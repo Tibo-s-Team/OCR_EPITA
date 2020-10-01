@@ -1,0 +1,24 @@
+A list of what has been done and what is left to do.
+You can add a hint on how to proceed.
+
+
++- Done --------------------------
+
+
+
++- ToDo --------------------------
+
+
+1. chargement de l’image ;
+
+2. suppression des couleurs (niveau de gris, puis noir et blanc) ;
+
+3. pré-traitement ;
+
+4. détection des blocs de textes ;
+
+5. détection des caractères ;
+
+6. reconnaissance des caractères détectés ;
+
+7. reconstruction du texte.
