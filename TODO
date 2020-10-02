@@ -10,10 +10,15 @@ You can add a hint on how to proceed.
 
 
 1. chargement de l’image ;
+	- SDL library
 
 2. suppression des couleurs (niveau de gris, puis noir et blanc) ;
+	- couleurs (r,g,b) -> niveaux de gris -> noir et blanc (tableau de 0 ou 1)
+	- formule niveau de gris: L  =  0.2126 × R   +   0.7152 × G   +   0.0722 × B 
 
 3. pré-traitement ;
+	- débruiter l'image (trouver le bon algorithme, déja existant)
+	- Exemple: tache d'encre
 
 4. détection des blocs de textes ;
 
