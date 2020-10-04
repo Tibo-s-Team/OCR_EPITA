@@ -10,7 +10,7 @@ You can add a hint on how to proceed.
 
 
 1. chargement de l’image ;
-	- SDL library
+	- SDL library : https://wiki.libsdl.org/Tutorials
 
 2. suppression des couleurs (niveau de gris, puis noir et blanc) ;
 	- couleurs (r,g,b) -> niveaux de gris -> noir et blanc (tableau de 0 ou 1)

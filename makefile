@@ -1,16 +1,16 @@
-OBJS	= main.o
-SOURCE	= main.c
-HEADER	= 
-OUT	= CText
+OBJS	= main.o src/image.o
+SOURCE	= main.c src/image.c
+HEADER	= src/*.h 
+OUT	= TIBO
 CC	 = gcc
-FLAGS	 = -g -c -Wall -Wextra -Wshadow -Wdouble-promotion -Wformat=2 -Wformat-truncation -Wformat-overflow -Wundef -fno-common -Wconversion -Wunused-parameter
-LFLAGS	 = 
+CFLAGS	 = -g -c -Wall -Wextra -lSDL2 -lSDL2_image 
+LFLAGS	 = -lSDL2 -lSDL2_image
 
 all: $(OBJS)
 	$(CC) -g $(OBJS) -o $(OUT) $(LFLAGS)
 
 main.o: main.c
-	$(CC) $(FLAGS) main.c -std=c99
+	$(CC) $(CFLAGS) main.c -std=c99
 
 
 clean:
