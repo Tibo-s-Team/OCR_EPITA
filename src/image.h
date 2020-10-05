@@ -4,7 +4,23 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-SDL_Surface *loadImage(char path[]);
-void displayImage(SDL_Surface *image); 
+typedef enum ImageType
+{
+    RGB,
+    GRAYSCALED,
+    BW
+} ImageType;
+
+typedef struct Image
+{
+    SDL_Surface *surface;
+    int width, height;
+    ImageType imageType;
+    // color matrix
+} Image;
+
+
+Image loadImage(const char *path);
+void displayImage(Image *image); 
 
 #endif

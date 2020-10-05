@@ -5,7 +5,7 @@
 
 int main(int argc, char *argv[]){
 
-	SDL_Surface *image;
+	Image image;
 
 	if(argc < 2) // if no path given do nothing
 		return 0;
@@ -18,7 +18,7 @@ int main(int argc, char *argv[]){
 		for (int i = 1; i < argc; i++) // for all given paths
 		{
 			image = loadImage(argv[i]);
-			displayImage(image);
+			displayImage(&image); // test
 			IMG_Quit();
 		}
 	}

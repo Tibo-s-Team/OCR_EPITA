@@ -2,10 +2,12 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include "image.h"
 
-SDL_Surface *loadImage(const char *path)
+Image loadImage(const char *path)
 {
-    SDL_Surface *image = NULL;
+    SDL_Surface *surface = NULL;
+    Image image;
 
     int flags = IMG_INIT_PNG | IMG_INIT_JPG;
     int initted = IMG_Init(flags);
@@ -14,17 +16,22 @@ SDL_Surface *loadImage(const char *path)
        printf("%s", IMG_GetError()); 
     }
     else {
-        image = IMG_Load(path);
-        if(image == NULL)
+        surface = IMG_Load(path);
+        if(surface == NULL)
             printf("ERROR: image_loading.c - %s\n", IMG_GetError());
+        else{
+            image.surface = surface;
+            image.width = (*surface).w; image.height = (*surface).h;
+            image.imageType = RGB;
+        }
     }
 
     return image;
 }
 
-void displayImage(SDL_Surface *image)
+void displayImage(Image *image)
 {
-    const int WIDTH = (*image).w, HEIGHT = (*image).h;
+    const int WIDTH = (*image).width, HEIGHT = (*image).height;
 
     SDL_Window *win = NULL;
     SDL_Renderer *renderer = NULL;
@@ -35,9 +42,9 @@ void displayImage(SDL_Surface *image)
     renderer = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
 
     // load image
-    img = SDL_CreateTextureFromSurface(renderer, image);
+    img = SDL_CreateTextureFromSurface(renderer, (*image).surface);
 	SDL_Rect texr; 
-    texr.x = 0; texr.y = 0; // placed in the top left corner of or window 
+    texr.x = 0; texr.y = 0; // placed in the top left corner of the window 
     texr.w = WIDTH; texr.h = HEIGHT; // set to the size of the window
 
 	
