@@ -24,5 +24,10 @@ Image loadImage(const char *path);
 void displayImage(Image *image); 
 void grayscaleImage(Image *image);
 void grayscale32(Uint8 *pixels, SDL_PixelFormat *format, int width, int height, int pitch);
+void blackAndWhite(Image *image);
+void bw32(Uint8 *pixels, SDL_PixelFormat *format, 
+    int width, int height, int pitch);
+void bw8(Uint8 *pixels, SDL_PixelFormat *format, 
+    int width, int height, int pitch);
 
 #endif

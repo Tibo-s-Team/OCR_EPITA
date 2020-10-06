@@ -18,6 +18,7 @@ int main(int argc, char *argv[]) {
         {
             image = loadImage(argv[i]);
             grayscaleImage(&image);
+            blackAndWhite(&image);
             displayImage(&image);  // test
             IMG_Quit();
         }
