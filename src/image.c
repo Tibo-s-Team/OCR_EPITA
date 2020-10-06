@@ -5,7 +5,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-Image loadImage(const char *path) {
+typedef unsigned char Uint8;
+typedef unsigned int Uint32;
+
+Image loadImage(const char *path) 
+{
     SDL_Surface *surface = NULL;
     Image image;
 
@@ -25,13 +29,15 @@ Image loadImage(const char *path) {
             image.width = surface->w;
             image.height = surface->h;
             image.imageType = RGB;
+            image.bitmap = NULL;
         }
     }
 
     return image;
 }
 
-void displayImage(Image *image) {
+void displayImage(Image *image) 
+{
     const int WIDTH = image->width, HEIGHT = image->height;
 
     SDL_Window *win = NULL;
@@ -53,13 +59,13 @@ void displayImage(Image *image) {
     while (1) {
         SDL_Event e;
         if (SDL_PollEvent(&e))
-            if (e.type == SDL_QUIT)  // escape key
+            if (e.type == SDL_QUIT || e.type == SDL_KEYUP)
                 break;
 
         // refresh renderer
-        SDL_RenderClear(renderer);                   // clear the screen
-        SDL_RenderCopy(renderer, img, NULL, &texr);  // save renderer
-        SDL_RenderPresent(renderer);                 // update renderer
+        SDL_RenderClear(renderer);                   
+        SDL_RenderCopy(renderer, img, NULL, &texr);  
+        SDL_RenderPresent(renderer);                 
     }
 
     SDL_DestroyTexture(img);
@@ -67,7 +73,8 @@ void displayImage(Image *image) {
     SDL_DestroyWindow(win);
 }
 
-void grayscaleImage(Image *image) {
+void grayscaleImage(Image *image)
+{
     SDL_Surface *surface = NULL;
     Uint8 *pixels = NULL;
 
@@ -86,17 +93,19 @@ void grayscaleImage(Image *image) {
     if (!locked) SDL_UnlockSurface(surface);
 }
 
-void grayscale32(Uint8 *pixels, SDL_PixelFormat *format, int width, int height,
-                 int pitch) {
+void grayscale32(Uint8 *pixels, SDL_PixelFormat *format, 
+    int width, int height, int pitch)
+{
+    Uint8 *byteptr = NULL;
     Uint32 *targetPixel = NULL;
     Uint8 r, g, b, gray;
-    printf("%d", pitch);
 
-    for (int y = 0; y * pitch < height * width * 3; y++) {
-        for (int x = 0; x < pitch / 4; x++) {
-            targetPixel = 
-                pixels + y * pitch + x * sizeof(*targetPixel);
+    for (int y = 0; y < height; y++) {
+        byteptr = &pixels[y * pitch];
+        for (int x = 0; x < width; x++, byteptr += 3) {
+            targetPixel = (Uint32 *) byteptr;
             SDL_GetRGB(*targetPixel, format, &r, &g, &b);
+
             gray = 0.21 * r + 0.72 * g + 0.07 * b;
             *targetPixel = SDL_MapRGB(format, gray, gray, gray);
         }

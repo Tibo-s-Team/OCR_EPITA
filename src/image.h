@@ -16,7 +16,7 @@ typedef struct Image
     SDL_Surface *surface;
     int width, height;
     ImageType imageType;
-    // color matrix
+    Uint8 *bitmap;
 } Image;
 
 
