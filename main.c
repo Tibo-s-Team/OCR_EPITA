@@ -1,27 +1,27 @@
+#include <SDL2/SDL.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <SDL2/SDL.h>
+
 #include "src/image.h"
 
-int main(int argc, char *argv[]){
+int main(int argc, char *argv[]) {
+    Image image;
 
-	Image image;
+    if (argc < 2)  // if no path given do nothing
+        return 0;
 
-	if(argc < 2) // if no path given do nothing
-		return 0;
-	
-	if( SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) < 0 ){
-		printf("Error: failed to initialize SDL: %s", SDL_GetError());
-		return 1;
-	}
-	else {
-		for (int i = 1; i < argc; i++) // for all given paths
-		{
-			image = loadImage(argv[i]);
-			displayImage(&image); // test
-			IMG_Quit();
-		}
-	}
-	
-	return 0;
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) < 0) {
+        printf("Error: failed to initialize SDL: %s", SDL_GetError());
+        return 1;
+    } else {
+        for (int i = 1; i < argc; i++)  // for all given paths
+        {
+            image = loadImage(argv[i]);
+            grayscaleImage(&image);
+            displayImage(&image);  // test
+            IMG_Quit();
+        }
+    }
+
+    return 0;
 }
