@@ -25,9 +25,8 @@ Image loadImage(const char *path) {
     int flags = IMG_INIT_PNG | IMG_INIT_JPG;
     int initted = IMG_Init(flags);
     if ((initted & flags) != flags) {
-        printf(
-            "ERROR: image_loading.c - "
-            "could not init required image format (jpg, png)\n");
+        printf("ERROR: image_loading.c - "
+        "could not init required image format (jpg, png)\n");
         printf("%s", IMG_GetError());
     } else {
         surface = IMG_Load(path);
