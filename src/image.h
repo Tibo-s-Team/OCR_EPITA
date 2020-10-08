@@ -4,15 +4,9 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-typedef enum ImageType
-{
-    RGB,
-    GRAYSCALED,
-    BW
-} ImageType;
+typedef enum ImageType { RGB, GRAYSCALED, BW } ImageType;
 
-typedef struct Image
-{
+typedef struct Image {
     SDL_Surface *surface;
     int width, height;
     ImageType imageType;
@@ -20,9 +14,8 @@ typedef struct Image
     Uint8 *bitmap;
 } Image;
 
-
 Image loadImage(const char *path);
-void displayImage(Image *image); 
+void displayImage(Image *image);
 void grayscaleImage(Image *image);
 void blackAndWhite(Image *image);
 
