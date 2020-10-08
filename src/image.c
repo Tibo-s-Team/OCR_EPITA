@@ -7,14 +7,14 @@
 
 //-----------------------------------------------
 
-void grayscale32(Uint8 *pixels, SDL_PixelFormat *format, int *seuil,
-    const int width, const int height, const int pitch);
+void grayscale32(Image *image, Uint8 *pixels, SDL_PixelFormat *format,
+                 const int pitch);
 
-void bw32(Uint8 *pixels, SDL_PixelFormat *format, Uint8 *bitmap, int seuil,
-    const int width, const int height, const int pitch);
+void bw32(Image *image, Uint8 *pixels, SDL_PixelFormat *format,
+                 const int pitch);
 
-void bitmap8(Uint8 *pixels, Uint8 *bitmap, 
-    const int pitch, const int width, const int height);
+void bitmap8(Image *image, Uint8 *pixels,
+                 const int pitch);
 
 //-----------------------------------------------
 
@@ -43,8 +43,7 @@ Image loadImage(const char *path) {
     }
 
     if (image.imageType == BW)
-        bitmap8(surface->pixels, image.bitmap, 
-            surface->pitch, image.width, image.height);
+        bitmap8(&image, surface->pixels, surface->pitch);
     return image;
 }
 
@@ -94,34 +93,39 @@ void grayscaleImage(Image *image) {
     int locked = SDL_MUSTLOCK(surface);
     if (!locked) SDL_LockSurface(surface);
 
-    grayscale32(pixels, surface->format, &image->seuil, image->width,
-                image->height, surface->pitch);
+    grayscale32(image, pixels, surface->format, surface->pitch);
     image->imageType = GRAYSCALED;
 
     if (!locked) SDL_UnlockSurface(surface);
 }
 
-void grayscale32(Uint8 *pixels, SDL_PixelFormat *format, int *seuil,
-                        const int width, const int height, const int pitch) {
-    Uint8 *byteptr = NULL;
+void grayscale32(Image *image, Uint8 *pixels, SDL_PixelFormat *format,
+                 const int pitch) {
+    Uint8 *byteptr = NULL, *matrixPtr = NULL, *bitmap = image->bitmap;
     Uint32 *targetPixel = NULL;
     Uint8 r, g, b, gray;
+    int width = image->width, height = image->height;
+
+    bitmap = malloc(height * width * sizeof(Uint8));
 
     // pixels : height * rows of (3 * width) pixels
     // a pixel stores info on 3 bytes
     for (int y = 0; y < height; y++) {
         byteptr = &pixels[y * pitch];
-        for (int x = 0; x < width; x++, byteptr += 3) {
+        matrixPtr = &bitmap[y];
+        for (int x = 0; x < width; x++, matrixPtr++, byteptr += 3) {
             targetPixel = (Uint32 *)byteptr;
             SDL_GetRGB(*targetPixel, format, &r, &g, &b);
 
             gray = 0.21 * r + 0.72 * g + 0.07 * b;  // grayscaling formula
-            *seuil += gray;
+            image->seuil += gray;
             *targetPixel = SDL_MapRGB(format, gray, gray, gray);
+
+            *matrixPtr =  gray;
         }
     }
 
-    *seuil /= width * height;  // average value of all grayscaled pixels
+    image->seuil /= width * height;  // average value of all grayscaled pixels
 }
 
 void blackAndWhite(Image *image) {
@@ -136,17 +140,17 @@ void blackAndWhite(Image *image) {
         printf("ERROR: image.c: blackAndWhite -\n");
         printf("PixelFormat not supported (must be 8 or 32 bits).\n");
     } else {
-        bw32(surface->pixels, format, image->bitmap, image->seuil, image->width,
-             image->height, surface->pitch);
+        bw32(image, image->surface->pixels, format, surface->pitch);
         image->imageType = BW;
     }
 }
 
-void bw32(Uint8 *pixels, SDL_PixelFormat *format, Uint8 *bitmap, 
-        const int seuil, const int width, const int height, const int pitch) {
-    Uint8 *byteptr = NULL, *matrixPtr = NULL;
+void bw32(Image *image, Uint8 *pixels, SDL_PixelFormat *format,
+                 const int pitch) {
+    Uint8 *byteptr = NULL, *matrixPtr = NULL, *bitmap = image->bitmap;
     Uint32 *targetPixel = NULL;
     Uint8 r, g, b, bw;
+    int width = image->width, height = image->height;
 
     bitmap = malloc(width * height * sizeof(Uint8));
 
@@ -156,7 +160,7 @@ void bw32(Uint8 *pixels, SDL_PixelFormat *format, Uint8 *bitmap,
         for (int x = 0; x < width; x++, byteptr += 3, matrixPtr++) {
             targetPixel = (Uint32 *)byteptr;
             SDL_GetRGB(*targetPixel, format, &r, &g, &b);
-            bw = (g < seuil) ? 0 : 255;
+            bw = (g < image->seuil) ? 0 : 255;
             *matrixPtr = (Uint8)(bw / 255);
             *targetPixel = SDL_MapRGB(format, bw, bw, bw);
         }
@@ -164,9 +168,10 @@ void bw32(Uint8 *pixels, SDL_PixelFormat *format, Uint8 *bitmap,
 }
 
 // Fills the image's pixel bitmap when the pixels are coded on 8bits
-void bitmap8(Uint8 *pixels, Uint8 *bitmap, 
-    const int pitch, const int width, const int height) {
-    Uint8 *pixelPtr = NULL, *matrixPtr = NULL;
+void bitmap8(Image *image, Uint8 *pixels,
+                 const int pitch) {
+    Uint8 *pixelPtr = NULL, *matrixPtr = NULL, *bitmap = image->bitmap;
+    const int width = image->width, height = image->height;
     bitmap = malloc(width * height * sizeof(Uint8));
 
     for (int y = 0; y < height; y++) {
