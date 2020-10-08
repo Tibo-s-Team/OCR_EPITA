@@ -73,6 +73,9 @@ void displayImage(Image *image)
     SDL_DestroyWindow(win);
 }
 
+void grayscale32(Uint8 *pixels, SDL_PixelFormat *format, int *seuil,
+    int width, int height, int pitch);
+
 void grayscaleImage(Image *image)
 {
     SDL_Surface *surface = image->surface;
@@ -85,14 +88,14 @@ void grayscaleImage(Image *image)
     int locked = SDL_MUSTLOCK(surface);
     if (!locked) SDL_LockSurface(surface);
 
-    grayscale32(pixels, surface->format, image->width, image->height,
-                surface->pitch);
+    grayscale32(pixels, surface->format, &image->seuil, 
+        image->width, image->height,surface->pitch);
     image->imageType = GRAYSCALED;
 
     if (!locked) SDL_UnlockSurface(surface);
 }
 
-void grayscale32(Uint8 *pixels, SDL_PixelFormat *format, 
+void grayscale32(Uint8 *pixels, SDL_PixelFormat *format, int *seuil,
     int width, int height, int pitch)
 {
     Uint8 *byteptr = NULL;
@@ -108,10 +111,17 @@ void grayscale32(Uint8 *pixels, SDL_PixelFormat *format,
             SDL_GetRGB(*targetPixel, format, &r, &g, &b);
 
             gray = 0.21 * r + 0.72 * g + 0.07 * b; // grayscaling formula
+            *seuil += gray;
             *targetPixel = SDL_MapRGB(format, gray, gray, gray);
         }
     }
+
+    *seuil /= width * height; // average value of all grayscaled pixels
 }
+
+
+void bw32(Uint8 *pixels, SDL_PixelFormat *format, int seuil,
+    int width, int height, int pitch);
 
 void blackAndWhite(Image *image)
 {
@@ -121,28 +131,17 @@ void blackAndWhite(Image *image)
     if(image->imageType != GRAYSCALED)
         return;
 
-    switch (format->BytesPerPixel)
-    {
-    case 1:
-        bw8(surface->pixels, format, 
+    if(format->BytesPerPixel != 3)
+        printf("ERROR: image.c: blackAndWhite -\nPixelFormat not supported (must be 8 or 32 bits).\n");
+    else{
+        bw32(surface->pixels, format, image->seuil, 
             image->width, image->height, surface->pitch);
         image->imageType = BW;
-        break;
-    case 3:
-        bw32(surface->pixels, format, 
-            image->width, image->height, surface->pitch);
-        image->imageType = BW;
-        break;
-
-    default:
-        printf(stderr, "ERROR: image.c: blackAndWhite -\nPixelFormat not supported (must be 8 or 32 bits).\n");
-        break;
     }
-
 }
 
 //TODO: fill pixel matrice
-void bw32(Uint8 *pixels, SDL_PixelFormat *format, 
+void bw32(Uint8 *pixels, SDL_PixelFormat *format, int seuil,
     int width, int height, int pitch)
 {
     Uint8 *byteptr = NULL;
@@ -154,20 +153,8 @@ void bw32(Uint8 *pixels, SDL_PixelFormat *format,
         for(int x = 0; x < width; x++, byteptr += 3){
             targetPixel = (Uint32 *) byteptr;
             SDL_GetRGB(*targetPixel, format, &r, &g, &b);
-            //printf("r:%d - g:%d - b:%d\n", r, g ,b);
-            bw = (g < 150) ? 0 : 255;
+            bw = (g < seuil) ? 0 : 255;
             *targetPixel = SDL_MapRGB(format, bw, bw, bw);
         }
     }
-    
-}
-
-void bw8(Uint8 *pixels, SDL_PixelFormat *format, 
-    int width, int height, int pitch)
-{
-    Uint8 *byteptr = NULL;
-    Uint32 *targetPixel = NULL;
-    Uint8 r, g, b, gray;
-
-    // FIXME : faire bw32 sur 8bits 
 }
