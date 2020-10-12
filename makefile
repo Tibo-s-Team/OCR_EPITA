@@ -1,5 +1,5 @@
-OBJS	= main.o src/image.o
-SOURCE	= main.c src/image.c
+OBJS	= main.o src/image.o src/preprocessing.o
+SOURCE	= main.c src/image.c src/preprocessing.c
 HEADER	= src/*.h 
 OUT	= TIBO
 CC	 = gcc
