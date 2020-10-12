@@ -97,6 +97,17 @@ for i in range(0, learning):
     # backpropagation
 
 
-def back_propagation_output(out_put_values, out_put_weight, out_put_biais):
+def back_propagation_output(out_put_values, waited_result):
+    error_output = []
     for i in range(len(out_put)):
-        print("ok")
+        error_output.append((waited_result[i] - out_put_values[i]) * sigmoidPrime(out_put_values[i]))
+    return error_output
+
+def back_propagation_hiddenlayer(error_before, weight, biais, values, nbNeuronne, nbNeuronneNext):
+    error_hiddenlayer = []
+    for i in range(len(nbNeuronne)):
+        error = 0.0
+        for j in range(nbNeuronneNext):
+            print("ok")
+
+
