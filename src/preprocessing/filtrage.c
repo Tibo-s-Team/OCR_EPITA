@@ -1,4 +1,4 @@
-#include "preprocessing.h"
+#include "filtrage.h"
 
 #include <stdio.h>
 #include <stdlib.h>

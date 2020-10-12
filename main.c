@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 #include "src/image.h"
-#include "src/preprocessing.h"
+#include "src/preprocessing/suppression_couleurs.h"
 
 int main(int argc, char *argv[]) {
     Image image;
