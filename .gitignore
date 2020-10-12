@@ -1,5 +1,6 @@
 # Visual studio files
 *.vscode
+*.idea
 
 # Prerequisites
 *.d
