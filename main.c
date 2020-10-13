@@ -22,7 +22,8 @@ int main(int argc, char *argv[]) {
             grayscaleImage(&image);
             blackAndWhite(&image);
 
-            Uint8 *histo = horizontalHistogram(&image);
+            horizontalHistogram(&image);
+            verticalHistogram(&image);
 
             IMG_Quit();
         }
