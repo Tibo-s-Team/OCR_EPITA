@@ -29,18 +29,11 @@ def initNeuralNetwork(nbInput, hiddenLayer, nbOutPut):
 
 def feedfoward(network, input):
     for i in range(len(network)):
-        if i == 0:
-            for j in range(len(network[i])):
-                somme = 0
-                for k in range(len(input)):
-                    somme += input[k] * network[i][j]["weight"][k]
-                network[i][j]["output"] = sigmoid(somme + network[i][j]["biais"])
-        else:
-            for j in range(len(network[i])):
-                somme = 0
-                for k in range(len(network[i - 1])):
-                    somme += network[i - 1][k]["output"] * network[i][j]["weight"][k]
-                network[i][j]["output"] = sigmoid(somme + network[i][j]["biais"])
+        for j in range(len(network[i])):
+            somme = 0
+            for k in range(len(input) if i==0 else len(network[i - 1])):
+                somme += (input[k] if i==0 else  network[i - 1][k]["output"]) * network[i][j]["weight"][k]
+            network[i][j]["output"] = sigmoid(somme + network[i][j]["biais"])
     return network
 
 print(feedfoward(initNeuralNetwork(2, hiddenLayer, 2), input))
