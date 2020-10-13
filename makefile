@@ -1,10 +1,12 @@
-OBJS	= main.o src/image.o src/preprocessing/suppression_couleurs.o src/preprocessing/filtrage.o
-SOURCE	= main.c src/image.c src/preprocessing/suppression_couleurs.c src/preprocessing/filtrage.c
+OBJS	= main.o src/image.o src/preprocessing/suppression_couleurs.o src/preprocessing/filtrage.o src/segmentation/segmentation.o
+SOURCE	= main.c src/image.c src/preprocessing/suppression_couleurs.c src/preprocessing/filtrage.c src/segmentation/segmentation.c
 HEADER	= src/*.h 
 OUT	= TIBO
 CC	 = gcc
-CFLAGS	 = -g -c -Wall -Wextra -Wno-unknown-pragmas -Wno-unused-variable -lSDL2 -lSDL2_image 
+CFLAGS	 = -g -c -Wall -Wextra -Wno-unknown-pragmas -Wno-unused-variable -Wno-unused-parameter -lSDL2 -lSDL2_image 
 LFLAGS	 = -lSDL2 -lSDL2_image
+$(VERBOSE).SILENT: $(OBJS)
+
 
 all: $(OBJS)
 	$(CC) -g $(OBJS) -o $(OUT) $(LFLAGS)

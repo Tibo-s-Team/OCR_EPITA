@@ -37,8 +37,6 @@ void grayscale32(Image *image, Uint8 *pixels, SDL_PixelFormat *format,
     Uint8 r, g, b, gray;
     int width = image->width, height = image->height;
 
-    bitmap = malloc(height * width * sizeof(Uint8));
-
     // pixels : height * rows of (3 * width) pixels
     // a pixel stores info on 3 bytes
     for (int y = 0; y < height; y++) {

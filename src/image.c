@@ -24,8 +24,7 @@ Image loadImage(const char *path) {
             "ERROR: image.c - "
             "could not init required image format (jpg, png)\n");
         printf("%s", IMG_GetError());
-    } 
-    else {
+    } else {
         surface = IMG_Load(path);
         if (surface == NULL)
             printf("ERROR: image.c - %s\n", IMG_GetError());
@@ -35,7 +34,7 @@ Image loadImage(const char *path) {
             image.width = surface->w;
             image.height = surface->h;
             image.imageType = (surface->format->BytesPerPixel == 3) ? RGB : BW;
-            image.bitmap = NULL;
+            image.bitmap = malloc(image.height * image.width * sizeof(Uint8));
         }
     }
 
@@ -60,25 +59,28 @@ void setPixel(Image *image, const Uint8 color, const int x, const int y) {
 
     Uint8 *ptr = &surface->pixels[y * pitch] + x * bytes;
     *ptr = (bytes == 1) ? color : SDL_MapRGB(format, color, color, color);
-    image->bitmap[y * width + y] = color;
+    image->bitmap[y * width + x] = color;
 }
 
 // get a pixel's color value from the bitmap according to coordinates
 Uint8 getPixel(Image *image, const int x, const int y) {
-    int width = image->width, height = image->height;
+    /*
+        int width = image->width, height = image->height;
 
-    if (y >= height || x >= width)
-        printf(
-            "ERROR: image.c : getPixel\n"
-            "The given coordinates exceed the bitmpa size.");
-
-    return image->bitmap[y * width + x];
+        if (y >= height || x >= width)
+            printf(
+                "ERROR: image.c : getPixel\n"
+                "The given coordinates exceed the bitmpa size.");
+    */
+    // bitmap8(image, image->surface->pixels, image->surface->pixels);
+    return image->bitmap[0];
 }
 
 // Fills the image's pixel bitmap when the pixels are coded on 8bits
 void bitmap8(Image *image, Uint8 *pixels, const int pitch) {
     Uint8 *pixelPtr = NULL, *matrixPtr = NULL, *bitmap = image->bitmap;
     const int width = image->width, height = image->height;
+    printf("test\n");
 
     bitmap = malloc(width * height * sizeof(Uint8));
 

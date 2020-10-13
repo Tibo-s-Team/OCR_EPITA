@@ -4,6 +4,7 @@
 
 #include "src/image.h"
 #include "src/preprocessing/suppression_couleurs.h"
+#include "src/segmentation/segmentation.h"
 
 int main(int argc, char *argv[]) {
     Image image;
@@ -20,7 +21,9 @@ int main(int argc, char *argv[]) {
             image = loadImage(argv[i]);
             grayscaleImage(&image);
             blackAndWhite(&image);
-            displayImage(&image);  // test
+
+            Uint8 *histo = horizontalHistogram(&image);
+
             IMG_Quit();
         }
     }
