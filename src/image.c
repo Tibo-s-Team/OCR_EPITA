@@ -53,13 +53,16 @@ void setPixel(Image *image, const Uint8 color, const int x, const int y) {
     if (y >= height || x >= width) {
         printf(
             "ERROR: image.c : getPixel\n"
-            "The given coordinates exceed the bitmpa size.");
+            "The given coordinates exceed the bitmap size.");
         return;
     }
 
-    Uint8 *ptr = &surface->pixels[y * pitch] + x * bytes;
-    *ptr = (bytes == 1) ? color : SDL_MapRGB(format, color, color, color);
-    image->bitmap[y * width + x] = color;
+    Uint32 *target_pixel = &surface->pixels[y * pitch] + x * bytes;
+    if(bytes == 1)
+        *target_pixel = color == 0;
+    else
+        *target_pixel = SDL_MapRGB(format, color * 255 , color * 255, color * 255);
+    image->bitmap[y * width + x] = (color == 0);
 }
 
 // get a pixel's color value from the bitmap according to coordinates
@@ -73,7 +76,7 @@ Uint8 getPixel(Image *image, const int x, const int y) {
                 "The given coordinates exceed the bitmpa size.");
     */
     // bitmap8(image, image->surface->pixels, image->surface->pixels);
-    return image->bitmap[0];
+    return image->bitmap[y * image->width + x];
 }
 
 // Fills the image's pixel bitmap when the pixels are coded on 8bits
@@ -88,7 +91,7 @@ void bitmap8(Image *image, Uint8 *pixels, const int pitch) {
         pixelPtr = &pixels[y * pitch];
         matrixPtr = &bitmap[y];
         for (int x = 0; x < width; x++, pixelPtr++, matrixPtr++) {
-            *matrixPtr = *pixelPtr * 255;
+            *matrixPtr = (*pixelPtr == 0) * 255;
         }
     }
 }

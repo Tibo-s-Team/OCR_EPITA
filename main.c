@@ -21,9 +21,10 @@ int main(int argc, char *argv[]) {
             image = loadImage(argv[i]);
             grayscaleImage(&image);
             blackAndWhite(&image);
+            displayImage(&image);
 
-            horizontalHistogram(&image);
-            verticalHistogram(&image);
+            segmentLine(&image);
+            displayImage(&image);
 
             IMG_Quit();
         }
