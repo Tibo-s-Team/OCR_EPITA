@@ -1,5 +1,6 @@
 import random
 import math
+import json
 from PIL import Image
 
 random.seed()
@@ -27,6 +28,22 @@ def initNeuralNetwork(nbInput, hiddenLayer, nbOutPut):
             LayerDico.append(neuronne)
         network.append(LayerDico)
     return network
+
+def loadNeurones(path = "DataSave/TrainedNeurones.json"):
+    """
+    :param path: path we want to load for network
+    :return: the new reconstructed network from a json file
+    """
+    with open(path) as Network_json:
+        network = json.load(Network_json)
+    return network
+
+
+
+def saveNeurones(network, path="DataSave/TrainedNeurones.json"):
+    with open(path, 'w') as Network_json:
+        json.dump(network, Network_json, indent=4)
+
 
 
 def feedfoward(network, input):
@@ -72,5 +89,7 @@ def trainingNetwork(times, network):
 
 ##Test
 network = initNeuralNetwork(2, hiddenLayer, 2)
-trainingNetwork(20, network)
-print(feedfoward(network,[1,0]))
+saveNeurones(network)
+print(loadNeurones())
+#trainingNetwork(20, network)
+#print(feedfoward(network,[1,0]))
