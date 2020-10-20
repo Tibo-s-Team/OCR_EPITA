@@ -2,11 +2,10 @@ import random
 import math
 import json
 from PIL import Image
+import training
+import BarDeChargement
 
 random.seed()
-hiddenLayer = [2, 3, 2]
-input = [3, 4]
-
 
 def sigmoid(x):
     return 1 / (1 + math.exp(-x))
@@ -80,16 +79,29 @@ def updateWeight (network, inputs, coeff):
     return network
 
 def trainingNetwork(times, network):
-
+    Bar = BarDeChargement.ProgressBar(100, 60, 'Apprentissage')
     for i in range(times):
-        network = feedfoward(network, [1, 0])
-        network = backforawrd(network, [0, 1])
-        network = updateWeight(network, input, 0.1)
+        for j in range(len(training.exo)):
+            for k in range(len(training.exo[j])):
+                network = feedfoward(network, training.exo[j][k])
+                network = backforawrd(network, training.solution[j])
+                network = updateWeight(network, training.exo[j][k], 0.1)
+        Bar.update(i/10)
     return network
 
 ##Test
-network = initNeuralNetwork(2, hiddenLayer, 2)
-saveNeurones(network)
-print(loadNeurones())
-#trainingNetwork(20, network)
-#print(feedfoward(network,[1,0]))
+network = initNeuralNetwork(625, [16, 16], 3)
+trainingNetwork(1000, network)
+result = feedfoward(network, training.exo[0][5])[-1]
+for i in range(len(result)):
+    print(result[i]["output"])
+print("###################")
+result = feedfoward(network, training.exo[1][2])[-1]
+for i in range(len(result)):
+    print(result[i]["output"])
+print("###################")
+result = feedfoward(network, training.exo[2][6])[-1]
+for i in range(len(result)):
+    print(result[i]["output"])
+
+
