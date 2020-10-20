@@ -2,6 +2,7 @@ import random
 import math
 from PIL import Image
 import training
+import BarDeChargement
 
 random.seed()
 
@@ -61,18 +62,29 @@ def updateWeight (network, inputs, coeff):
     return network
 
 def trainingNetwork(times, network):
-
+    Bar = BarDeChargement.ProgressBar(100, 60, 'Apprentissage')
     for i in range(times):
         for j in range(len(training.exo)):
             for k in range(len(training.exo[j])):
                 network = feedfoward(network, training.exo[j][k])
                 network = backforawrd(network, training.solution[j])
                 network = updateWeight(network, training.exo[j][k], 0.1)
+        Bar.update(i/10)
     return network
 
 ##Test
 network = initNeuralNetwork(625, [16, 16], 3)
-trainingNetwork(10, network)
-result = feedfoward(network, training.exo[0][3])[-1]
+trainingNetwork(1000, network)
+result = feedfoward(network, training.exo[0][5])[-1]
 for i in range(len(result)):
     print(result[i]["output"])
+print("###################")
+result = feedfoward(network, training.exo[1][2])[-1]
+for i in range(len(result)):
+    print(result[i]["output"])
+print("###################")
+result = feedfoward(network, training.exo[2][6])[-1]
+for i in range(len(result)):
+    print(result[i]["output"])
+
+
