@@ -1,11 +1,9 @@
 import random
 import math
 from PIL import Image
+import training
 
 random.seed()
-hiddenLayer = [2, 3, 2]
-input = [3, 4]
-
 
 def sigmoid(x):
     return 1 / (1 + math.exp(-x))
@@ -65,12 +63,16 @@ def updateWeight (network, inputs, coeff):
 def trainingNetwork(times, network):
 
     for i in range(times):
-        network = feedfoward(network, [1, 0])
-        network = backforawrd(network, [0, 1])
-        network = updateWeight(network, input, 0.1)
+        for j in range(len(training.exo)):
+            for k in range(len(training.exo[j])):
+                network = feedfoward(network, training.exo[j][k])
+                network = backforawrd(network, training.solution[j])
+                network = updateWeight(network, training.exo[j][k], 0.1)
     return network
 
 ##Test
-network = initNeuralNetwork(2, hiddenLayer, 2)
-trainingNetwork(20, network)
-print(feedfoward(network,[1,0]))
+network = initNeuralNetwork(625, [16, 16], 3)
+trainingNetwork(10, network)
+result = feedfoward(network, training.exo[0][3])[-1]
+for i in range(len(result)):
+    print(result[i]["output"])
