@@ -38,6 +38,15 @@ def creatLsit_matrix(listfolderLetter):
         res.append(sous_list)
     return res
 
+def creatlist_matrixtest(list_image_test):
+    res = []
+    for i in range(len(list_image_test)):
+        image = Image.open(list_image_test[i])
+        matrix = matrixImage(image)
+        res.append(matrix)
+    return res
+
+
 resultA = [1, 0, 0]
 resultB = [0, 1, 0]
 resultC = [0, 0, 1]
@@ -45,3 +54,4 @@ resultC = [0, 0, 1]
 listfolderLetters = creatList_folderLetters("letters\\")
 exo = creatLsit_matrix(listfolderLetters)
 solution = [resultA, resultB, resultC]
+test = creatlist_matrixtest(creatList_images("test\\"))

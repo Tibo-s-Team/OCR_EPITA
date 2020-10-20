@@ -73,17 +73,19 @@ def trainingNetwork(times, network):
     return network
 
 ##Test
-network = initNeuralNetwork(625, [16, 16], 3)
+network = initNeuralNetwork(625, [16], 3)
 trainingNetwork(1000, network)
-result = feedfoward(network, training.exo[0][5])[-1]
+testa = feedfoward(network, training.test[0])[-1]
+
+print("\n")
+for i in range(len(testa)):
+    print(testa[i]["output"])
+print("###################")
+result = feedfoward(network, training.test[1])[-1]
 for i in range(len(result)):
     print(result[i]["output"])
 print("###################")
-result = feedfoward(network, training.exo[1][2])[-1]
-for i in range(len(result)):
-    print(result[i]["output"])
-print("###################")
-result = feedfoward(network, training.exo[2][6])[-1]
+result = feedfoward(network, training.test[2])[-1]
 for i in range(len(result)):
     print(result[i]["output"])
 
