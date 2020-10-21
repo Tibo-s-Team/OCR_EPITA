@@ -4,6 +4,7 @@ import json
 from PIL import Image
 import training
 import BarDeChargement
+import NeuralNetwork
 
 random.seed()
 
@@ -36,7 +37,6 @@ def loadNeurones(path = "DataSave/TrainedNeurones.json"):
     with open(path) as Network_json:
         network = json.load(Network_json)
     return network
-
 
 
 def saveNeurones(network, path="DataSave/TrainedNeurones.json"):
@@ -89,8 +89,11 @@ def trainingNetwork(times, network):
         Bar.update(i/10)
     return network
 
+
 ##Test
-network = initNeuralNetwork(625, [16, 16], 3)
+
+network = initNeuralNetwork(3, [16, 16], 3)
+"""
 trainingNetwork(1000, network)
 result = feedfoward(network, training.exo[0][5])[-1]
 for i in range(len(result)):
@@ -103,5 +106,9 @@ print("###################")
 result = feedfoward(network, training.exo[2][6])[-1]
 for i in range(len(result)):
     print(result[i]["output"])
+"""
 
+new_network = NeuralNetwork.Network(3, [16,16], 3)
+print(new_network.display())
+print(network)
 
