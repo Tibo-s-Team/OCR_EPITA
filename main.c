@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 #include "src/image.h"
-#include "src/preprocessing/suppression_couleurs.h"
+#include "src/preprocessing/preprocessing.h"
 #include "src/segmentation/segmentation.h"
 
 int main(int argc, char *argv[]) {
@@ -19,10 +19,9 @@ int main(int argc, char *argv[]) {
         for (int i = 1; i < argc; i++)  // for all given paths
         {
             image = loadImage(argv[i]);
-            grayscaleImage(&image);
+            grayscale(&image);
             blackAndWhite(&image);
             displayImage(&image);
-
             segmentLine(&image);
             displayImage(&image);
 

@@ -1,8 +1,9 @@
 #ifndef SEGMENTATION_H_
 #define SEGMENTATION_H_
 
-#define unsigned char Uint8
+#include "../image.h"
 
 void segmentLine(Image *image);
+void displayHisto(Image *image);
 
 #endif

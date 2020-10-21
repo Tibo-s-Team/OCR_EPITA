@@ -1,18 +1,5 @@
 #include "image.h"
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <stdio.h>
-#include <stdlib.h>
-
-//-----------------------------------------------
-
-void bitmap8(Image *image, Uint8 *pixels, const int pitch);
-
-//-----------------------------------------------
-
-// Loads an image from a file (PNG, JPG, BMP)
-// Creates, initialize  and returns an Image struct
 Image loadImage(const char *path) {
     SDL_Surface *surface = NULL;
     Image image;
@@ -34,69 +21,75 @@ Image loadImage(const char *path) {
             image.width = surface->w;
             image.height = surface->h;
             image.imageType = (surface->format->BytesPerPixel == 3) ? RGB : BW;
-            image.bitmap = malloc(image.height * image.width * sizeof(Uint8));
         }
     }
 
-    if (image.imageType == BW) bitmap8(&image, surface->pixels, surface->pitch);
     return image;
 }
 
-// Can be used to set a pixel's value
-// Should not be used to modify an entire image's pixel value => inefficient
-void setPixel(Image *image, const Uint8 color, const int x, const int y) {
-    SDL_Surface *surface = image->surface;
-    SDL_PixelFormat *format = surface->format;
-    int width = image->width, height = image->height, pitch = surface->pitch;
-    int bytes = format->BytesPerPixel;
+static inline Uint8 *getPixelRef(SDL_Surface *surf, int x, int y) {
+    if (x > surf->w || y > surf->h)
+        errx(1, "Error: image.c - getPixelRef : IndexOutOfBounds.");
 
-    if (y >= height || x >= width) {
-        printf(
-            "ERROR: image.c : getPixel\n"
-            "The given coordinates exceed the bitmap size.");
+    Uint8 bpp = surf->format->BytesPerPixel;
+    return (Uint8 *)surf->pixels + y * surf->pitch + x * bpp;
+}
+
+void getPixelRGB(Image *image, const int x, const int y, Uint8 *r, Uint8 *g,
+                 Uint8 *b) {
+    Uint8 *pixel = getPixelRef(image->surface, x, y);
+    Uint32 color;
+
+    if (image->imageType == BW) {
+        warnx(
+            "Warning: image.c - getPixelRGB : image's pixels must be encoded "
+            "on 32B of data. "
+            "Skipped.");
         return;
     }
 
-    Uint32 *target_pixel = &surface->pixels[y * pitch] + x * bytes;
-    if(bytes == 1)
-        *target_pixel = color == 0;
+    if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
+        color = pixel[0] << 16 | pixel[1] << 8 | pixel[2];
     else
-        *target_pixel = SDL_MapRGB(format, color * 255 , color * 255, color * 255);
-    image->bitmap[y * width + x] = (color == 0);
+        color = pixel[0] | pixel[1] << 8 | pixel[2] << 16;
+
+    SDL_GetRGB(color, image->surface->format, r, g, b);
 }
 
-// get a pixel's color value from the bitmap according to coordinates
-Uint8 getPixel(Image *image, const int x, const int y) {
-    /*
-        int width = image->width, height = image->height;
+Uint8 getPixelColor(Image *image, const int x, const int y) {
+    Uint8 *pixel = getPixelRef(image->surface, x, y);
+    Uint8 r, g, b;
 
-        if (y >= height || x >= width)
-            printf(
-                "ERROR: image.c : getPixel\n"
-                "The given coordinates exceed the bitmpa size.");
-    */
-    // bitmap8(image, image->surface->pixels, image->surface->pixels);
-    return image->bitmap[y * image->width + x];
+    switch (image->imageType) {
+        case RGB:
+            warnx(
+                "Warning: image.c - getPixelColor : imageType must not be "
+                "RGB. "
+                "Skipped.");
+            return 0;
+        case GRAYSCALE:
+            getPixelRGB(image, x, y, &r, &g, &b);
+            return g;
+        case BW:
+            // SDL - 8bits : 0 = white & 1 = black
+            return !(*pixel) * 255;
+    }
+
+    return 0;
 }
 
-// Fills the image's pixel bitmap when the pixels are coded on 8bits
-void bitmap8(Image *image, Uint8 *pixels, const int pitch) {
-    Uint8 *pixelPtr = NULL, *matrixPtr = NULL, *bitmap = image->bitmap;
-    const int width = image->width, height = image->height;
-    printf("test\n");
+void setPixelColor(Image *image, Uint8 color, const int x, const int y) {
+    Uint8 *pixel = getPixelRef(image->surface, x, y);
 
-    bitmap = malloc(width * height * sizeof(Uint8));
-
-    for (int y = 0; y < height; y++) {
-        pixelPtr = &pixels[y * pitch];
-        matrixPtr = &bitmap[y];
-        for (int x = 0; x < width; x++, pixelPtr++, matrixPtr++) {
-            *matrixPtr = (*pixelPtr == 0) * 255;
-        }
+    if (image->imageType == BW)
+        *pixel = color == 0;
+    else {
+        pixel[0] = color;
+        pixel[1] = color;
+        pixel[2] = color;
     }
 }
 
-// Displays an image in a external window
 void displayImage(Image *image) {
     const int WIDTH = image->width, HEIGHT = image->height;
 
