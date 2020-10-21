@@ -68,13 +68,13 @@ def trainingNetwork(times, network):
             for k in range(len(training.exo[j])):
                 network = feedfoward(network, training.exo[j][k])
                 network = backforawrd(network, training.solution[j])
-                network = updateWeight(network, training.exo[j][k], 0.1)
-        Bar.update(i/10)
+                network = updateWeight(network, training.exo[j][k], 0.2)
+        Bar.update(i)
     return network
 
 ##Test
-network = initNeuralNetwork(625, [16], 3)
-trainingNetwork(1000, network)
+network = initNeuralNetwork(625, [16, 16], 4)
+trainingNetwork(100, network)
 testa = feedfoward(network, training.test[0])[-1]
 
 print("\n")

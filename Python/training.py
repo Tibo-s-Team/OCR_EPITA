@@ -47,11 +47,18 @@ def creatlist_matrixtest(list_image_test):
     return res
 
 
-resultA = [1, 0, 0]
-resultB = [0, 1, 0]
-resultC = [0, 0, 1]
+resultA = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+resultB = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0]
+resultC = [0, 0, 1, 0, 0, 0, 0, 0, 0, 0]
+resultD = [0, 0, 0, 1, 0, 0, 0, 0, 0, 0]
+resultE = [0, 0, 0, 0, 1, 0, 0, 0, 0, 0]
+resultF = [0, 0, 0, 0, 0, 1, 0, 0, 0, 0]
+resultG = [0, 0, 0, 0, 0, 0, 1, 0, 0, 0]
+resultH = [0, 0, 0, 0, 0, 0, 0, 1, 0, 0]
+resultI = [0, 0, 0, 0, 0, 0, 0, 0, 1, 0]
+resultJ = [0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
 
 listfolderLetters = creatList_folderLetters("letters\\")
 exo = creatLsit_matrix(listfolderLetters)
-solution = [resultA, resultB, resultC]
+solution = [resultA, resultB, resultC, resultD, resultE, resultF, resultG, resultH, resultI, resultJ]
 test = creatlist_matrixtest(creatList_images("test\\"))
