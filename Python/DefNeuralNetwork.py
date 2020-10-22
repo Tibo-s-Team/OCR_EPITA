@@ -61,9 +61,10 @@ def backforawrd(network, output):
                 network[i][j]["error"] = (output[j] - network[i][j]["output"]) * sigmoidPrime(network[i][j]["output"])
         else:
             for j in range(len(network[i])):
+                error = 0
                 for k in range(len(network[i+1])):
-                    error = network[i+1][k]["weight"][j] * network[i+1][k]["error"]
-                network[i][j]["error"] = error * sigmoidPrime( network[i][j]["output"])
+                    error += network[i+1][k]["weight"][j] * network[i+1][k]["error"] #Lowen le GENIE
+                network[i][j]["error"] = error * sigmoidPrime(network[i][j]["output"])
     return network
 
 def updateWeight (network, inputs, coeff):
@@ -82,26 +83,39 @@ def trainingNetwork(times, network):
     Bar = BarDeChargement.ProgressBar(100, 60, 'Apprentissage')
     for i in range(times):
         for j in range(len(training.exo)):
-            for k in range(len(training.exo[j])):
-                network = feedfoward(network, training.exo[j][k])
+            for k in range(15):
+                train = random.randint(0, 360)
+                network = feedfoward(network, training.exo[j][train])
                 network = backforawrd(network, training.solution[j])
-                network = updateWeight(network, training.exo[j][k], 0.2)
-        Bar.update(i/100)
+                network = updateWeight(network, training.exo[j][train], 0.1)
+        Bar.update(i/10 )
+    saveNeurones(network)
     return network
 
 
 ##Test
 def test_print(network, numbertest, letter):
     print("##########"+letter+"##########")
-    result = feedfoward(network, training.test[numbertest])[-1]
-    for i in range(len(result)):
-        if i == numbertest:
-            print("#", result[i]["output"])
-        else:
-            print(result[i]["output"])
+    resultLv1 = feedfoward(network, training.testLv1[numbertest])[-1]
+    maxi_val_Lv1 = 0
+    maxi_lettre_Lv1 = -1
+    maxi_val_Lv2 = 0
+    maxi_lettre_Lv2 = -1
+    for i in range(len(resultLv1)):
+        if resultLv1[i]["output"] > maxi_val_Lv1:
+            maxi_val_Lv1 = resultLv1[i]["output"]
+            maxi_lettre_Lv1 = i
+    resultLv2 = feedfoward(network, training.testLv2[numbertest])[-1]
+    for i in range(len(resultLv2)):
+        if resultLv2[i]["output"] > maxi_val_Lv2:
+            maxi_val_Lv2 = resultLv2[i]["output"]
+            maxi_lettre_Lv2 = i
+    print("LV1 :", training.parsingNeuronne2Letter(maxi_lettre_Lv1), "=", str(maxi_val_Lv1))
+    print("LV2 :", training.parsingNeuronne2Letter(maxi_lettre_Lv2), "=", str(maxi_val_Lv2))
 
-network = initNeuralNetwork(625, [25, 25], 10)
-trainingNetwork(10, network)
+#network = initNeuralNetwork(625, [16, 16], 10)
+#trainingNetwork(1000, network)
+network = loadNeurones()
 
 print("\n")
 test_print(network, 0, "A")
@@ -112,8 +126,7 @@ test_print(network, 4, "E")
 test_print(network, 5, "F")
 test_print(network, 6, "G")
 test_print(network, 7, "H")
+test_print(network, 8, "I")
+test_print(network, 9, "J")
 
-new_network = NeuralNetwork.Network(3, [16,16], 3)
-print(new_network.display())
-print(network)
 
