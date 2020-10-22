@@ -86,27 +86,32 @@ def trainingNetwork(times, network):
                 network = feedfoward(network, training.exo[j][k])
                 network = backforawrd(network, training.solution[j])
                 network = updateWeight(network, training.exo[j][k], 0.1)
-        Bar.update(i/10)
+        Bar.update(i/100)
     return network
 
 
 ##Test
+def test_print(network, numbertest, letter):
+    print("##########"+letter+"##########")
+    result = feedfoward(network, training.test[numbertest])[-1]
+    for i in range(len(result)):
+        if i == numbertest:
+            print("#", result[i]["output"])
+        else:
+            print(result[i]["output"])
 
-network = initNeuralNetwork(3, [16, 16], 3)
-"""
+network = initNeuralNetwork(625, [16, 16], 10)
 trainingNetwork(1000, network)
-result = feedfoward(network, training.exo[0][5])[-1]
-for i in range(len(result)):
-    print(result[i]["output"])
-print("###################")
-result = feedfoward(network, training.exo[1][2])[-1]
-for i in range(len(result)):
-    print(result[i]["output"])
-print("###################")
-result = feedfoward(network, training.exo[2][6])[-1]
-for i in range(len(result)):
-    print(result[i]["output"])
-"""
+
+print("\n")
+test_print(network, 0, "A")
+test_print(network, 1, "B")
+test_print(network, 2, "C")
+test_print(network, 3, "D")
+test_print(network, 4, "E")
+test_print(network, 5, "F")
+test_print(network, 6, "G")
+test_print(network, 7, "H")
 
 new_network = NeuralNetwork.Network(3, [16,16], 3)
 print(new_network.display())
