@@ -17,7 +17,7 @@ def RotateImages360(pathimage):
                 (pixelr, pixelg, pixelb) = rotate1.getpixel((k, l))
                 if pixelr < 50:
                     rotate1.putpixel((k, l), (255, 255, 255, 255))
-                elif pixelr < 200:
+                elif pixelr < 200 and pixelb < pixelr:
                     rotate1.putpixel((k,l), (pixelr-150, pixelg, pixelb, 255))
         rotate1.save(pathimage[-5]+str(i)+".png", 'png')
 
