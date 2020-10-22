@@ -46,7 +46,6 @@ def creatlist_matrixtest(list_image_test):
         res.append(matrix)
     return res
 
-
 resultA = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 resultB = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0]
 resultC = [0, 0, 1, 0, 0, 0, 0, 0, 0, 0]
