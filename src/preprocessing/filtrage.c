@@ -12,7 +12,8 @@ void swap(Uint8 *a, Uint8 *b);
 //--------------------------------
 
 void convolution(Kernel *kernel) {
-    // reverse columns and lines of k
+    // TODO
+    // reverse columns and lines of k - Done
     // place chosen pixel in the center of the kernel
     // multiplier les elements correpondants (k[i,j] * pixels[x-1+i, y-1+j])
     // additioner tous les resultats des multiplications

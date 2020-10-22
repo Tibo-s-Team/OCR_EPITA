@@ -1,5 +1,6 @@
 #include "image.h"
 
+// Loads an image from a file and returns an Image struct
 Image loadImage(const char *path) {
     SDL_Surface *surface = NULL;
     Image image;
@@ -27,6 +28,9 @@ Image loadImage(const char *path) {
     return image;
 }
 
+#pragma region getPixel
+
+// Returns the address in memory of the pixel at the (x, y) coordinate
 static inline Uint8 *getPixelRef(SDL_Surface *surf, int x, int y) {
     if (x > surf->w || y > surf->h)
         errx(1, "Error: image.c - getPixelRef : IndexOutOfBounds.");
@@ -35,6 +39,13 @@ static inline Uint8 *getPixelRef(SDL_Surface *surf, int x, int y) {
     return (Uint8 *)surf->pixels + y * surf->pitch + x * bpp;
 }
 
+/*!
+ * Stores the rgb value of the pixel at the (x, y) coordinate.
+ * @param image a non BW image (bits stored on 3 or 4 bytes)
+ * @param r red value output
+ * @param g green value output
+ * @param b blue value output
+ */
 void getPixelRGB(Image *image, const int x, const int y, Uint8 *r, Uint8 *g,
                  Uint8 *b) {
     Uint8 *pixel = getPixelRef(image->surface, x, y);
@@ -48,6 +59,7 @@ void getPixelRGB(Image *image, const int x, const int y, Uint8 *r, Uint8 *g,
         return;
     }
 
+    // Bitwise operation to create a RGB representation of the pixel's color
     if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
         color = pixel[0] << 16 | pixel[1] << 8 | pixel[2];
     else
@@ -56,6 +68,10 @@ void getPixelRGB(Image *image, const int x, const int y, Uint8 *r, Uint8 *g,
     SDL_GetRGB(color, image->surface->format, r, g, b);
 }
 
+/*!
+ * @return 8bits color value of a pixel
+ * @param image greyscaled / BW image (same R G & B for each pixel)
+ */
 Uint8 getPixelColor(Image *image, const int x, const int y) {
     Uint8 *pixel = getPixelRef(image->surface, x, y);
     Uint8 r, g, b;
@@ -78,6 +94,13 @@ Uint8 getPixelColor(Image *image, const int x, const int y) {
     return 0;
 }
 
+#pragma endregion getPixel
+
+/*!
+ * Changes the color of a pixel to a shade of grey.
+ * @param color new color will be of the form RGB(color, color, color).
+ * If image is BW anything other than black will result in a white pixel.
+ */
 void setPixelColor(Image *image, Uint8 color, const int x, const int y) {
     Uint8 *pixel = getPixelRef(image->surface, x, y);
 

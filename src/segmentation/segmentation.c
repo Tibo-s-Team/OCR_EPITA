@@ -7,6 +7,7 @@ Uint8 *horizontalHistogram(Image *image);
 
 //---------------------------------------------
 
+// Highlights what the algorithm thinks is a line
 void segmentLine(Image *image) {
     Uint8 *histo = horizontalHistogram(image);
     int mean = 0;
@@ -24,11 +25,15 @@ void segmentLine(Image *image) {
 
     for (int y = 0; y < image->height; y++) {
         if (histo[y] > mean) {
-            for (int x = 0; x < image->width; x++) setPixelColor(image, BLACK, x, y);
+            for (int x = 0; x < image->width; x++)
+                setPixelColor(image, BLACK, x, y);
         }
     }
 }
 
+#pragma region histogram
+
+// @return the image's pixel histogram line per line
 Uint8 *horizontalHistogram(Image *image) {
     Uint8 *res = malloc(image->height * sizeof(Uint8));
     Uint8 *ptr_res = res;
@@ -42,6 +47,7 @@ Uint8 *horizontalHistogram(Image *image) {
     return res;
 }
 
+// @return the image's pixel histogram column per column
 Uint8 *verticalHistogram(Image *image) {
     Uint8 *res = malloc(image->width * sizeof(Uint8));
     Uint8 *ptr_res = res;
@@ -73,3 +79,5 @@ void displayHisto(Image *image) {
     displayImage(image);
     free(histo);
 }
+
+#pragma endregion histogram
