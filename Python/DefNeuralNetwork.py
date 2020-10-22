@@ -79,22 +79,29 @@ def updateWeight (network, inputs, coeff):
             network[i][k]['biais'] += coeff * network[i][k]['error']
     return network
 
-def trainingNetwork(times, network):
+def trainingNetwork(times, network, input=None):
     Bar = BarDeChargement.ProgressBar(100, 60, 'Apprentissage')
     for i in range(times):
+        for j in range(len(input)):
+            #for XOR
+            network = feedfoward(network, input[j])
+            network = backforawrd(network, input[j])
+            network = updateWeight(network, input[j], 0.1)
+        """
         for j in range(len(training.exo)):
             for k in range(15):
                 train = random.randint(0, 360)
+                
                 network = feedfoward(network, training.exo[j][train])
                 network = backforawrd(network, training.solution[j])
                 network = updateWeight(network, training.exo[j][train], 0.1)
-        Bar.update(i/10 )
-    saveNeurones(network)
+                """
+        Bar.update(i*10)
     return network
 
 
 ##Test
-
+"""
 def test_print(network, numbertest, letter):
     print("##########"+letter+"##########")
     result = feedfoward(network, training.test[numbertest])[-1]
@@ -105,7 +112,7 @@ def test_print(network, numbertest, letter):
             print(result[i]["output"])
 
 network = initNeuralNetwork(625, [16, 16], 10)
-trainingNetwork(1000, network)
+trainingNetwork(10, network)
 #network = loadNeurones()
 print("\n")
 test_print(network, 0, "A")
@@ -117,7 +124,7 @@ test_print(network, 5, "F")
 test_print(network, 6, "G")
 test_print(network, 7, "H")
 """
-
+"""
 new_network = NeuralNetwork.Network(3, [16,16], 3)
 print(new_network.display())
 print(network)
