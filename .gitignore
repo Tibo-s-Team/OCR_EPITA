@@ -1,4 +1,4 @@
-# Visual studio files
+# Text editor files
 *.vscode
 *.idea
 */__pycache__/
@@ -40,6 +40,7 @@
 *.i*86
 *.x86_64
 *.hex
+TIBO
 
 # Debug files
 *.dSYM/

@@ -116,6 +116,7 @@ def test_print(network, numbertest, letter):
 #network = initNeuralNetwork(625, [16, 16], 10)
 #trainingNetwork(1000, network)
 network = loadNeurones()
+
 print("\n")
 test_print(network, 0, "A")
 test_print(network, 1, "B")

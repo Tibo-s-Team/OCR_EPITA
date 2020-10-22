@@ -1,22 +1,28 @@
-#ifndef IMG_H_
-#define IMG_H_
+#ifndef IMAGE_H_
+#define IMAGE_H_
 
+#include <stdlib.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <err.h>
 
-typedef enum ImageType { RGB, GRAYSCALED, BW } ImageType;
+#define WHITE 255
+#define BLACK 0
+
+typedef enum ImageType { RGB, GRAYSCALE, BW } ImageType;
 
 typedef struct Image {
     SDL_Surface *surface;
     int width, height;
     ImageType imageType;
-    int seuil;
-    Uint8 *bitmap;
 } Image;
 
 Image loadImage(const char *path);
+Uint8 getPixelColor(Image *image, const int x, const int y);
+void getPixelRGB(Image *image, const int x, const int y, 
+                Uint8 *r, Uint8 *g, Uint8 *b);
+void setPixelColor(Image *image, Uint8 color, 
+                const int x, const int y);
 void displayImage(Image *image);
-void grayscaleImage(Image *image);
-void blackAndWhite(Image *image);
 
 #endif
