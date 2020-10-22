@@ -100,8 +100,8 @@ def test_print(network, numbertest, letter):
         else:
             print(result[i]["output"])
 
-network = initNeuralNetwork(625, [25], 10)
-trainingNetwork(10000, network)
+network = initNeuralNetwork(625, [25, 25], 10)
+trainingNetwork(10, network)
 
 print("\n")
 test_print(network, 0, "A")
