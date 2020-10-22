@@ -61,8 +61,9 @@ def backforawrd(network, output):
                 network[i][j]["error"] = (output[j] - network[i][j]["output"]) * sigmoidPrime(network[i][j]["output"])
         else:
             for j in range(len(network[i])):
+                error = 0
                 for k in range(len(network[i+1])):
-                    error = network[i+1][k]["weight"][j] * network[i+1][k]["error"]
+                    error += network[i+1][k]["weight"][j] * network[i+1][k]["error"]
                 network[i][j]["error"] = error * sigmoidPrime( network[i][j]["output"])
     return network
 
@@ -86,11 +87,14 @@ def trainingNetwork(times, network):
                 network = feedfoward(network, training.exo[j][k])
                 network = backforawrd(network, training.solution[j])
                 network = updateWeight(network, training.exo[j][k], 0.2)
-        Bar.update(i/100)
+        while times/100 != 1:
+            times = times*10 if times/100 < 1 else times/10
+        Bar.update(i*times)
     return network
 
 
 ##Test
+
 def test_print(network, numbertest, letter):
     print("##########"+letter+"##########")
     result = feedfoward(network, training.test[numbertest])[-1]
@@ -112,8 +116,9 @@ test_print(network, 4, "E")
 test_print(network, 5, "F")
 test_print(network, 6, "G")
 test_print(network, 7, "H")
+"""
 
 new_network = NeuralNetwork.Network(3, [16,16], 3)
 print(new_network.display())
 print(network)
-
+"""
