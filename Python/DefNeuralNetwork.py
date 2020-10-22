@@ -1,8 +1,10 @@
 import random
 import math
+import json
 from PIL import Image
 import training
 import BarDeChargement
+import NeuralNetwork
 
 random.seed()
 
@@ -26,6 +28,21 @@ def initNeuralNetwork(nbInput, hiddenLayer, nbOutPut):
             LayerDico.append(neuronne)
         network.append(LayerDico)
     return network
+
+def loadNeurones(path = "DataSave/TrainedNeurones.json"):
+    """
+    :param path: path we want to load for network
+    :return: the new reconstructed network from a json file
+    """
+    with open(path) as Network_json:
+        network = json.load(Network_json)
+    return network
+
+
+def saveNeurones(network, path="DataSave/TrainedNeurones.json"):
+    with open(path, 'w') as Network_json:
+        json.dump(network, Network_json, indent=4)
+
 
 
 def feedfoward(network, input):
@@ -72,6 +89,7 @@ def trainingNetwork(times, network):
         Bar.update(i/100)
     return network
 
+
 ##Test
 def test_print(network, numbertest, letter):
     print("##########"+letter+"##########")
@@ -94,8 +112,8 @@ test_print(network, 4, "E")
 test_print(network, 5, "F")
 test_print(network, 6, "G")
 test_print(network, 7, "H")
-test_print(network, 8, "I")
-test_print(network, 9, "J")
 
-
+new_network = NeuralNetwork.Network(3, [16,16], 3)
+print(new_network.display())
+print(network)
 
