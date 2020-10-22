@@ -1,109 +1,100 @@
-#include <stdio.h>
-#include <stdlib.h>
-
-#include "../image.h"
-
-//-----------------------------------------------
-
-void grayscale32(Image *image, Uint8 *pixels, SDL_PixelFormat *format,
-                 const int pitch);
-
-void bw32(Image *image, Uint8 *pixels, SDL_PixelFormat *format,
-          const int pitch);
-
-//-----------------------------------------------
+#include "preprocessing.h"
 
 #pragma region grayscale
 
-// Applies a grayscaling algorithm onto the image
-// Fills its structure's bitmap afterwards
-void grayscaleImage(Image *image) {
-    SDL_Surface *surface = image->surface;
-    Uint8 *pixels = surface->pixels;
-
-    if (surface->format->BytesPerPixel == 1 && image->imageType == RGB)
-        image->imageType = GRAYSCALED;  // image en niveaux de gris d'origine
-    if (image->imageType != RGB) return;
-
-    grayscale32(image, pixels, surface->format, surface->pitch);
-    image->imageType = GRAYSCALED;
-}
-
-// Grayscaling algorithm for an image coded on 32bits and bitmap filling
-void grayscale32(Image *image, Uint8 *pixels, SDL_PixelFormat *format,
-                 const int pitch) {
-    Uint8 *byteptr = NULL, *matrixPtr = NULL, *bitmap = image->bitmap;
-    Uint32 *targetPixel = NULL;
+void grayscale(Image *image) {
     Uint8 r, g, b, gray;
-    int width = image->width, height = image->height;
 
-    bitmap = malloc(height * width * sizeof(Uint8));
+    if (image->imageType != RGB) return;
+    image->imageType = GRAYSCALE;
 
-    // pixels : height * rows of (3 * width) pixels
-    // a pixel stores info on 3 bytes
-    for (int y = 0; y < height; y++) {
-        byteptr = &pixels[y * pitch];
-        matrixPtr = &bitmap[y];
-        for (int x = 0; x < width; x++, matrixPtr++, byteptr += 3) {
-            targetPixel = (Uint32 *)byteptr;
-            SDL_GetRGB(*targetPixel, format, &r, &g, &b);
-
+    for (int y = 0; y < image->height; y++) {
+        for (int x = 0; x < image->width; x++) {
+            getPixelRGB(image, x, y, &r, &g, &b);
+            // printf("%d|%d|%d\n", r, g, b);
             gray = 0.21 * r + 0.72 * g + 0.07 * b;  // grayscaling formula
-            image->seuil += gray;
-            *targetPixel = SDL_MapRGB(format, gray, gray, gray);
+            setPixelColor(image, gray, x, y);
+            /*
+            Uint32 pixel = get_pixel(image->surface, x, y);
+            SDL_GetRGB(pixel, image->surface->format, &r, &g, &b);
 
-            *matrixPtr = gray;
+            gray = 0.3 * r + 0.59 * g + 0.11 * b;
+            pixel = SDL_MapRGB(image->surface->format, gray, gray, gray);
+
+            put_pixel(image->surface, x, y, pixel);
+            */
         }
     }
+}
 
-    image->seuil /= width * height;  // average value of all grayscaled pixels
+void grayscaleTest(Image *image) {
+    const int WIDTH = image->width, HEIGHT = image->height;
+    int count = 2;
+
+    SDL_Window *win = NULL;
+    SDL_Renderer *renderer = NULL;
+    SDL_Texture *img = NULL;
+    SDL_Rect texr;
+
+    // create rendering context
+    win = SDL_CreateWindow("Image Preview", 100, 100, WIDTH, HEIGHT, 0);
+    renderer = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
+
+    // load image in the window
+    img = SDL_CreateTextureFromSurface(renderer, image->surface);
+    texr.x = 0;
+    texr.y = 0;
+    texr.w = WIDTH;
+    texr.h = HEIGHT;
+
+    while (count) {
+        SDL_Event e;
+        if (SDL_PollEvent(&e))
+            if (e.type == SDL_QUIT || e.type == SDL_KEYUP) {
+                grayscale(image);
+                count--;
+            }
+
+        // refresh renderer
+        SDL_RenderClear(renderer);
+        SDL_RenderCopy(renderer, img, NULL, &texr);
+        SDL_RenderPresent(renderer);
+    }
+
+    SDL_DestroyTexture(img);
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(win);
 }
 
 #pragma endregion grayscale
 
-#pragma region black_and_white
+#pragma region BW
 
-// Applies black and white algorithm onto an image and updates its bitmap
-// @param image : greyscaled image (uniformed RGB values for each pixel)
 void blackAndWhite(Image *image) {
-    SDL_Surface *surface = image->surface;
-    SDL_PixelFormat *format = surface->format;
+    int seuil = 0;
 
-    if (image->imageType !=
-        GRAYSCALED)  // Can only apply to a Grayscaled 32bits image
-        return;
-
-    if (format->BytesPerPixel != 3) {
-        printf("ERROR: image.c: blackAndWhite -\n");
-        printf("PixelFormat not supported (must be 8 or 32 bits).\n");
-    } else {
-        bw32(image, image->surface->pixels, format, surface->pitch);
-        image->imageType = BW;
-    }
-}
-
-// Applies black and white algorithm onto image encoded on 32bits
-// Fills its bitmap afterwards
-void bw32(Image *image, Uint8 *pixels, SDL_PixelFormat *format,
-          const int pitch) {
-    Uint8 *byteptr = NULL, *matrixPtr = NULL, *bitmap = image->bitmap;
-    Uint32 *targetPixel = NULL;
-    Uint8 r, g, b, bw;
-    int width = image->width, height = image->height;
-
-    bitmap = malloc(width * height * sizeof(Uint8));
-
-    for (int y = 0; y < height; y++) {
-        byteptr = &pixels[y * pitch];
-        matrixPtr = &bitmap[y];
-        for (int x = 0; x < width; x++, byteptr += 3, matrixPtr++) {
-            targetPixel = (Uint32 *)byteptr;
-            SDL_GetRGB(*targetPixel, format, &r, &g, &b);
-            bw = (g < image->seuil) ? 0 : 255;
-            *matrixPtr = (Uint8)bw;
-            *targetPixel = SDL_MapRGB(format, bw, bw, bw);
+    if (image->imageType == RGB)
+        warnx(
+            "Warning: supression_couleurs.c - blackAndWhite : imageType must "
+            "be GRAYSCALE. Skipped.");
+    else {
+        for (int y = 0; y < image->height; y++) {
+            for (int x = 0; x < image->width; x++) {
+                Uint8 color = getPixelColor(image, x, y);
+                seuil += color;
+            }
+        }
+        seuil = seuil / (image->width * image->height);
+        for (int y = 0; y < image->height; y++) {
+            for (int x = 0; x < image->width; x++) {
+                Uint8 color = getPixelColor(image, x, y);
+                color = color <= seuil ? BLACK : WHITE;
+                setPixelColor(image, color, x, y);
+            }
         }
     }
+
+    image->imageType = BW;
 }
 
-#pragma endregion black_and_white
+#pragma endregion BW
