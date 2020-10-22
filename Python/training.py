@@ -60,4 +60,28 @@ resultJ = [0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
 listfolderLetters = creatList_folderLetters("..\\tests\\images\\letters\\")
 exo = creatLsit_matrix(listfolderLetters)
 solution = [resultA, resultB, resultC, resultD, resultE, resultF, resultG, resultH, resultI, resultJ]
-test = creatlist_matrixtest(creatList_images("..\\tests\images\\test_letters\\"))
+testLv1 = creatlist_matrixtest(creatList_images("..\\tests\images\\test_letters\\"))
+testLv2 = creatlist_matrixtest(creatList_images("..\\tests\images\\test_letters_lv2\\"))
+
+def parsingNeuronne2Letter(number):
+    if number == 0:
+        return "A"
+    if number == 1:
+        return "B"
+    if number == 2:
+        return "C"
+    if number == 3:
+        return "D"
+    if number == 4:
+        return "E"
+    if number == 5:
+        return "F"
+    if number == 6:
+        return "G"
+    if number == 7:
+        return "H"
+    if number == 8:
+        return "I"
+    if number == 9:
+        return "J"
+    return None
