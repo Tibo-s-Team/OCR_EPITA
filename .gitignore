@@ -1,6 +1,7 @@
 # Visual studio files
 *.vscode
 *.idea
+*/__pycache__/
 
 # Prerequisites
 *.d
