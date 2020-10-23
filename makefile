@@ -1,5 +1,5 @@
-OBJS	= main.o src/image.o src/preprocessing/suppression_couleurs.o src/segmentation/segmentation.o src/preprocessing/filtrage.o 
-SOURCE	= main.c src/image.c src/preprocessing/suppression_couleurs.c src/segmentation/segmentation.c src/preprocessing/filtrage.c 
+OBJS	= main.o src/image.o src/preprocessing/suppression_couleurs.o src/segmentation/segmentation.o src/segmentation/binaryTree.o src/preprocessing/filtrage.o 
+SOURCE	= main.c src/image.c src/preprocessing/suppression_couleurs.c src/segmentation/segmentation.c src/segmentation/binaryTree.c src/preprocessing/filtrage.c 
 HEADER	= src/*.h 
 OUT	= TIBO
 CC	 = gcc

@@ -21,7 +21,6 @@ int main(int argc, char *argv[]) {
             image = loadImage(argv[i]);
             grayscale(&image);
             blackAndWhite(&image);
-            displayImage(&image);
             segmentLine(&image);
             displayImage(&image);
 
