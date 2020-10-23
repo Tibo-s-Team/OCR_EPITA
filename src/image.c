@@ -51,7 +51,7 @@ void getPixelRGB(Image *image, const int x, const int y, Uint8 *r, Uint8 *g,
     Uint8 *pixel = getPixelRef(image->surface, x, y);
     Uint32 color;
 
-    if (image->imageType == BW) {
+    if (image->surface->format->BytesPerPixel <= 2) {
         warnx(
             "Warning: image.c - getPixelRGB : image's pixels must be encoded "
             "on 32B of data. "
@@ -76,22 +76,20 @@ Uint8 getPixelColor(Image *image, const int x, const int y) {
     Uint8 *pixel = getPixelRef(image->surface, x, y);
     Uint8 r, g, b;
 
-    switch (image->imageType) {
-        case RGB:
-            warnx(
-                "Warning: image.c - getPixelColor : imageType must not be "
-                "RGB. "
-                "Skipped.");
-            return 0;
-        case GRAYSCALE:
-            getPixelRGB(image, x, y, &r, &g, &b);
-            return g;
-        case BW:
-            // SDL - 8bits : 0 = white & 1 = black
-            return !(*pixel) * 255;
+    if (image->imageType == RGB) {
+        warnx(
+            "Warning: image.c - getPixelColor : imageType must not be "
+            "RGB. "
+            "Skipped.");
+        return 0;
     }
 
-    return 0;
+    if (image->surface->format->BytesPerPixel <= 2)
+        // SDL - 8bits : 0 = white & 1 = black
+        return !(*pixel) * 255;
+
+    getPixelRGB(image, x, y, &r, &g, &b);
+    return g;
 }
 
 #pragma endregion getPixel

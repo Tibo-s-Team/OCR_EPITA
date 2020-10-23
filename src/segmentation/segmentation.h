@@ -3,6 +3,15 @@
 
 #include "../image.h"
 
+typedef enum HistogramType { LINE, COLUMN } HistogramType;
+
+typedef struct Histogram {
+    int *histo;
+    HistogramType type;
+    int threshold[2];
+    int mean, size;
+} Histogram;
+
 void segmentLine(Image *image);
 void displayHisto(Image *image);
 
