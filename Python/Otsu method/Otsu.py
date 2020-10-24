@@ -2,6 +2,16 @@ from PIL import Image
 
 
 def paintGray(filename, output):
+    """
+    paintGray function
+    Author: Lowen Desmarais
+    Date: 24 October 2020
+
+    Grayscales an image with the specified path, and outputs with the specified output path
+
+    :param filename: Input path image
+    :param output: Output path
+    """
     image = Image.open(filename)
     (width, height) = image.size
     r, g, b = image.split()
@@ -16,6 +26,15 @@ def paintGray(filename, output):
 
 
 def histogramGray(filename):
+    """
+    histogramGray function
+    Author: Lowen Desmarais
+    Date: 24 October 2024
+
+    Creates a histogram of grey levels of an image from the specified path
+
+    :param filename: path to load image
+    """
     histogram = [0] * 256  # les valeurs de gris de pixel
     image = Image.open(filename)
     (width, height) = image.size
@@ -29,6 +48,16 @@ def histogramGray(filename):
 
 
 def Threshold(histogram):
+    """
+    Threshold function
+    Author: Lowen Desmarais
+    Date: 24 October 2020
+
+    calculates the optimal threshold value using the otsu method with the gray histogram
+
+    :param histogram: (list:) histogram of gray levels
+    :return: threshold value (between 0 and 255)
+    """
     totalPixel = 0
     for i in range(256):
         totalPixel += histogram[i]
@@ -54,6 +83,15 @@ def Threshold(histogram):
     return thresholdMax
 
 def Otsu(filename):
+    """
+    Otsu function
+    Author: Desmarais Lowen
+    Date: 24 October 2020
+
+    contrasts the image using the calculated threshold value for all pixels of the image and saves it
+
+    :param filename: path of image input
+    """
     image = Image.open(filename)
     histogram = histogramGray(filename)
     threshold = Threshold(histogram)
