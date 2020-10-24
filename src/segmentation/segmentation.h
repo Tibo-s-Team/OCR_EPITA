@@ -14,18 +14,25 @@ typedef struct Histogram {
     int mean, size;
 } Histogram;
 
-void segmentLine(Image *image);
-void displayHisto(Image *image);
+// classic arrray implementation
+void segmentation(Image *image);
+int *segmentLine(Image *image);
+// binaryTree implementation
+void bin_segmentLine(Image *image);
 
 // binaryTree.c
 
 typedef struct BinTree {
-  int key[2];
-  struct BinTree *child;
-  struct BinTree *sibling;
+    int key[2];
+    struct BinTree *child;
+    struct BinTree *sibling;
+    struct BinTree *parent;
 } BinTree;
 
 BinTree createBinTree(int start, int end);
-void appendBinTree(BinTree *new, BinTree *dest);
+void addSibling(BinTree *new, BinTree *dest);
+void addChild(BinTree *new, BinTree *dest);
+void mapFunction(BinTree *tree, Image *image, void (*f)(Image *, BinTree *));
+void printBranch(BinTree *node);
 
 #endif

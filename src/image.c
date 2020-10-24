@@ -33,7 +33,7 @@ Image loadImage(const char *path) {
 // Returns the address in memory of the pixel at the (x, y) coordinate
 static inline Uint8 *getPixelRef(SDL_Surface *surf, int x, int y) {
     if (x > surf->w || y > surf->h)
-        errx(1, "Error: image.c - getPixelRef : IndexOutOfBounds.");
+        errx(1, "Error: image.c - getPixelRef : IndexOutOfBounds (%d,%d)", x, y);
 
     Uint8 bpp = surf->format->BytesPerPixel;
     return (Uint8 *)surf->pixels + y * surf->pitch + x * bpp;
