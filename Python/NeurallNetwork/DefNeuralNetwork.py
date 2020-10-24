@@ -195,8 +195,8 @@ def trainingNetwork(times, network, input=None):
                 network = feedfoward(network, training.exo[j][train])
                 network = backforawrd(network, training.solution[j])
                 network = updateWeight(network, training.exo[j][train], 0.1)
-                """
-        Bar.update(i*10)
+        Bar.update(i/10 )
+    saveNeurones(network)
     return network
 
 
@@ -204,16 +204,27 @@ def trainingNetwork(times, network, input=None):
 """
 def test_print(network, numbertest, letter):
     print("##########"+letter+"##########")
-    result = feedfoward(network, training.test[numbertest])[-1]
-    for i in range(len(result)):
-        if i == numbertest:
-            print("#", result[i]["output"])
-        else:
-            print(result[i]["output"])
+    resultLv1 = feedforward(network, training.testLv1[numbertest])[-1]
+    maxi_val_Lv1 = 0
+    maxi_lettre_Lv1 = -1
+    maxi_val_Lv2 = 0
+    maxi_lettre_Lv2 = -1
+    for i in range(len(resultLv1)):
+        if resultLv1[i]["output"] > maxi_val_Lv1:
+            maxi_val_Lv1 = resultLv1[i]["output"]
+            maxi_lettre_Lv1 = i
+    resultLv2 = feedforward(network, training.testLv2[numbertest])[-1]
+    for i in range(len(resultLv2)):
+        if resultLv2[i]["output"] > maxi_val_Lv2:
+            maxi_val_Lv2 = resultLv2[i]["output"]
+            maxi_lettre_Lv2 = i
+    print("LV1 :", training.parsingNeuronne2Letter(maxi_lettre_Lv1), "=", str(maxi_val_Lv1))
+    print("LV2 :", training.parsingNeuronne2Letter(maxi_lettre_Lv2), "=", str(maxi_val_Lv2))
 
-network = initNeuralNetwork(625, [16, 16], 10)
-trainingNetwork(10, network)
-#network = loadNeurones()
+#network = initNeuralNetwork(625, [16, 16], 10)
+#trainingNetwork(1000, network)
+network = loadNeurones()
+
 print("\n")
 test_print(network, 0, "A")
 test_print(network, 1, "B")
@@ -223,9 +234,7 @@ test_print(network, 4, "E")
 test_print(network, 5, "F")
 test_print(network, 6, "G")
 test_print(network, 7, "H")
-"""
-"""
-new_network = NeuralNetwork.Network(3, [16,16], 3)
-print(new_network.display())
-print(network)
-"""
+test_print(network, 8, "I")
+test_print(network, 9, "J")
+
+
