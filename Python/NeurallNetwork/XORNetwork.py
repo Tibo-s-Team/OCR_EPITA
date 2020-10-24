@@ -8,7 +8,18 @@ DefNeuralNetwork.trainingNetwork(1000, network, input)
 
 
 def XOR_print(network, input, expected_output):
-    result = DefNeuralNetwork.feedfoward(network, input)[-1]
+    """
+    XOR_print function
+    Author: Lowen Desmarais
+    Date: 22 October 2020
+
+    prints all output results from the XOR Neural Network
+
+    :param network: The neural Network
+    :param input: input value
+    :param expected_output: expected output value
+    """
+    result = DefNeuralNetwork.feedforward(network, input)[-1]
     message = "Success!" if result[0] == expected_output else "Failure..."
     print(f"\n{message} expected: {expected_output} got: {result[0]['output']}")
 
