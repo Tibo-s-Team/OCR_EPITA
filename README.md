@@ -11,20 +11,30 @@ or use the Python scripts for the Neural Network
 
 
 ## Running the tests
-Python: 
-- Xor: Use XOR script
-- Grayscale: Use the Otsu: PaintGray function
+Shell:
+	`tests/scripts/launch.sh/ [--compiler] [-args] [image-path]`
 
+### compiler
 
-C:
-- run `make` and execute the program with the desired arguments using `./TIBO [-args] files`.
+- --gcc : execute C script
+- --python : execute Python script (not a compiler but ...)
+
+### args	
+Please refer to the corresponding script below
+
+### Python: 
+	Xor: Use XOR script
+	Grayscale: Use the Otsu: PaintGray function
+
+### C:
+	run `make` and execute the program with the desired arguments using `./TIBO [-args] files`.
 
 ### arguments
 
-- -g : grayscaling process only
-- -b : binarization process only
-- -l : linewise text segmentation only
-- -w : wordwise text segmentation only (by default)
+	- g : grayscaling process only
+	- b : binarization process only
+	- l : linewise text segmentation only
+	- w : wordwise text segmentation only (by default)
 
 ## File Architecture
 
