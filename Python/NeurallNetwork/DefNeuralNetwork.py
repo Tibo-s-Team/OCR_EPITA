@@ -167,41 +167,32 @@ def updateWeight (network, inputs, coeff):
             network[i][k]['biais'] += coeff * network[i][k]['error']
     return network
 
-def trainingNetwork(times, network, input=None):
+def trainingNetworkImage(times, network):
     """
     trainingNetwork function
     Author: Florian Drevet
     Date: 16 october 2020
 
-    number of times/generation to train network with inputs
+    number of times/generation to train network wqith list of matrix images
 
     :param times: (int:) number of generations
     :param network: The neural network
-    :param input: test input value
     :return: The trained Neural Network
     """
     Bar = BarDeChargement.ProgressBar(100, 60, 'Apprentissage')
     for i in range(times):
-        for j in range(len(input)):
-            #for XOR
-            network = feedforward(network, input[j])
-            network = backPropagation(network, input[j])
-            network = updateWeight(network, input[j], 0.1)
-        """
         for j in range(len(training.exo)):
             for k in range(15):
                 train = random.randint(0, 360)
-                
                 network = feedfoward(network, training.exo[j][train])
                 network = backforawrd(network, training.solution[j])
                 network = updateWeight(network, training.exo[j][train], 0.1)
-        Bar.update(i/10 )
+        Bar.update(i / 10)
     saveNeurones(network)
     return network
 
 
 ##Test
-"""
 def test_print(network, numbertest, letter):
     print("##########"+letter+"##########")
     resultLv1 = feedforward(network, training.testLv1[numbertest])[-1]
@@ -220,7 +211,7 @@ def test_print(network, numbertest, letter):
             maxi_lettre_Lv2 = i
     print("LV1 :", training.parsingNeuronne2Letter(maxi_lettre_Lv1), "=", str(maxi_val_Lv1))
     print("LV2 :", training.parsingNeuronne2Letter(maxi_lettre_Lv2), "=", str(maxi_val_Lv2))
-
+'''
 #network = initNeuralNetwork(625, [16, 16], 10)
 #trainingNetwork(1000, network)
 network = loadNeurones()
@@ -236,5 +227,5 @@ test_print(network, 6, "G")
 test_print(network, 7, "H")
 test_print(network, 8, "I")
 test_print(network, 9, "J")
-
+'''
 
