@@ -1,31 +1,40 @@
 /*!
- *  file created on 10/15/2020 (MM/DD/YYY) by leo.duboin
- * 
+ *  File created on 10/15/2020 (MM/DD/YYYY) by leo.duboin
+ *  Contributors : leo.duboin
+ *
  *  This file implements the text block segmentation process using an histogram
  *  based algorithm. Computing a pixel histogram for each line / column then
  *  finding "blocks" of empty spaces within these histograms.
- * 
- *  10/23 : Implementation of a binaryTree data structure to store all the boundary boxes
+ *
+ *  10/23 : Implementation of a binaryTree data structure to store all the
+ *  boundary boxes.
+ *
+ * //TODO : Fix letter segmentation, implement threshold system
  */
 
 #include "segmentation.h"
 
-#pragma region ArrayMethod
+#pragma region ArrayImplementation
 
 //---------------------------------------------
 
-void highlightWord(Image *image, int height[2], int width[2]);
+void highlightText(Image *image, int height[2], int width[2]);
 
 int *segmentLine(Image *image);
 int *segmentWords(Image *image, int line[2]);
 int *segmentLetters(Image *image, int line[2], int column[2]);
-int *findBlocks(Histogram *histo);
 
 Histogram columnHistogram(Image *image, int lineBlock[2], int columnBLock[2]);
 Histogram lineHistogram(Image *image);
+int *findBlocks(Histogram *histo);
 
 //---------------------------------------------
 
+/*!
+ * Apply segmentation process to a given image using the classic array
+ *  implementation.
+ * @param image black and white image
+ */
 void segmentation(Image *image) {
     if (image->imageType != BW)
         errx(1,
@@ -39,34 +48,56 @@ void segmentation(Image *image) {
         int *words = segmentWords(image, height);
         for (int word = 1; word < words[0]; word += 2) {
             int width[2] = {words[word], words[word + 1]};
-            highlightWord(image, height, width);
+            highlightText(image, height, width);
 
             // int *letters = segmentLetters(image, height, width);
             /*
             for (int letter = 1; letter < letters[0]; letters += 2) {
                 int tmp[2] = {letters[letter], letters[letter + 1]};
-                highlightWord(image, height, tmp);
+                highlightText(image, height, tmp);
             }
             */
         }
     }
 }
 
-void highlightWord(Image *image, int height[2], int width[2]) {
+/*!
+ * Highlight text in an image.
+ * @param image black and white image
+ * @param height tuple with information about the text's height (start, end)
+ * @param width tuple with information about the text's width (start, end)
+ */
+void highlightText(Image *image, int height[2], int width[2]) {
     for (int y = height[0]; y < height[1]; y++) {
         for (int x = width[0]; x < width[1]; x++)
             setPixelColor(image, BLACK, x, y);
     }
 }
 
-// Returns what the algorithm thinks is a line
+/*!
+ * Segment an image into lines.
+ * @param image black and white image
+ * @returns An array of the form [size, (start, end), ..., (start, end)]
+ *  where each tuple represent the start and the end of a line, size being the
+ *  total size of the resulting array.
+ */
 int *segmentLine(Image *image) {
+    // FIXME
     Histogram histo = lineHistogram(image);
     int *blocks = findBlocks(&histo);
 
     return blocks;
 }
 
+/*!
+ * Segment a line into words.
+ * @param image black and white image
+ * @param line tuple representing the starting and the ending height of the line
+ *  to segment
+ * @returns An array of the form [size, (start, end), ..., (start, end)]
+ *  where each tuple represent the starting and the ending width of a word, size
+ *  being the total size of the resulting array.
+ */
 int *segmentWords(Image *image, int line[2]) {
     int column[2] = {0, image->width};
     Histogram histo = columnHistogram(image, line, column);
@@ -75,8 +106,18 @@ int *segmentWords(Image *image, int line[2]) {
     return blocks;
 }
 
-int *segmentLetters(Image *image, int line[2], int column[2]) {
-    Histogram histo = columnHistogram(image, line, column);
+/*!
+ * Segment a word into letters.
+ * @param image black and white image
+ * @param line tuple representing the start and the end width of the line
+ *  containing the word
+ * @param word tuple representing the startign and the ending width of the word
+ * @returns An array of the form [size, (start, end), ..., (start, end)]
+ *  where each tuple represent the starting and the ending width of a word, size
+ *  being the total size of the resulting array.
+ */
+int *segmentLetters(Image *image, int line[2], int word[2]) {
+    Histogram histo = columnHistogram(image, line, word);
     int *blocks = findBlocks(&histo);
 
     return blocks;
@@ -84,8 +125,8 @@ int *segmentLetters(Image *image, int line[2], int column[2]) {
 
 /*!
  * @returns An array of the form [size, (start, end), ..., (start, end)]
- *      with each tuple representing the start and the end of a block.
- *      Size is used to give the resulting array's size.
+ *  with each tuple representing the starting and the ending position of a
+ *  block, size being the total size of the resulting array.
  */
 int *findBlocks(Histogram *histo) {
     int *blocks = calloc(histo->size + 1, sizeof(int));
@@ -121,7 +162,7 @@ int *findBlocks(Histogram *histo) {
 
 #pragma endregion Array
 
-#pragma region BinTreeMethod
+#pragma region BinTreeImplementation
 
 /*!
  * The same algorithm but making use of a binary tree to store the boxes.
@@ -134,12 +175,18 @@ int *findBlocks(Histogram *histo) {
 //--------------------------------------------
 
 BinTree bin_findBlocks(Histogram *histo);
+void bin_highlightText(Image *image, BinTree *tree);
 void bin_test(Image *image, BinTree *tree);
 void getLines(Image *image, BinTree *node);
 
 //--------------------------------------------
 
-void bin_segmentLine(Image *image) {
+/*!
+ * Apply segmentation process to a given image using the binary tree
+ *  implementation.
+ * @param image black and white image
+ */
+void bin_segmentation(Image *image) {
     if (image->imageType != BW)
         errx(1,
              "ERROR : segmentation.c - segmentLine : Image must have been "
@@ -151,10 +198,16 @@ void bin_segmentLine(Image *image) {
 
     BinTree node = createBinTree(0, image->height);
     getLines(image, &node);
-    mapFunction(&node, image, bin_test);
+    mapFunction(&node, image, bin_highlightText);
 }
 
-void bin_test(Image *image, BinTree *tree) {
+/*!
+ * Highlight text in an image.
+ * @param image black and white image
+ * @param tree a tree node whose key contains information about
+ *  the text's position in the image
+ */
+void bin_highlightText(Image *image, BinTree *tree) {
     int start = tree->key[0], end = tree->key[1];
 
     for (int y = start; y < end; y++) {
@@ -163,15 +216,26 @@ void bin_test(Image *image, BinTree *tree) {
     }
 }
 
+/*!
+ * Segement an image into lines and add them as the given node's children.
+ * @param image black and white image
+ * @param node root of the image's 'box' binary tree
+ */
 void getLines(Image *image, BinTree *node) {
     Histogram histo = lineHistogram(image);
     BinTree child = bin_findBlocks(&histo);
     addChild(&child, node);
 }
 
+/*!
+ * Find all the 'box' in a given histogram.
+ * @return a binary tree forest whose tree's keys contain the starting and
+ *  ending position of all the boxes found.
+ */
 BinTree bin_findBlocks(Histogram *histo) {
-    BinTree res = createBinTree(0, 0);
+    BinTree res = createBinTree(0, 0);  // generic tree to append to
     int gap = 0, size = 0, blocks_index = 1;
+
     // Store nodes in an array instead of local stack
     BinTree *nodes = calloc(histo->size + 1, sizeof(BinTree));
 
@@ -183,7 +247,7 @@ BinTree bin_findBlocks(Histogram *histo) {
             if (size > 0) {  // if we just quit a block
                 if (gap > histo->threshold[0] && size > histo->threshold[1]) {
                     // if block is of the correct size -> append it in a new
-                    // node.
+                    // node
                     nodes[i] = createBinTree(i - size - 1, i - 1);
                     addSibling(&nodes[i], &res);
                 }
@@ -208,7 +272,9 @@ BinTree bin_findBlocks(Histogram *histo) {
 
 #pragma region histogram
 
-// @return the image's pixel histogram line per line
+/*!
+ * @return the image's pixel histogram, line per line
+ */
 Histogram lineHistogram(Image *image) {
     int mean = 0, size = image->height;
     int *histo = calloc(size, sizeof(int));
@@ -225,7 +291,9 @@ Histogram lineHistogram(Image *image) {
     return res;
 }
 
-// @return the image's pixel histogram column per column
+/*!
+ * @return the image's pixel histogram, column per column
+ */
 Histogram columnHistogram(Image *image, int lineBlock[2], int columnBLock[2]) {
     int mean = 0, size = columnBLock[1] - columnBLock[0];
     int *histo = calloc(size, sizeof(int));

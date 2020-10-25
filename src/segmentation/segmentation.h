@@ -1,9 +1,18 @@
+/*!
+ *  File created on 10/15/2020 (MM/DD/YYYY) by leo.duboin
+ *  Contributors : leo.duboin
+ *
+ *  This file contains all the necessary to apply 
+ *  the text segmentation process to an image.
+ */
+
 #ifndef SEGMENTATION_H_
 #define SEGMENTATION_H_
 
 #include "../image.h"
+#include "binaryTree.h"
 
-// segmentation.c
+// segmentation.c ------------------
 
 typedef enum HistogramType { LINE, COLUMN } HistogramType;
 
@@ -14,25 +23,7 @@ typedef struct Histogram {
     int mean, size;
 } Histogram;
 
-// classic arrray implementation
-void segmentation(Image *image);
-int *segmentLine(Image *image);
-// binaryTree implementation
-void bin_segmentLine(Image *image);
-
-// binaryTree.c
-
-typedef struct BinTree {
-    int key[2];
-    struct BinTree *child;
-    struct BinTree *sibling;
-    struct BinTree *parent;
-} BinTree;
-
-BinTree createBinTree(int start, int end);
-void addSibling(BinTree *new, BinTree *dest);
-void addChild(BinTree *new, BinTree *dest);
-void mapFunction(BinTree *tree, Image *image, void (*f)(Image *, BinTree *));
-void printBranch(BinTree *node);
+void segmentation(Image *image);      // classic arrray implementation
+void bin_segmentation(Image *image);  // binaryTree implementation
 
 #endif
