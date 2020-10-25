@@ -1,22 +1,28 @@
 /*!
+ *  file created on 10/15/2020 (MM/DD/YYY) by leo.duboin
+ * 
  *  This file implements the text block segmentation process using an histogram
- * based algorithm. Computing a pixel histogram for each line / column then
- * finding "blocks" of empty spaces within these histograms.
+ *  based algorithm. Computing a pixel histogram for each line / column then
+ *  finding "blocks" of empty spaces within these histograms.
+ * 
+ *  10/23 : Implementation of a binaryTree data structure to store all the boundary boxes
  */
 
 #include "segmentation.h"
 
-#pragma region Array
+#pragma region ArrayMethod
 
 //---------------------------------------------
 
 void highlightWord(Image *image, int height[2], int width[2]);
+
 int *segmentLine(Image *image);
 int *segmentWords(Image *image, int line[2]);
+int *segmentLetters(Image *image, int line[2], int column[2]);
+int *findBlocks(Histogram *histo);
+
 Histogram columnHistogram(Image *image, int lineBlock[2], int columnBLock[2]);
 Histogram lineHistogram(Image *image);
-int *findBlocks(Histogram *histo);
-void displayHisto(Image *image, Histogram *);
 
 //---------------------------------------------
 
@@ -33,9 +39,15 @@ void segmentation(Image *image) {
         int *words = segmentWords(image, height);
         for (int word = 1; word < words[0]; word += 2) {
             int width[2] = {words[word], words[word + 1]};
-            //printf("height : (%d,%d)  -  width : (%d,%d)\n", height[0],
-            //       height[1], width[0], width[1]);
             highlightWord(image, height, width);
+
+            // int *letters = segmentLetters(image, height, width);
+            /*
+            for (int letter = 1; letter < letters[0]; letters += 2) {
+                int tmp[2] = {letters[letter], letters[letter + 1]};
+                highlightWord(image, height, tmp);
+            }
+            */
         }
     }
 }
@@ -60,8 +72,12 @@ int *segmentWords(Image *image, int line[2]) {
     Histogram histo = columnHistogram(image, line, column);
     int *blocks = findBlocks(&histo);
 
-    for (int i = 1; i < blocks[0]; i += 2){}
-        //printf("(%d,%d)\n", blocks[i], blocks[i + 1]);
+    return blocks;
+}
+
+int *segmentLetters(Image *image, int line[2], int column[2]) {
+    Histogram histo = columnHistogram(image, line, column);
+    int *blocks = findBlocks(&histo);
 
     return blocks;
 }
@@ -72,7 +88,6 @@ int *segmentWords(Image *image, int line[2]) {
  *      Size is used to give the resulting array's size.
  */
 int *findBlocks(Histogram *histo) {
-    // TODO threshold system (currently set to 0)
     int *blocks = calloc(histo->size + 1, sizeof(int));
     int gap = 0, size = 0, blocks_index = 1;
     // Length of the array set to 1 (the size value itself)
@@ -106,14 +121,14 @@ int *findBlocks(Histogram *histo) {
 
 #pragma endregion Array
 
-#pragma region BinTree
+#pragma region BinTreeMethod
 
 /*!
  * The same algorithm but making use of a binary tree to store the boxes.
  * You apply segmentation to its leaves and add the resulting boxes as their
  * child.
  *
- * Current Issue : pointesrs are acting weird with local variables
+ * Current Issue : pointers are acting weird with local variables
  */
 
 //--------------------------------------------
@@ -137,7 +152,6 @@ void bin_segmentLine(Image *image) {
     BinTree node = createBinTree(0, image->height);
     getLines(image, &node);
     mapFunction(&node, image, bin_test);
-    displayImage(image);
 }
 
 void bin_test(Image *image, BinTree *tree) {
@@ -204,7 +218,7 @@ Histogram lineHistogram(Image *image) {
         ptr_histo = &histo[y];
         for (int x = 0; x < image->width; x++)
             *ptr_histo += getPixelColor(image, x, y) == BLACK;
-        mean += *ptr_histo;
+        if (*ptr_histo < (100 * size) / 85) mean += *ptr_histo;
     }
 
     Histogram res = {histo, LINE, {0, 0}, mean / (2 * size), size};
@@ -221,30 +235,11 @@ Histogram columnHistogram(Image *image, int lineBlock[2], int columnBLock[2]) {
         ptr_histo = &histo[x];
         for (int y = lineBlock[0]; y < lineBlock[1]; y++)
             *ptr_histo += getPixelColor(image, x, y) == BLACK;
-        mean += *ptr_histo;
+        if (*ptr_histo < (100 * size) / 85) mean += *ptr_histo;
     }
 
     Histogram res = {histo, COLUMN, {0, 0}, mean / (2 * size), size};
     return res;
-}
-
-void displayHisto(Image *image, Histogram *histogram) {
-    int *histo = histogram->histo;
-    int a = 0;
-
-    for (int y = 0; y < image->height; y++) {
-        a = 0;
-        for (int x = 0; x < image->width; x++) {
-            a += getPixelColor(image, x, y) == BLACK;
-            if (x <= histo[y])
-                setPixelColor(image, BLACK, x, y);
-            else
-                setPixelColor(image, WHITE, x, y);
-        }
-    }
-
-    displayImage(image);
-    free(histo);
 }
 
 #pragma endregion histogram
