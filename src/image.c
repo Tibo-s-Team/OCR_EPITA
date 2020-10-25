@@ -1,6 +1,20 @@
+/*!
+ *  File created on 10/8/2020 (MM/DD/YYYY) by leo.duboin
+ *  Contributors : leo.duboin
+ *
+ *  File containing all the functions necessary to interact with an image.
+ *
+ *  10/20 : Cleaned code by mixing it with some functions seen in class
+ */
+
 #include "image.h"
 
-// Loads an image from a file and returns an Image struct
+/*!
+ * Loads an image from a file and returns an Image struct.
+ * @param path the path to the image to load
+ *  (can be absolute or relative to the workspace folder)
+ * @return an image structure with all the loaded image's information
+ */
 Image loadImage(const char *path) {
     SDL_Surface *surface = NULL;
     Image image;
@@ -30,10 +44,15 @@ Image loadImage(const char *path) {
 
 #pragma region getPixel
 
-// Returns the address in memory of the pixel at the (x, y) coordinate
+/*!
+ * Returns the address in memory of the pixel at the (x, y) coordinate.
+ * @param surf the surface to get the pixel's information from
+ * @return a pointer to the pixel's memory address
+ */
 static inline Uint8 *getPixelRef(SDL_Surface *surf, int x, int y) {
     if (x > surf->w || y > surf->h)
-        errx(1, "Error: image.c - getPixelRef : IndexOutOfBounds.");
+        errx(1, "Error: image.c - getPixelRef : IndexOutOfBounds (%d,%d)", x,
+             y);
 
     Uint8 bpp = surf->format->BytesPerPixel;
     return (Uint8 *)surf->pixels + y * surf->pitch + x * bpp;
@@ -51,7 +70,7 @@ void getPixelRGB(Image *image, const int x, const int y, Uint8 *r, Uint8 *g,
     Uint8 *pixel = getPixelRef(image->surface, x, y);
     Uint32 color;
 
-    if (image->imageType == BW) {
+    if (image->surface->format->BytesPerPixel <= 2) {
         warnx(
             "Warning: image.c - getPixelRGB : image's pixels must be encoded "
             "on 32B of data. "
@@ -69,37 +88,36 @@ void getPixelRGB(Image *image, const int x, const int y, Uint8 *r, Uint8 *g,
 }
 
 /*!
- * @return 8bits color value of a pixel
+ * Returns the pixel color of a nn RGB image.
  * @param image greyscaled / BW image (same R G & B for each pixel)
+ * @return 8bits color value of a pixel
  */
 Uint8 getPixelColor(Image *image, const int x, const int y) {
     Uint8 *pixel = getPixelRef(image->surface, x, y);
     Uint8 r, g, b;
 
-    switch (image->imageType) {
-        case RGB:
-            warnx(
-                "Warning: image.c - getPixelColor : imageType must not be "
-                "RGB. "
-                "Skipped.");
-            return 0;
-        case GRAYSCALE:
-            getPixelRGB(image, x, y, &r, &g, &b);
-            return g;
-        case BW:
-            // SDL - 8bits : 0 = white & 1 = black
-            return !(*pixel) * 255;
+    if (image->imageType == RGB) {
+        warnx(
+            "Warning: image.c - getPixelColor : imageType must not be "
+            "RGB. Use getPixelColorRGB() instead."
+            "Skipped.");
+        return 0;
     }
 
-    return 0;
+    if (image->surface->format->BytesPerPixel <= 2)
+        // SDL - 8bits : 0 = white & 1 = black
+        return !(*pixel) * 255;
+
+    getPixelRGB(image, x, y, &r, &g, &b);
+    return g;
 }
 
 #pragma endregion getPixel
 
 /*!
- * Changes the color of a pixel to a shade of grey.
+ * Change the color of a pixel to a shade of grey.
  * @param color new color will be of the form RGB(color, color, color).
- * If image is BW anything other than black will result in a white pixel.
+ *  If image is BW anything other than black will result in a white pixel.
  */
 void setPixelColor(Image *image, Uint8 color, const int x, const int y) {
     Uint8 *pixel = getPixelRef(image->surface, x, y);
@@ -113,6 +131,11 @@ void setPixelColor(Image *image, Uint8 color, const int x, const int y) {
     }
 }
 
+/*!
+ * Display an image in an external window.
+ *  Image will not be resized nor modified.
+ * @param image the image to display on screen
+ */
 void displayImage(Image *image) {
     const int WIDTH = image->width, HEIGHT = image->height;
 
@@ -146,4 +169,35 @@ void displayImage(Image *image) {
     SDL_DestroyTexture(img);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(win);
+}
+
+/*!
+ * Extract part of an image and save it as a new image.
+ * @param image the image to extract from
+ * @param file the file where to save the new image
+ * @param height tuple contating the starting and ending height
+ *  of the part of the image to extract
+ * @param width tuple contating the starting and ending width
+ *  of the part of the image to extract
+ */
+void extractImage(Image *image, const char *file, int height[2], int width[2]) {
+    // FIXME
+    return;
+
+    SDL_Surface *new_image = NULL;
+    SDL_Rect rect = {.x = width[0],
+                     .y = height[0],
+                     .w = width[1] - width[0],
+                     .h = height[1] - height[0]};
+
+    // verify path doesn't already exist
+
+    // extract image part => returns 0 if succesful
+    int extraction = SDL_BlitSurface(image->surface, NULL, new_image, NULL);
+    if (extraction)
+        errx(1,
+             "Error : image.c - extractImage : Image couldn't be extracted.");
+
+    IMG_SavePNG(new_image, file);
+    SDL_FreeSurface(new_image);
 }

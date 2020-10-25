@@ -1,8 +1,15 @@
-#include "preprocessing.h"
+/*!
+ *  File created on 10/12/2020 (MM/DD/YYYY) by leo.duboin
+ *  Contributors : leo.duboin
+ *
+ *  File containing the necessary functions to apply filters onto an image.
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "preprocessing.h"
 
 //--------------------------------
 
@@ -26,18 +33,22 @@ void convolution(Kernel *kernel) {
 }
 
 // reverse columns and lines of k
+/*!
+ * Reverse the columns and the lines of a kernel (matrix).
+ * [ [0,1],[2,3] ] => [ [3,2],[1,0] ]
+ * @param kernel the kernel whose columns/lines we want to inverse
+ */
 void reverseKernel(Kernel *kernel) {
-    // reverse columns and lines of k
     int width = kernel->width, height = kernel->height;
 
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
-            // inversion colonnes
+            // column inversion
             if (x < width / 2) {
                 swap(&kernel->matrix[y * width + x],
                      &kernel->matrix[(y + 1) * width - x - 1]);
             }
-            // inversion lignes
+            // line inversion
             if (y >= height / 2) {
                 int symetric_y = height - 1 - y;
                 swap(&kernel->matrix[y * width + x],
@@ -47,7 +58,11 @@ void reverseKernel(Kernel *kernel) {
     }
 }
 
-// swaps the values of 2 unsigned char
+/*!
+ * swaps the values of 2 unsigned char
+ * @param a unsigned char pointer
+ * @param b unsigned char pointer
+ */
 void swap(Uint8 *a, Uint8 *b) {
     int tmp = *a;
 
@@ -55,7 +70,10 @@ void swap(Uint8 *a, Uint8 *b) {
     *b = tmp;
 }
 
-// Displays the content of the kernel's matrix in a table like format.
+/*!
+ * Displays the content of the kernel's matrix in a table like format.
+ * @param kernel the kernel to print
+ */
 void printKernel(Kernel *kernel) {
     Uint8 *matrix = kernel->matrix;
     int length = 0;

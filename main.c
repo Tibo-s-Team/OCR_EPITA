@@ -19,10 +19,11 @@ int main(int argc, char *argv[]) {
         for (int i = 1; i < argc; i++)  // for all given paths
         {
             image = loadImage(argv[i]);
+
             grayscale(&image);
             blackAndWhite(&image);
-            displayImage(&image);
-            segmentLine(&image);
+
+            segmentation(&image);
             displayImage(&image);
 
             IMG_Quit();
