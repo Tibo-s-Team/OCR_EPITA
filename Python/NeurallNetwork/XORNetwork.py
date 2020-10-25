@@ -1,10 +1,10 @@
-import DefNeuralNetwork
+from NeurallNetwork import DefNeuralNetwork
 
-input = [[0,0], [1,0], [0, 1], [1, 1]]
+input = [[0,0], [0, 1], [1,0], [1, 1]]
 expected_output = [0, 1, 1, 0]
 
 network = DefNeuralNetwork.initNeuralNetwork(2, [2], 1)
-DefNeuralNetwork.trainingNetwork(1000, network, input)
+DefNeuralNetwork.trainingNetwork(10000, network, input)
 
 
 def XOR_print(network, input, expected_output):

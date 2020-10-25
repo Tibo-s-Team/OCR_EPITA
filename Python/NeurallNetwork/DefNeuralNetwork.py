@@ -4,6 +4,7 @@ import json
 from PIL import Image
 import BarDeChargement
 import NeuralNetwork
+import training
 
 random.seed()
 
@@ -182,26 +183,28 @@ def trainingNetwork(times, network, input=None):
     """
     Bar = BarDeChargement.ProgressBar(100, 60, 'Apprentissage')
     for i in range(times):
-        for j in range(len(input)):
-            #for XOR
-            network = feedforward(network, input[j])
-            network = backPropagation(network, input[j])
-            network = updateWeight(network, input[j], 0.1)
-        """
-        for j in range(len(training.exo)):
-            for k in range(15):
-                train = random.randint(0, 360)
-                
-                network = feedfoward(network, training.exo[j][train])
-                network = backforawrd(network, training.solution[j])
-                network = updateWeight(network, training.exo[j][train], 0.1)
-        Bar.update(i/10 )
+        # for XOR
+        network = feedforward(network, input)
+        network = backPropagation(network, input)
+        network = updateWeight(network, input, 0.1)
+
+        Bar.update(i/10)
     saveNeurones(network)
     return network
 
 
-##Test
 """
+        for j in range(len(training.exo)):
+            for k in range(15):
+                train = random.randint(0, 360)
+                
+                network = feedforward(network, training.exo[j][train])
+                network = backPropagation(network, training.solution[j])
+                network = updateWeight(network, training.exo[j][train], 0.1)
+"""
+
+##Test
+
 def test_print(network, numbertest, letter):
     print("##########"+letter+"##########")
     resultLv1 = feedforward(network, training.testLv1[numbertest])[-1]
@@ -221,9 +224,9 @@ def test_print(network, numbertest, letter):
     print("LV1 :", training.parsingNeuronne2Letter(maxi_lettre_Lv1), "=", str(maxi_val_Lv1))
     print("LV2 :", training.parsingNeuronne2Letter(maxi_lettre_Lv2), "=", str(maxi_val_Lv2))
 
-#network = initNeuralNetwork(625, [16, 16], 10)
-#trainingNetwork(1000, network)
-network = loadNeurones()
+network = initNeuralNetwork(625, [16, 16], 10)
+trainingNetwork(1000, network)
+#network = loadNeurones()
 
 print("\n")
 test_print(network, 0, "A")
