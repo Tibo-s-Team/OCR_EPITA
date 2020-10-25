@@ -1,3 +1,6 @@
+# project files
+images/*
+
 # Text editor files
 *.vscode
 *.idea

@@ -24,7 +24,6 @@ int main(int argc, char *argv[]) {
             blackAndWhite(&image);
 
             segmentation(&image);
-
             displayImage(&image);
 
             IMG_Quit();

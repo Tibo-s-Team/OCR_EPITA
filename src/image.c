@@ -170,3 +170,34 @@ void displayImage(Image *image) {
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(win);
 }
+
+/*!
+ * Extract part of an image and save it as a new image.
+ * @param image the image to extract from
+ * @param file the file where to save the new image
+ * @param height tuple contating the starting and ending height
+ *  of the part of the image to extract
+ * @param width tuple contating the starting and ending width
+ *  of the part of the image to extract
+ */
+void extractImage(Image *image, const char *file, int height[2], int width[2]) {
+    // FIXME
+    return;
+
+    SDL_Surface *new_image = NULL;
+    SDL_Rect rect = {.x = width[0],
+                     .y = height[0],
+                     .w = width[1] - width[0],
+                     .h = height[1] - height[0]};
+
+    // verify path doesn't already exist
+
+    // extract image part => returns 0 if succesful
+    int extraction = SDL_BlitSurface(image->surface, NULL, new_image, NULL);
+    if (extraction)
+        errx(1,
+             "Error : image.c - extractImage : Image couldn't be extracted.");
+
+    IMG_SavePNG(new_image, file);
+    SDL_FreeSurface(new_image);
+}
