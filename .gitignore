@@ -1,5 +1,10 @@
-# Visual studio files
+# project files
+images/*
+
+# Text editor files
 *.vscode
+*.idea
+*__pycache__/
 
 # Prerequisites
 *.d
@@ -38,6 +43,7 @@
 *.i*86
 *.x86_64
 *.hex
+TIBO
 
 # Debug files
 *.dSYM/
