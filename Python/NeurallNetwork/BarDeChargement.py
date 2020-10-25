@@ -1,3 +1,9 @@
+"""
+This File was found on the internet to print a loading bar on the screen.
+It will not be use in our OCR project at the end.
+It's only to see how many time take the training of the neural netork.
+"""
+
 class ProgressBar:
     '''
     Progress bar
