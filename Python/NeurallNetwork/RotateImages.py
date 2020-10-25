@@ -2,6 +2,16 @@ from PIL import Image
 import os
 
 def RotateImages360(pathimage):
+    """
+        Turn an image of a letter of 1 degre and save it (does that 360 times)
+        Author: Florian Drevet
+        Date: 16 october 2020
+
+        Creat 360 images from a given image of letter but rotated from 1 degre in the same directory of the given image
+
+        :param pathimage: Path of the image to turn
+        :return: void, 360 new images
+        """
     image = Image.open(pathimage)
     os.chdir(pathimage[0:-5])
     (width, height) = image.size
@@ -22,5 +32,5 @@ def RotateImages360(pathimage):
         rotate1.save(pathimage[-5]+str(i)+".png", 'png')
 
 
-
+#Use the function to rotate the image
 RotateImages360("letters\\A\\a.png")
