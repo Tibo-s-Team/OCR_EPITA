@@ -49,15 +49,27 @@ void segmentation(Image *image) {
         for (int word = 1; word < words[0]; word += 2) {
             int width[2] = {words[word], words[word + 1]};
             highlightText(image, height, width);
-
-            // int *letters = segmentLetters(image, height, width);
-            /*
-            for (int letter = 1; letter < letters[0]; letters += 2) {
-                int tmp[2] = {letters[letter], letters[letter + 1]};
-                highlightText(image, height, tmp);
-            }
-            */
         }
+    }
+}
+
+/*!
+ * Apply line segmentation process to a given image using the classic array
+ *  implementation.
+ * @param image black and white image
+ */
+void lineSegmentation(Image *image) {
+    if (image->imageType != BW)
+        errx(1,
+             "ERROR : segmentation.c - segmentLine : Image must have been "
+             "binarized beforehand.\n");
+
+    int *lines = segmentLine(image);
+
+    for (int line = 1; line < lines[0]; lines += 2) {
+        int height[2] = {lines[line], lines[line + 1]};
+        int width[2] = {0, image->width};
+        highlightText(image, height, width);
     }
 }
 
