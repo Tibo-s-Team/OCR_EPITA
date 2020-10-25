@@ -1,6 +1,20 @@
+/*!
+ *  File created on 10/8/2020 (MM/DD/YYYY) by leo.duboin
+ *  Contributors : leo.duboin
+ *
+ *  File containing all the functions necessary to interact with an image.
+ *
+ *  10/20 : Cleaned code by mixing it with some functions seen in class
+ */
+
 #include "image.h"
 
-// Loads an image from a file and returns an Image struct
+/*!
+ * Loads an image from a file and returns an Image struct.
+ * @param path the path to the image to load
+ *  (can be absolute or relative to the workspace folder)
+ * @return an image structure with all the loaded image's information
+ */
 Image loadImage(const char *path) {
     SDL_Surface *surface = NULL;
     Image image;
@@ -30,10 +44,15 @@ Image loadImage(const char *path) {
 
 #pragma region getPixel
 
-// Returns the address in memory of the pixel at the (x, y) coordinate
+/*!
+ * Returns the address in memory of the pixel at the (x, y) coordinate.
+ * @param surf the surface to get the pixel's information from
+ * @return a pointer to the pixel's memory address
+ */
 static inline Uint8 *getPixelRef(SDL_Surface *surf, int x, int y) {
     if (x > surf->w || y > surf->h)
-        errx(1, "Error: image.c - getPixelRef : IndexOutOfBounds (%d,%d)", x, y);
+        errx(1, "Error: image.c - getPixelRef : IndexOutOfBounds (%d,%d)", x,
+             y);
 
     Uint8 bpp = surf->format->BytesPerPixel;
     return (Uint8 *)surf->pixels + y * surf->pitch + x * bpp;
@@ -69,8 +88,9 @@ void getPixelRGB(Image *image, const int x, const int y, Uint8 *r, Uint8 *g,
 }
 
 /*!
- * @return 8bits color value of a pixel
+ * Returns the pixel color of a nn RGB image.
  * @param image greyscaled / BW image (same R G & B for each pixel)
+ * @return 8bits color value of a pixel
  */
 Uint8 getPixelColor(Image *image, const int x, const int y) {
     Uint8 *pixel = getPixelRef(image->surface, x, y);
@@ -79,7 +99,7 @@ Uint8 getPixelColor(Image *image, const int x, const int y) {
     if (image->imageType == RGB) {
         warnx(
             "Warning: image.c - getPixelColor : imageType must not be "
-            "RGB. "
+            "RGB. Use getPixelColorRGB() instead."
             "Skipped.");
         return 0;
     }
@@ -95,9 +115,9 @@ Uint8 getPixelColor(Image *image, const int x, const int y) {
 #pragma endregion getPixel
 
 /*!
- * Changes the color of a pixel to a shade of grey.
+ * Change the color of a pixel to a shade of grey.
  * @param color new color will be of the form RGB(color, color, color).
- * If image is BW anything other than black will result in a white pixel.
+ *  If image is BW anything other than black will result in a white pixel.
  */
 void setPixelColor(Image *image, Uint8 color, const int x, const int y) {
     Uint8 *pixel = getPixelRef(image->surface, x, y);
@@ -111,6 +131,11 @@ void setPixelColor(Image *image, Uint8 color, const int x, const int y) {
     }
 }
 
+/*!
+ * Display an image in an external window.
+ *  Image will not be resized nor modified.
+ * @param image the image to display on screen
+ */
 void displayImage(Image *image) {
     const int WIDTH = image->width, HEIGHT = image->height;
 
