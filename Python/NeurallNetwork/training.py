@@ -127,7 +127,7 @@ def trainingNetworkImage(times, network):
                 network = DefNeuralNetwork.feedforward(network, exo[j][train])
                 network = DefNeuralNetwork.backPropagation(network, solution[j])
                 network = DefNeuralNetwork.updateWeight(network, exo[j][train], 0.1)
-        Bar.update(i / 10)
+        Bar.update(i / 0.2)
     DefNeuralNetwork.saveNeurones(network)
     return network
 
@@ -143,12 +143,12 @@ resultG = [0, 0, 0, 0, 0, 0, 1, 0, 0, 0]
 resultH = [0, 0, 0, 0, 0, 0, 0, 1, 0, 0]
 resultI = [0, 0, 0, 0, 0, 0, 0, 0, 1, 0]
 resultJ = [0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
-
+'''
 # Build the list of each path of the differents images that are use to train the neural network in the folder
 # tests/imagesletters/
 listfolderLetters = creatList_folderLetters("..\\..\\tests\\images\\letters\\")
 # Creat the list of the matrix of this images
-exo = creatLsit_matrix(listfolderLetters)
+exo = creatLsit_matrix(listfolderLetters)'''
 # Creat a list of the results for the letters in alphabetical order
 solution = [resultA, resultB, resultC, resultD, resultE, resultF, resultG, resultH, resultI, resultJ]
 # Creat a list of matrix of test images that the neural tnetwork has already seen -> Easy
@@ -190,12 +190,13 @@ def parsingNeuronne2Letter(number):
         return "J"
     return None
 
-
+'''
 # Init a neural network to train
 network = DefNeuralNetwork.initNeuralNetwork(625, [16, 16], 10)
 # Train the neural network with the different images
-trainingNetworkImage(1000, network)
-
+trainingNetworkImage(50, network)
+'''
+network = DefNeuralNetwork.loadNeurones()
 
 # Load a neural network from a json file
 # network = loadNeurones()
