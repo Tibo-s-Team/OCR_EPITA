@@ -4,6 +4,7 @@ import json
 from PIL import Image
 import BarDeChargement
 import NeuralNetwork
+import training
 
 random.seed()
 
