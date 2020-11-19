@@ -31,6 +31,7 @@ Please refer to the corresponding script below
 
 ### arguments
 
+	- d : simple display of the image
 	- g : grayscaling process only
 	- b : binarization process only
 	- l : linewise text segmentation only
