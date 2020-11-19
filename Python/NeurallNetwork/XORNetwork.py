@@ -28,7 +28,7 @@ def trainingNetworkXOR(times, network):
             network = DefNeuralNetwork.feedforward(network, input[j])
             network = DefNeuralNetwork.backPropagation(network, expected_output[j])
             network = DefNeuralNetwork.updateWeight(network, input[j], 0.1)
-        Bar.update(i / 1000)
+        Bar.update(i / 100)
     DefNeuralNetwork.saveNeurones(network)
     return network
 
@@ -51,7 +51,7 @@ def XOR_print(network, input, expected_output):
         "Success!" if expected_output[0] == 0 and result[0]['output'] <= 0.1 else "Failure...")
     print(f"\n{message} expected: {expected_output[0]} got: {result[0]['output']}")
 
-
+'''
 # Train our neural network to learn Xor
 network = trainingNetworkXOR(100000, network)
 
@@ -61,3 +61,4 @@ for i in range(4):
 
 # Save the neural network
 DefNeuralNetwork.saveNeurones(network, "DataSave/XORNeurones.json")
+'''

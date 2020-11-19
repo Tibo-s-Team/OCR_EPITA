@@ -82,6 +82,11 @@ def Threshold(histogram):
 
     return thresholdMax
 
+def ThresholdTest(histogram):
+    totalPixel = 0
+    for i in range(256):
+        totalPixel += histogram[i]
+
 def Otsu(filename):
     """
     Otsu function
