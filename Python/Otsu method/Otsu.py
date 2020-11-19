@@ -87,7 +87,7 @@ def ThresholdTest(histogram):
     for i in range(256):
         totalPixel += histogram[i]
 
-def Otsu(filename):
+def Otsu(filename, output):
     """
     Otsu function
     Author: Desmarais Lowen
@@ -100,7 +100,7 @@ def Otsu(filename):
     image = Image.open(filename)
     histogram = histogramGray(filename)
     threshold = Threshold(histogram)
-    print(threshold)
+    #print(threshold)
 
     (width, height) = image.size
     r, g, b = image.split()
@@ -111,8 +111,8 @@ def Otsu(filename):
                 image.putpixel((i, j), (0, 0, 0))
             else:
                 image.putpixel((i, j), (255, 255, 255))
-    image.save("otsuOutput.png")
+    image.save(output)
 
 
-paintGray("meme.png", "memeGray.png")
-Otsu("memeGray.png")
+#paintGray("meme.png", "Output/memeGray.png")
+#Otsu("memeGray.png", "Output/OtsuOutput")
