@@ -1,4 +1,4 @@
-#include <SDL2/SDL.h>
+#include <SDL/SDL.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -17,7 +17,7 @@ int main(int argc, char *argv[]) {
     if (argc < 2)  // if no path given do nothing
         return 0;
 
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) < 0) {
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_NUMEVENTS) < 0) {
         printf("Error: failed to initialize SDL: %s", SDL_GetError());
         return 1;
     } else {
