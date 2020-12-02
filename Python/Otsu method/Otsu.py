@@ -114,5 +114,5 @@ def Otsu(filename, output):
     image.save(output)
 
 
-#paintGray("meme.png", "Output/memeGray.png")
+paintGray("meme.png", "Output/memeGray.png")
 #Otsu("memeGray.png", "Output/OtsuOutput")
