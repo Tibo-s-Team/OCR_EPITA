@@ -1,19 +1,25 @@
 #ifndef NEURALNETWORK_H_
 #define NEURALNETWORK_H_
-#define INPUT 2
-#define HIDDEN_LAYER [2, 2]
-#define OUTPUT_LAYER 1
 
-typedef struct Neuronne Neuronne;
-struct Neuronne
+typedef struct Neuronne
 {
     int nbr_poids;
-    double weigth;
+    double *weigth;
+    double *end;
     double biais;
     double error;
     double output;
-};
+}Neuronne;
+
+typedef struct Layer
+{
+    int nbr_neuronnes;
+    Neuronne *neuronne;
+    Neuronne *end;
+}Layer;
 
 Neuronne creat_neuronne(size_t nbr_poids);
+Layer creat_layer(int nbr_poids, int nbr_neuronne);
+void free_layer(Layer layer);
 
 #endif

@@ -23,8 +23,30 @@ Neuronne creat_neuronne(size_t nbr_poids)
        *i = randfrom(-1.0, 1.0); 
     }
     double biais = randfrom(-1.0, 1.0);
-    struct Neuronne neuronne = {nbr_poids, *begin_weigth, biais, 0, 0};
+    struct Neuronne neuronne = {nbr_poids, begin_weigth, end_weight, biais, 0, 0};
     return neuronne;
+}
+
+Layer creat_layer(int nbr_poids, int nbr_neuronnes)
+{
+    Neuronne *begin_layer = malloc(nbr_neuronnes * sizeof(Neuronne));
+    Neuronne *end_layer = begin_layer + nbr_neuronnes;
+    for(Neuronne *i = begin_layer; i < end_layer; i++)
+    {
+        Neuronne neuronne = creat_neuronne(nbr_poids);
+        *i = neuronne; 
+    } 
+    Layer layer = {nbr_neuronnes, begin_layer, end_layer};
+    return layer;
+}
+
+void free_layer(Layer layer)
+{
+    for(Neuronne *i = layer.neuronne; i < layer.end; i++)
+    {
+        free(i->weigth);
+    }
+    free(layer.neuronne);
 }
 
 

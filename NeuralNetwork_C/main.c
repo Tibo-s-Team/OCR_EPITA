@@ -4,7 +4,7 @@
 #include "neuralnetwork.h"
 
 int main(int argc, char *argv[]) {
-    size_t nbr_neuronne = 5;
-    struct Neuronne neuronne = creat_neuronne(nbr_neuronne);
+    Layer layer = creat_layer(5, 3);
+    free_layer(layer);
     return 0;
 }
