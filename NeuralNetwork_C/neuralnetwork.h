@@ -18,8 +18,18 @@ typedef struct Layer
     Neuronne *end;
 }Layer;
 
+typedef struct NeuralNetwork 
+{
+    int nbr_layers;
+    int nbr_inputs; 
+    Layer *layer;
+    Layer *end;
+}NeuralNetwork;
+
 Neuronne creat_neuronne(size_t nbr_poids);
 Layer creat_layer(int nbr_poids, int nbr_neuronne);
 void free_layer(Layer layer);
+NeuralNetwork creat_neuralNetwork(int nbr_inputs, int layers[], int len);
+void free_neuralNetwork(NeuralNetwork neuralnetwork);
 
 #endif

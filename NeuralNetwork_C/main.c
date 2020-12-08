@@ -4,7 +4,8 @@
 #include "neuralnetwork.h"
 
 int main(int argc, char *argv[]) {
-    Layer layer = creat_layer(5, 3);
-    free_layer(layer);
+    int layer[3] = {2,2,2};
+    NeuralNetwork neuralnetwork = creat_neuralNetwork(3, layer, 3);
+    free_neuralNetwork(neuralnetwork);
     return 0;
 }

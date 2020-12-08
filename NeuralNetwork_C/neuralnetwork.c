@@ -49,6 +49,37 @@ void free_layer(Layer layer)
     free(layer.neuronne);
 }
 
+NeuralNetwork creat_neuralNetwork(int nbr_inputs, int layers[], int len)
+{
 
+    Layer *begin_neuralnetwork = malloc(len * sizeof(Layer));
+    Layer *end_neuralnetwork = begin_neuralnetwork + len;
+    int j = 0;
+    for(Layer *i = begin_neuralnetwork; i < end_neuralnetwork ; i++)
+    {
+        if (j == 0)
+        {
+            Layer layer = creat_layer(nbr_inputs, layers[0]);
+            *i = layer;
+        }
+        else
+        {
+            Layer layer = creat_layer((i-1)->nbr_neuronnes, layers[j]);
+            *i = layer;
+        }
+        j += 1;
+    }
+    NeuralNetwork neuralnetwork = {j, nbr_inputs, begin_neuralnetwork, end_neuralnetwork};
+    return neuralnetwork;
+}
+
+void free_neuralNetwork(NeuralNetwork neuralnetwork)
+{
+    for(Layer *i = neuralnetwork.layer; i < neuralnetwork.end; i++)
+    {
+        free_layer(*i);
+    }
+    free(neuralnetwork.layer);
+}
 
 
