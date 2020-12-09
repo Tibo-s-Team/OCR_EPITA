@@ -1,22 +1,27 @@
 # Makefile
 
-CC=gcc -fsanitize=address
-CPPFLAGS= -MMD -D_XOPEN_SOURCE=500
-CFLAGS= -Wall -Wextra -std=c99 -O2
-LDFLAGS=
-LDLIBS=
+CC=gcc
+CFLAGS=-W -Wall -ansi -pedantic -std=c99
+HEADER= *.h
+LDFLAGS=-fsanitize=address
+EXEC=main
 
-SRC= neuralnetwork.c main.c
-OBJ= ${SRC:.c=.o}
-DEP= ${SRC:.c=.d}
+all: $(EXEC)
 
-all: main
+main: neuralnetwork.o NN_functions.o main.o
+	$(CC) -o main neuralnetwork.o NN_functions.o main.o -lm $(LDFLAGS)
 
--include ${DEP}
+neuralnetwork.o: neuralnetwork.c
+	$(CC) -o neuralnetwork.o -c neuralnetwork.c -lm $(CFLAGS)
 
-main: ${OBJ}
+NN_functions.o : NN_functions.c
+	$(CC) -o NN_functions.o -c NN_functions.c -lm $(CFLAGS)
+main.o: main.c $(HEADER)
+	$(CC) -o main.o -c main.c -lm $(CFLAGS)
 
 clean:
-	rm -f ${OBJ} ${DEP} main
+	rm -rf *.o
 
+mrproper: clean
+	rm -rf $(EXEC)
 # END

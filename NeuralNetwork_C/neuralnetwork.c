@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "neuralnetwork.h"
 
 
@@ -7,6 +8,7 @@ double randfrom(double min, double max)
 {
     double range = (max - min); 
     double div = RAND_MAX / range;
+    srand(time (NULL));
     double res = min + (rand() / div);
     if (res == 1 || res == -1)
         return randfrom(min, max);
@@ -23,7 +25,7 @@ Neuronne creat_neuronne(size_t nbr_poids)
        *i = randfrom(-1.0, 1.0); 
     }
     double biais = randfrom(-1.0, 1.0);
-    struct Neuronne neuronne = {nbr_poids, begin_weigth, end_weight, biais, 0, 0};
+    struct Neuronne neuronne = {nbr_poids, begin_weigth, end_weight, biais, 1.1, 1.1};
     return neuronne;
 }
 
