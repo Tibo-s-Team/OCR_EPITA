@@ -13,8 +13,11 @@ int main(int argc, char *argv[]) {
     double waited[8] = {0.1,0.6,0.8,0.1,0.25};
     NeuralNetwork neuralnetwork = creat_neuralNetwork(5, layer, 3);
     feedForward(neuralnetwork, inputs, 5);
+    free(print_output(neuralnetwork));
     backPropagation(neuralnetwork, waited);
-    print_error(neuralnetwork);
+    updateWeigth(neuralnetwork, inputs, 5, 0.1);
+    printf("_____________\n");
+    feedForward(neuralnetwork, inputs, 5);
     free(print_output(neuralnetwork));
     free_neuralNetwork(neuralnetwork);
     return 0;

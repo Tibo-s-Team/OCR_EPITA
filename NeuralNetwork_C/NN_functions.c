@@ -105,3 +105,33 @@ void print_error(NeuralNetwork neuralnetwork)
         printf("%f \n", i->error);
     }
 }
+
+void updateWeigth(NeuralNetwork neuralnetwork, double inputs[], int len, double coeff)
+{
+    for(int i = 0; i < neuralnetwork.nbr_layers; i++)
+    {
+        Layer *layer = neuralnetwork.layer + i;
+        for(int k = 0; k < layer->nbr_neuronnes; k++)
+        {
+            Neuronne *neuronne = layer->neuronne + k;
+            double* weigth = neuronne->weigth;
+            if(i == 0)
+            {
+                for(int j = 0; j < len; j++)
+                {
+                    *(weigth + j) += coeff * neuronne->error * inputs[j]; 
+                }
+            }
+            else
+            {
+                Layer *before_layer = neuralnetwork.layer + i - 1;
+                for(int j = 0; j < before_layer->nbr_neuronnes; j++)
+                {
+                    Neuronne *before_neuronne = before_layer->neuronne + j;
+                    *(weigth + j) += coeff * neuronne->error * before_neuronne->output;
+                }
+            }
+            neuronne->biais += coeff * neuronne->error;
+        }
+    }
+}
