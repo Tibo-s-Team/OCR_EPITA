@@ -6,5 +6,7 @@
 double sigmoid(double gitant);
 void feedForward(NeuralNetwork neuralnetwork, double inputs[], int len);
 double* print_output(NeuralNetwork neuralnetwork);
+void backPropagation(NeuralNetwork neuralnetwork, double waited[]);
+void print_error(NeuralNetwork neuralnetwork);
 
 #endif

@@ -9,6 +9,11 @@ double sigmoid(double x)
     return 1/(1 + exp(x));
 }
 
+double sigmoidPrime(double x)
+{
+    return x * (1-x);
+}
+
 void feedForward(NeuralNetwork neuralnetwork, double inputs[], int len)
 {
     Layer *layer = neuralnetwork.layer;
@@ -61,3 +66,42 @@ double* print_output(NeuralNetwork neuralnetwork)
     return output;
 }
     
+void backPropagation(NeuralNetwork neuralnetwork, double waited[])
+{
+    for(int i = neuralnetwork.nbr_layers-1; i >= 0; i--)
+    {
+        Layer *layer = neuralnetwork.layer + i;
+        if(i == neuralnetwork.nbr_layers-1)
+        {
+            for(int j = 0; j < layer->nbr_neuronnes; j++)
+            {
+                Neuronne *neuronne = layer->neuronne + j;
+                neuronne->error = (waited[j] - neuronne->output) * sigmoidPrime(neuronne->output);
+            }
+        }
+        else
+        {
+            Layer *next_layer = neuralnetwork.layer + i + 1;
+            for(int j = 0; j < layer->nbr_neuronnes; j++)
+            {
+                double error = 0;
+                for(int k = 0; k < next_layer->nbr_neuronnes; k++)
+                {
+                    Neuronne *neuronne = next_layer->neuronne+k;
+                    error += *(neuronne->weigth + j) * neuronne->error;
+                }
+                Neuronne *neuronne = layer->neuronne + j;
+                neuronne->error = error * sigmoidPrime(neuronne->output);
+            }
+        }
+    }
+}
+
+void print_error(NeuralNetwork neuralnetwork)
+{
+    Layer *layer = neuralnetwork.end -1;
+    for(Neuronne *i = layer->neuronne; i < layer->end; i++)
+    {
+        printf("%f \n", i->error);
+    }
+}
