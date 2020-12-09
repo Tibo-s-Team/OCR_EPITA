@@ -9,13 +9,15 @@ double sigmoid(double x)
     return 1/(1 + exp(x));
 }
 
-void feedForward(NeuralNetwork neuralnetwork, int inputs[], int len)
+void feedForward(NeuralNetwork neuralnetwork, double inputs[], int len)
 {
     Layer *layer = neuralnetwork.layer;
     for(int i = 0; i < neuralnetwork.nbr_layers; i++)
     {
         for(int j = 0; j < layer->nbr_neuronnes; j++)
         {
+            Neuronne *neuronne_precedent = (layer-1)->neuronne;
+            Neuronne *neuronne = (layer->neuronne)+j;
             double somme = 0.0;
             int length;
             if (i == 0)
@@ -28,9 +30,7 @@ void feedForward(NeuralNetwork neuralnetwork, int inputs[], int len)
             }
             for(int k = 0; k < length; k++)
             {
-                Neuronne *neuronne_precedent = (layer-1)->neuronne;
-                Neuronne *neuronne = layer->neuronne;
-                double *weigth = (neuronne+j)->weigth;
+                double *weigth = neuronne->weigth;
                 if(i == 0)
                 {
                     somme += inputs[k] * (*(weigth + k));
@@ -39,9 +39,25 @@ void feedForward(NeuralNetwork neuralnetwork, int inputs[], int len)
                 {
                     somme += (neuronne_precedent + k)->output * (*(weigth + k));
                 }
-                neuronne->output = sigmoid(somme + neuronne->biais);       
+                      
             }
+            neuronne->output = sigmoid(somme + neuronne->biais); 
         }
         layer += 1;
     }
 }
+
+double* print_output(NeuralNetwork neuralnetwork)
+{
+    double* output = malloc((neuralnetwork.end -1)->nbr_neuronnes * sizeof(double));
+    double* j = output;
+    Layer *layer = neuralnetwork.end -1;
+    for(Neuronne *i = layer->neuronne; i < layer->end; i++)
+    {
+        *j = i->output;
+        printf("%f \n", i->output);
+        j++;
+    }
+    return output;
+}
+    

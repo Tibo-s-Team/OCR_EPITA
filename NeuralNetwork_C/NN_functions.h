@@ -4,6 +4,7 @@
 #include "neuralnetwork.h"
 
 double sigmoid(double gitant);
-void feedForward(NeuralNetwork neuralnetwork, int inputs[], int len);
+void feedForward(NeuralNetwork neuralnetwork, double inputs[], int len);
+double* print_output(NeuralNetwork neuralnetwork);
 
 #endif
