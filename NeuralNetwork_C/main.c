@@ -5,20 +5,14 @@
 #include <math.h>
 #include "neuralnetwork.h"
 #include "NN_functions.h"
+#include "XOR.h"
 
 int main(int argc, char *argv[]) {
     srand(time (NULL));
-    int layer[3] = {3,5,8};
-    double inputs[5] = {0.5,0.2,0.1,0.6,0.5};
-    double waited[8] = {0.1,0.6,0.8,0.1,0.25};
-    NeuralNetwork neuralnetwork = creat_neuralNetwork(5, layer, 3);
-    feedForward(neuralnetwork, inputs, 5);
-    free(print_output(neuralnetwork));
-    backPropagation(neuralnetwork, waited);
-    updateWeigth(neuralnetwork, inputs, 5, 0.1);
-    printf("_____________\n");
-    feedForward(neuralnetwork, inputs, 5);
-    free(print_output(neuralnetwork));
+    int layer[2] = {2, 1};
+    NeuralNetwork neuralnetwork = creat_neuralNetwork(2, layer, 2);
+    XORtraining(100000, neuralnetwork);
+    XOR(neuralnetwork, 1.0, 1.0);
     free_neuralNetwork(neuralnetwork);
     return 0;
 }
