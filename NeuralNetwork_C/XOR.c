@@ -11,6 +11,7 @@ void XORtraining(int times, NeuralNetwork neuralnetwork)
     double waited[4][1] = {{1.0}, {0.0}, {0.0}, {1.0}};
     for(int i = 0; i < times; i++)
     {
+        
         for(int j = 0; j < 4; j++)
         {
             feedForward(neuralnetwork, inputs[j], 2);

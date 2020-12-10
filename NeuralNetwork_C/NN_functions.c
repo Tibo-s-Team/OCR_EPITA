@@ -6,7 +6,7 @@
 
 double sigmoid(double x)
 {
-    return 1/(1 + exp(x));
+    return 1/(1 + exp(-x));
 }
 
 double sigmoidPrime(double x)
@@ -16,9 +16,9 @@ double sigmoidPrime(double x)
 
 void feedForward(NeuralNetwork neuralnetwork, double inputs[], int len)
 {
-    Layer *layer = neuralnetwork.layer;
     for(int i = 0; i < neuralnetwork.nbr_layers; i++)
     {
+        Layer *layer = neuralnetwork.layer +i;
         for(int j = 0; j < layer->nbr_neuronnes; j++)
         {
             Neuronne *neuronne_precedent = (layer-1)->neuronne;
@@ -36,6 +36,7 @@ void feedForward(NeuralNetwork neuralnetwork, double inputs[], int len)
             for(int k = 0; k < length; k++)
             {
                 double *weigth = neuronne->weigth;
+                
                 if(i == 0)
                 {
                     somme += inputs[k] * (*(weigth + k));
@@ -48,7 +49,6 @@ void feedForward(NeuralNetwork neuralnetwork, double inputs[], int len)
             }
             neuronne->output = sigmoid(somme + neuronne->biais); 
         }
-        layer += 1;
     }
 }
 

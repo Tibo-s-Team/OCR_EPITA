@@ -24,6 +24,11 @@ Neuronne creat_neuronne(size_t nbr_poids)
     }
     double biais = randfrom(-1.0, 1.0);
     struct Neuronne neuronne = {nbr_poids, begin_weigth, end_weight, biais, 0.0, 0.0};
+    int j = 0;
+    for(double *i = begin_weigth; i < end_weight; i++)
+    {
+        j++;
+    }
     return neuronne;
 }
 
