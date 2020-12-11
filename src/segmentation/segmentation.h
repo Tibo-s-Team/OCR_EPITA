@@ -10,18 +10,10 @@
 #define SEGMENTATION_H_
 
 #include "../image.h"
+#include "boundaryBox.h"
 
 // segmentation.c ------------------
 
-typedef struct PixelLocation {
-    int x;
-    int y;
-} Pixel;
-
-typedef struct BoundaryBox {
-    Pixel start;
-    Pixel end;
-} BBox;
 
 typedef enum HistogramType { LINE, COLUMN } HistogramType;
 
