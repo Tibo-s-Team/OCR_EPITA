@@ -3,7 +3,7 @@
 
 #include "binarization.h"
 
-void adaptativeThreshold(Image img, unsigned int out[], int w, int h);
+void adaptativeThreshold(Image img, unsigned int out[][], int w, int h);
 
 
 void Bradley(char *filename, char *output)
@@ -25,7 +25,7 @@ void Bradley(char *filename, char *output)
 }
 
 
-void adaptativeThreshold(Image img, unsigned int out[], int w, int h)
+void adaptativeThreshold(Image img, unsigned int out[][], int w, int h)
 {
     unsigned long intImage[w][h] = {
         {0, },
