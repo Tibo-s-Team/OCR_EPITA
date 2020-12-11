@@ -23,9 +23,12 @@ int main(int argc, char *argv[]) {
             grayscale(&image);
             blackAndWhite(&image);
 
-            //segmentation(&image);
-            bin_segmentation(&image);
-            displayImage(&image);
+            // segmentation(&image);
+            // bin_segmentation(&image);
+            // displayImage(&image);
+
+            BBox area = {(Pixel){100, 100}, (Pixel){image.width / 4, image.height / 4}};
+            extractImage(&image, "test.png", area);
 
             IMG_Quit();
         }

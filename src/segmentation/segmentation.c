@@ -217,11 +217,14 @@ void bin_segmentation(Image *image) {
 
             size_t letter_count;
             Pixel *letters = getColumns(image, word, &letter_count);
+            printf("letters : %ld | ");
+            printBox(word);
+            bin_highlightText(image, word);
 
             for (size_t z = 0; z < letter_count; z++) {
                 BBox letter = {(Pixel){letters[j].x, line.start.y},
                                (Pixel){letters[j].y, line.end.y}};
-                bin_highlightText(image, letter);
+                // bin_highlightText(image, letter);
             }
             free(letters);
         }
@@ -279,8 +282,7 @@ Pixel *bin_findBoxes(Histogram *histo, size_t *len) {
         else {
             if (size > 0) {  // if we just quit a block
                 if (gap > histo->threshold[0] && size > histo->threshold[1]) {
-                    // if block is of the correct size -> append it in a new
-                    // node
+                    // append block if it is of the correct size
                     boxes[*len] = (Pixel){i - size - 1, i - 1};
                     *len += 1;
                 }
@@ -297,15 +299,6 @@ Pixel *bin_findBoxes(Histogram *histo, size_t *len) {
     }
 
     return boxes;
-}
-
-/*!
- * Prints information about a BoundaryBox
- * @param box the BoundaryBox structure we want to be displayed.
- */
-void printBox(BBox box) {
-    printf("[%d, %d] -> [%d,%d]\n", box.start.x, box.start.y, box.end.x,
-           box.end.y);
 }
 
 #pragma endregion BinTree

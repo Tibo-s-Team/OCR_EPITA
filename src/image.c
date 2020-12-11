@@ -180,24 +180,25 @@ void displayImage(Image *image) {
  * @param width tuple contating the starting and ending width
  *  of the part of the image to extract
  */
-void extractImage(Image *image, const char *file, int height[2], int width[2]) {
+void extractImage(Image *image, const char *file, BBox area) {
     // FIXME
-    return;
 
-    SDL_Surface *new_image = NULL;
-    SDL_Rect rect = {.x = width[0],
-                     .y = height[0],
-                     .w = width[1] - width[0],
-                     .h = height[1] - height[0]};
+    SDL_Rect rect = {.x = area.start.x,
+                     .y = area.start.y,
+                     .w = area.end.x - area.start.x,
+                     .h = area.end.y - area.start.y};
+    SDL_Surface *cropped =
+        SDL_CreateRGBSurface(0, rect.w, rect.h, 32, 0, 0, 0, 0);
 
+    // create new blank surface
     // verify path doesn't already exist
+    SDL_UnlockSurface(image->surface);
 
     // extract image part => returns 0 if succesful
-    int extraction = SDL_BlitSurface(image->surface, NULL, new_image, NULL);
+    int extraction = SDL_BlitSurface(image->surface, &rect, cropped, NULL);
     if (extraction)
         errx(1,
              "Error : image.c - extractImage : Image couldn't be extracted.");
 
-    IMG_SavePNG(new_image, file);
-    SDL_FreeSurface(new_image);
+    IMG_SavePNG(cropped, file);
 }
