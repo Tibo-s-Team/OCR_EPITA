@@ -24,6 +24,7 @@ int main(int argc, char *argv[]) {
     } else {
         for (int i = 1; i < argc; i++)  // for all given paths
         {
+<<<<<<< HEAD
             if (argv[i][0] == '-') {
                 for (int j = 1; j < (int)strlen(argv[i]); j++) {
                     switch (argv[i][j]) {
@@ -59,6 +60,21 @@ int main(int argc, char *argv[]) {
 
                 displayImage(&image);
             }
+=======
+            image = loadImage(argv[i]);
+
+            grayscale(&image);
+            blackAndWhite(&image);
+
+            // segmentation(&image);
+            // bin_segmentation(&image);
+            // displayImage(&image);
+
+            BBox area = {(Pixel){100, 100}, (Pixel){image.width / 4, image.height / 4}};
+            extractImage(&image, "test.png", area);
+
+            IMG_Quit();
+>>>>>>> 325a2fb694d9b09862640edd0a193487f93c7b60
         }
     }
 

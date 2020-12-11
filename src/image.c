@@ -201,3 +201,33 @@ void extractImage(Image *image, const char *file, int height[2], int width[2]) {
         SDL_FreeSurface(new_image);
     */
 }
+
+/*!
+ * Extract part of an image and save it as a new image.
+ * @param image the image to extract from
+ * @param file the file where to save the new image
+ * @param height tuple contating the starting and ending height
+ *  of the part of the image to extract
+ * @param width tuple contating the starting and ending width
+ *  of the part of the image to extract
+ */
+void extractImage(Image *image, const char *file, BBox area) {
+    SDL_Rect rect = {.x = area.start.x,
+                     .y = area.start.y,
+                     .w = area.end.x - area.start.x,
+                     .h = area.end.y - area.start.y};
+    SDL_Surface *cropped =
+        SDL_CreateRGBSurface(0, rect.w, rect.h, 32, 0, 0, 0, 0);
+
+    // create new blank surface
+    // verify path doesn't already exist
+    SDL_UnlockSurface(image->surface);
+
+    // extract image part => returns 0 if succesful
+    int extraction = SDL_BlitSurface(image->surface, &rect, cropped, NULL);
+    if (extraction)
+        errx(1,
+             "Error : image.c - extractImage : Image couldn't be extracted.");
+
+    IMG_SavePNG(cropped, file);
+}

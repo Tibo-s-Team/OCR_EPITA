@@ -1,4 +1,8 @@
 /*!
+<<<<<<< HEAD
+=======
+ *  /!\ DEPRECATED /!\
+>>>>>>> 325a2fb694d9b09862640edd0a193487f93c7b60
  *  File created on 10/23/2020 (MM/DD/YYYY) by leo.duboin
  *  Contributors : leo.duboin
  *
@@ -17,8 +21,13 @@
  * @param end ending position of a block
  * @return a standalone tree whose key contains the position of a block
  */
+<<<<<<< HEAD
 BinTree createBinTree(int start, int end) {
     BinTree node = {{start, end}, NULL, NULL, NULL};
+=======
+BinTree createBinTree(BBox key) {
+    BinTree node = {key, NULL, NULL, NULL};
+>>>>>>> 325a2fb694d9b09862640edd0a193487f93c7b60
     return node;
 }
 
@@ -64,13 +73,32 @@ void mapFunction(BinTree *tree, Image *image, void (*f)(Image *, BinTree *)) {
     }
 }
 
+<<<<<<< HEAD
+=======
+#pragma region print
+
+>>>>>>> 325a2fb694d9b09862640edd0a193487f93c7b60
 /*!
  * Print the content of a forest of trees. Each node is printed as [key1, key2].
  * @param node the first tree of the forest to be printed
  */
 void printForest(BinTree *node) {
     if (node != NULL) {
+<<<<<<< HEAD
         printf("[%d, %d]\n", node->key[0], node->key[1]);
         printForest(node->sibling);
     }
 }
+=======
+        printBox(node->key);
+        printForest(node->sibling);
+    }
+}
+
+void printBox(BBox box) {
+    printf("[%d, %d] -> [%d,%d]\n", box.start.x, box.start.y, box.end.x,
+           box.end.y);
+}
+
+#pragma endregion print
+>>>>>>> 325a2fb694d9b09862640edd0a193487f93c7b60
