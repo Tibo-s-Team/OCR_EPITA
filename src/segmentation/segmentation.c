@@ -9,7 +9,10 @@
  *  10/23 : Implementation of a binaryTree data structure to store all the
  *  boundary boxes.
  *
- * //TODO : Fix letter segmentation, implement threshold system
+ *  12/11 : Abandonned binaryTree for a simple boundaryBox struct.
+ *  Need to fix threshold calculation
+ *
+ * //TODO : implement threshold system
  */
 
 #include "segmentation.h"
@@ -48,17 +51,19 @@ void segmentation(Image *image) {
         int *words = segmentWords(image, height);
         for (int word = 1; word < words[0]; word += 2) {
             int width[2] = {words[word], words[word + 1]};
-            highlightText(image, height, width);
+            // highlightText(image, height, width);
 
-            // int *letters = segmentLetters(image, height, width);
-            /*
+            int *letters = segmentLetters(image, height, width);
+
             for (int letter = 1; letter < letters[0]; letters += 2) {
                 int tmp[2] = {letters[letter], letters[letter + 1]};
                 highlightText(image, height, tmp);
             }
-            */
+            free(letters);
         }
+        free(words);
     }
+    free(lines);
 }
 
 /*!
@@ -169,20 +174,22 @@ int *findBlocks(Histogram *histo) {
  * You apply segmentation to its leaves and add the resulting boxes as their
  * child.
  *
- * Current Issue : pointers are acting weird with local variables
+ * BoundaryBox : holds coordinates of the detected text.
+ *
+ * 12/11/2020 : BinaryTree dropped, created boundarybox struct instead.
  */
 
 //--------------------------------------------
 
-BinTree bin_findBlocks(Histogram *histo);
-void bin_highlightText(Image *image, BinTree *tree);
-void bin_test(Image *image, BinTree *tree);
-void getLines(Image *image, BinTree *node);
+Pixel *bin_findBoxes(Histogram *histo, size_t *len);
+void bin_highlightText(Image *image, BBox box);
+Pixel *getColumns(Image *image, BBox line, size_t *len);
+void printBox(BBox box);
 
 //--------------------------------------------
 
 /*!
- * Apply segmentation process to a given image using the binary tree
+ * Apply segmentation process to a given image using the !boundaryBox
  *  implementation.
  * @param image black and white image
  */
@@ -192,52 +199,78 @@ void bin_segmentation(Image *image) {
              "ERROR : segmentation.c - segmentLine : Image must have been "
              "binarized beforehand.\n");
 
-    // TODO
-    // apply segmentation to all he leaves of the tree
-    // add the resulting tree as their child.
+    Histogram histo = lineHistogram(image);
+    size_t len;
 
-    BinTree node = createBinTree(0, image->height);
-    getLines(image, &node);
-    mapFunction(&node, image, bin_highlightText);
+    // x = start of box | y = end of box
+    Pixel *lines = bin_findBoxes(&histo, &len);
+
+    for (size_t i = 0; i < len; i++) {
+        BBox line = {(Pixel){0, lines[i].x}, (Pixel){image->width, lines[i].y}};
+
+        size_t word_count;
+        Pixel *words = getColumns(image, line, &word_count);
+
+        for (size_t j = 0; j < word_count; j++) {
+            BBox word = {(Pixel){words[j].x, line.start.y},
+                         (Pixel){words[j].y, line.end.y}};
+
+            size_t letter_count;
+            Pixel *letters = getColumns(image, word, &letter_count);
+
+            for (size_t z = 0; z < letter_count; z++) {
+                BBox letter = {(Pixel){letters[j].x, line.start.y},
+                               (Pixel){letters[j].y, line.end.y}};
+                bin_highlightText(image, letter);
+            }
+            free(letters);
+        }
+        free(words);
+    }
+    free(lines);
 }
 
 /*!
- * Highlight text in an image.
+ * Highlight text in an image. Mainly used for test purposes.
  * @param image black and white image
- * @param tree a tree node whose key contains information about
- *  the text's position in the image
+ * @param tree BoundaryBox representing the area to highlight in the image
  */
-void bin_highlightText(Image *image, BinTree *tree) {
-    int start = tree->key[0], end = tree->key[1];
-
-    for (int y = start; y < end; y++) {
-        for (int x = 0; x < image->width; x++)
+void bin_highlightText(Image *image, BBox box) {
+    for (int y = box.start.y; y < box.end.y; y++) {
+        for (int x = box.start.x; x < box.end.x; x++)
             setPixelColor(image, BLACK, x, y);
     }
 }
 
 /*!
- * Segement an image into lines and add them as the given node's children.
+ * Segement a box into columns (line to words / word to letters).
  * @param image black and white image
- * @param node root of the image's 'box' binary tree
+ * @param line BoundaryBox we want to segment.
+ * @param len pointer used to store the number of resulting columns.
  */
-void getLines(Image *image, BinTree *node) {
-    Histogram histo = lineHistogram(image);
-    BinTree child = bin_findBlocks(&histo);
-    addChild(&child, node);
+Pixel *getColumns(Image *image, BBox line, size_t *len) {
+    int columnBlock[2] = {line.start.x, line.end.x},
+        lineBlock[2] = {line.start.y, line.end.y};
+    Histogram histo = columnHistogram(image, lineBlock, columnBlock);
+
+    // x = start of box | y = end of box
+    Pixel *boxes = bin_findBoxes(&histo, len);
+    return boxes;
 }
 
 /*!
- * Find all the 'box' in a given histogram.
- * @return a binary tree forest whose tree's keys contain the starting and
- *  ending position of all the boxes found.
+ * Find all 'boxes' in a given histogram.
+ * @return a list of all the identified boundary boxes
+ * @param histo the histogram
+ * @param len pointer to the size of the returned list
  */
-BinTree bin_findBlocks(Histogram *histo) {
-    BinTree res = createBinTree(0, 0);  // generic tree to append to
-    int gap = 0, size = 0, blocks_index = 1;
+Pixel *bin_findBoxes(Histogram *histo, size_t *len) {
+    // BinTree res = createBinTree(0, 0);  // generic tree to append to
+    int gap = 0, size = 0;
+    *len = 0;
 
     // Store nodes in an array instead of local stack
-    BinTree *nodes = calloc(histo->size + 1, sizeof(BinTree));
+    Pixel *boxes = calloc(histo->size, sizeof(Pixel));
 
     for (int i = 0; i < histo->size; i++) {
         int line = histo->histo[i];
@@ -248,8 +281,8 @@ BinTree bin_findBlocks(Histogram *histo) {
                 if (gap > histo->threshold[0] && size > histo->threshold[1]) {
                     // if block is of the correct size -> append it in a new
                     // node
-                    nodes[i] = createBinTree(i - size - 1, i - 1);
-                    addSibling(&nodes[i], &res);
+                    boxes[*len] = (Pixel){i - size - 1, i - 1};
+                    *len += 1;
                 }
                 gap = 0;
                 size = 0;
@@ -259,13 +292,20 @@ BinTree bin_findBlocks(Histogram *histo) {
     }
     // check if still in a block when exiting the loop
     if (size > 0 && gap > histo->threshold[0] && size > histo->threshold[1]) {
-        nodes[histo->size] =
-            createBinTree(histo->size - size - 1, histo->size - 1);
-        addSibling(&nodes[histo->size], &res);
+        boxes[*len] = (Pixel){histo->size - size - 1, histo->size - 1};
+        *len += 1;
     }
 
-    free(nodes);
-    return res;
+    return boxes;
+}
+
+/*!
+ * Prints information about a BoundaryBox
+ * @param box the BoundaryBox structure we want to be displayed.
+ */
+void printBox(BBox box) {
+    printf("[%d, %d] -> [%d,%d]\n", box.start.x, box.start.y, box.end.x,
+           box.end.y);
 }
 
 #pragma endregion BinTree
@@ -295,7 +335,7 @@ Histogram lineHistogram(Image *image) {
  * @return the image's pixel histogram, column per column
  */
 Histogram columnHistogram(Image *image, int lineBlock[2], int columnBLock[2]) {
-    int mean = 0, size = columnBLock[1] - columnBLock[0];
+    int mean = 0, size = image->width;
     int *histo = calloc(size, sizeof(int));
     int *ptr_histo = histo;
 

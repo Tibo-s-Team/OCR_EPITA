@@ -2,7 +2,7 @@
  *  File created on 10/15/2020 (MM/DD/YYYY) by leo.duboin
  *  Contributors : leo.duboin
  *
- *  This file contains all the necessary to apply 
+ *  This file contains all the necessary to apply
  *  the text segmentation process to an image.
  */
 
@@ -10,9 +10,18 @@
 #define SEGMENTATION_H_
 
 #include "../image.h"
-#include "binaryTree.h"
 
 // segmentation.c ------------------
+
+typedef struct PixelLocation {
+    int x;
+    int y;
+} Pixel;
+
+typedef struct BoundaryBox {
+    Pixel start;
+    Pixel end;
+} BBox;
 
 typedef enum HistogramType { LINE, COLUMN } HistogramType;
 

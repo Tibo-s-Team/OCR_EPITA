@@ -23,7 +23,8 @@ int main(int argc, char *argv[]) {
             grayscale(&image);
             blackAndWhite(&image);
 
-            segmentation(&image);
+            //segmentation(&image);
+            bin_segmentation(&image);
             displayImage(&image);
 
             IMG_Quit();
