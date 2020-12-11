@@ -181,8 +181,6 @@ void displayImage(Image *image) {
  *  of the part of the image to extract
  */
 void extractImage(Image *image, const char *file, BBox area) {
-    // FIXME
-
     SDL_Rect rect = {.x = area.start.x,
                      .y = area.start.y,
                      .w = area.end.x - area.start.x,
