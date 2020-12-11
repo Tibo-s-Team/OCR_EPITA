@@ -35,10 +35,6 @@ void getPixelRGB(Image *image, const int x, const int y,
 void setPixelColor(Image *image, Uint8 color, 
                 const int x, const int y);
 void displayImage(Image *image);
-<<<<<<< HEAD
-void extractImage(Image *image, const char *file, int height[2], int width[2]);
-=======
 void extractImage(Image *image, const char *file, BBox area);
->>>>>>> 325a2fb694d9b09862640edd0a193487f93c7b60
 
 #endif

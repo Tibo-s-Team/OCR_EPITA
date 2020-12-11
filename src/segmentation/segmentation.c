@@ -9,14 +9,10 @@
  *  10/23 : Implementation of a binaryTree data structure to store all the
  *  boundary boxes.
  *
-<<<<<<< HEAD
- * //TODO : Fix letter segmentation, implement threshold system
-=======
  *  12/11 : Abandonned binaryTree for a simple boundaryBox struct.
  *  Need to fix threshold calculation
  *
  * //TODO : implement threshold system
->>>>>>> 325a2fb694d9b09862640edd0a193487f93c7b60
  */
 
 #include "segmentation.h"
@@ -47,7 +43,6 @@ void segmentation(Image *image) {
         errx(1,
              "ERROR : segmentation.c - segmentLine : Image must have been "
              "binarized beforehand.\n");
-<<<<<<< HEAD
 
     int *lines = segmentLine(image);
 
@@ -56,19 +51,7 @@ void segmentation(Image *image) {
         int *words = segmentWords(image, height);
         for (int word = 1; word < words[0]; word += 2) {
             int width[2] = {words[word], words[word + 1]};
-            highlightText(image, height, width);
-        }
-=======
-
-    int *lines = segmentLine(image);
-
-    for (int line = 1; line < lines[0]; lines += 2) {
-        int height[2] = {lines[line], lines[line + 1]};
-        int *words = segmentWords(image, height);
-        for (int word = 1; word < words[0]; word += 2) {
-            int width[2] = {words[word], words[word + 1]};
-            // highlightText(:w
-            :wq
+            // highlightText
             
 
             int *letters = segmentLetters(image, height, width);
@@ -94,41 +77,6 @@ void highlightText(Image *image, int height[2], int width[2]) {
     for (int y = height[0]; y < height[1]; y++) {
         for (int x = width[0]; x < width[1]; x++)
             setPixelColor(image, BLACK, x, y);
->>>>>>> 325a2fb694d9b09862640edd0a193487f93c7b60
-    }
-}
-
-/*!
-<<<<<<< HEAD
- * Apply line segmentation process to a given image using the classic array
- *  implementation.
- * @param image black and white image
- */
-void lineSegmentation(Image *image) {
-    if (image->imageType != BW)
-        errx(1,
-             "ERROR : segmentation.c - segmentLine : Image must have been "
-             "binarized beforehand.\n");
-
-    int *lines = segmentLine(image);
-
-    for (int line = 1; line < lines[0]; lines += 2) {
-        int height[2] = {lines[line], lines[line + 1]};
-        int width[2] = {0, image->width};
-        highlightText(image, height, width);
-    }
-}
-
-/*!
- * Highlight text in an image.
- * @param image black and white image
- * @param height tuple with information about the text's height (start, end)
- * @param width tuple with information about the text's width (start, end)
- */
-void highlightText(Image *image, int height[2], int width[2]) {
-    for (int y = height[0]; y < height[1]; y++) {
-        for (int x = width[0]; x < width[1]; x++)
-            setPixelColor(image, BLACK, x, y);
     }
 }
 
@@ -147,22 +95,6 @@ int *segmentLine(Image *image) {
     return blocks;
 }
 
-=======
- * Segment an image into lines.
- * @param image black and white image
- * @returns An array of the form [size, (start, end), ..., (start, end)]
- *  where each tuple represent the start and the end of a line, size being the
- *  total size of the resulting array.
- */
-int *segmentLine(Image *image) {
-    // FIXME
-    Histogram histo = lineHistogram(image);
-    int *blocks = findBlocks(&histo);
-
-    return blocks;
-}
-
->>>>>>> 325a2fb694d9b09862640edd0a193487f93c7b60
 /*!
  * Segment a line into words.
  * @param image black and white image
@@ -243,13 +175,9 @@ int *findBlocks(Histogram *histo) {
  * You apply segmentation to its leaves and add the resulting boxes as their
  * child.
  *
-<<<<<<< HEAD
- * Current Issue : pointers are acting weird with local variables
-=======
  * BoundaryBox : holds coordinates of the detected text.
  *
  * 12/11/2020 : BinaryTree dropped, created boundarybox struct instead.
->>>>>>> 325a2fb694d9b09862640edd0a193487f93c7b60
  */
 
 //--------------------------------------------
@@ -269,11 +197,7 @@ void printBox(BBox box);
 //--------------------------------------------
 
 /*!
-<<<<<<< HEAD
- * Apply segmentation process to a given image using the binary tree
-=======
  * Apply segmentation process to a given image using the !boundaryBox
->>>>>>> 325a2fb694d9b09862640edd0a193487f93c7b60
  *  implementation.
  * @param image black and white image
  */
@@ -283,99 +207,6 @@ void bin_segmentation(Image *image) {
              "ERROR : segmentation.c - segmentLine : Image must have been "
              "binarized beforehand.\n");
 
-<<<<<<< HEAD
-    // TODO
-    // apply segmentation to all he leaves of the tree
-    // add the resulting tree as their child.
-
-    BinTree node = createBinTree(0, image->height);
-    getLines(image, &node);
-    mapFunction(&node, image, bin_highlightText);
-}
-
-/*!
- * Highlight text in an image.
- * @param image black and white image
- * @param tree a tree node whose key contains information about
- *  the text's position in the image
- */
-void bin_highlightText(Image *image, BinTree *tree) {
-    int start = tree->key[0], end = tree->key[1];
-
-    for (int y = start; y < end; y++) {
-        for (int x = 0; x < image->width; x++)
-            setPixelColor(image, BLACK, x, y);
-    }
-}
-
-/*!
- * Segement an image into lines and add them as the given node's children.
- * @param image black and white image
- * @param node root of the image's 'box' binary tree
- */
-void getLines(Image *image, BinTree *node) {
-    Histogram histo = lineHistogram(image);
-    BinTree child = bin_findBlocks(&histo);
-    addChild(&child, node);
-}
-
-/*!
- * Find all the 'box' in a given histogram.
- * @return a binary tree forest whose tree's keys contain the starting and
- *  ending position of all the boxes found.
- */
-BinTree bin_findBlocks(Histogram *histo) {
-    BinTree res = createBinTree(0, 0);  // generic tree to append to
-    int gap = 0, size = 0, blocks_index = 1;
-
-    // Store nodes in an array instead of local stack
-    BinTree *nodes = calloc(histo->size + 1, sizeof(BinTree));
-
-    for (int i = 0; i < histo->size; i++) {
-        int line = histo->histo[i];
-        if (line >= histo->mean)
-            ++size;
-        else {
-            if (size > 0) {  // if we just quit a block
-                if (gap > histo->threshold[0] && size > histo->threshold[1]) {
-                    // if block is of the correct size -> append it in a new
-                    // node
-                    nodes[i] = createBinTree(i - size - 1, i - 1);
-                    addSibling(&nodes[i], &res);
-                }
-                gap = 0;
-                size = 0;
-            }
-            gap++;
-        }
-    }
-    // check if still in a block when exiting the loop
-    if (size > 0 && gap > histo->threshold[0] && size > histo->threshold[1]) {
-        nodes[histo->size] =
-            createBinTree(histo->size - size - 1, histo->size - 1);
-        addSibling(&nodes[histo->size], &res);
-    }
-
-    free(nodes);
-    return res;
-}
-
-#pragma endregion BinTree
-
-#pragma region histogram
-
-/*!
- * @return the image's pixel histogram, line per line
- */
-Histogram lineHistogram(Image *image) {
-    int mean = 0, size = image->height;
-    int *histo = calloc(size, sizeof(int));
-    int *ptr_histo = histo;
-
-    for (int y = 0; y < image->height; y++) {
-        ptr_histo = &histo[y];
-        for (int x = 0; x < image->width; x++)
-=======
     Histogram histo = lineHistogram(image);
     size_t len;
 
@@ -518,33 +349,10 @@ Histogram columnHistogram(Image *image, int lineBlock[2], int columnBLock[2]) {
     for (int x = columnBLock[0]; x < columnBLock[1]; x++) {
         ptr_histo = &histo[x];
         for (int y = lineBlock[0]; y < lineBlock[1]; y++)
->>>>>>> 325a2fb694d9b09862640edd0a193487f93c7b60
             *ptr_histo += getPixelColor(image, x, y) == BLACK;
         if (*ptr_histo < (100 * size) / 85) mean += *ptr_histo;
     }
 
-<<<<<<< HEAD
-    Histogram res = {histo, LINE, {0, 0}, mean / (2 * size), size};
-    return res;
-}
-
-/*!
- * @return the image's pixel histogram, column per column
- */
-Histogram columnHistogram(Image *image, int lineBlock[2], int columnBLock[2]) {
-    int mean = 0, size = columnBLock[1] - columnBLock[0];
-    int *histo = calloc(size, sizeof(int));
-    int *ptr_histo = histo;
-
-    for (int x = columnBLock[0]; x < columnBLock[1]; x++) {
-        ptr_histo = &histo[x];
-        for (int y = lineBlock[0]; y < lineBlock[1]; y++)
-            *ptr_histo += getPixelColor(image, x, y) == BLACK;
-        if (*ptr_histo < (100 * size) / 85) mean += *ptr_histo;
-    }
-
-=======
->>>>>>> 325a2fb694d9b09862640edd0a193487f93c7b60
     Histogram res = {histo, COLUMN, {0, 0}, mean / (2 * size), size};
     return res;
 }
