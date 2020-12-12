@@ -24,43 +24,6 @@ int main(int argc, char *argv[]) {
     } else {
         for (int i = 1; i < argc; i++)  // for all given paths
         {
-<<<<<<< HEAD
-            if (argv[i][0] == '-') {
-                for (int j = 1; j < (int)strlen(argv[i]); j++) {
-                    switch (argv[i][j]) {
-                        case 'd':
-                            display = 1;
-                            break;
-                        case 'g':
-                            gray = 1;
-                            break;
-                        case 'b':
-                            gray = 1;
-                            black_and_white = 1;
-                            break;
-                        case 'l':
-                            gray = 1;
-                            black_and_white = 1;
-                            lines = 1;
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            } else {
-                Image image = loadImage(argv[i]);
-                int words = !gray && !black_and_white && !lines;
-
-                if (!display) {
-                    if (gray || words) grayscale(&image);
-                    if (black_and_white || words) blackAndWhite(&image);
-                    if (lines) lineSegmentation(&image);
-                    if (words) segmentation(&image);
-                }
-
-                displayImage(&image);
-            }
-=======
             image = loadImage(argv[i]);
 
             grayscale(&image);
@@ -74,7 +37,6 @@ int main(int argc, char *argv[]) {
             extractImage(&image, "test.png", area);
 
             IMG_Quit();
->>>>>>> 325a2fb694d9b09862640edd0a193487f93c7b60
         }
     }
 

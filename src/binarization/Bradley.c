@@ -21,7 +21,7 @@ void Bradley(char *filename, char *output)
             setPixelColor(img, out[i][j], i, j)
     }
 
-    displayImage(img);
+
 }
 
 
