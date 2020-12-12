@@ -1,3 +1,0 @@
-#!/bin/bash
-
-gcc -Wno-format -o OCR visual.c -Wno-deprecated-declarations -Wno-format-security -lm `pkg-config --cflags --libs gtk+-3.0 `  `pkg-config --libs sdl` -lm -lSDL_image -export-dynamic 

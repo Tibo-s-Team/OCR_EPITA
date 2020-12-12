@@ -1,6 +1,6 @@
 /*!
  *  File created on 10/8/2020 (MM/DD/YYYY) by leo.duboin
- *  Contributors : leo.duboin
+ *  Contributors : leo.duboin jean.barbaroux
  *
  *  File containing all the functions necessary to interact with an image.
  *
@@ -201,3 +201,5 @@ void extractImage(Image *image, const char *file, int height[2], int width[2]) {
         SDL_FreeSurface(new_image);
     */
 }
+
+

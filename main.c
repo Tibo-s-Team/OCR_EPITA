@@ -52,9 +52,13 @@ int main(int argc, char *argv[]) {
 
                 if (!display) {
                     if (gray || words) grayscale(&image);
+                         SDL_SaveBMP(image.surface, "tests/tmp/grayscaled");
                     if (black_and_white || words) blackAndWhite(&image);
+                         SDL_SaveBMP(image.surface, "tests/tmp/blackandwhited");
                     if (lines) lineSegmentation(&image);
+                          SDL_SaveBMP(image.surface, "tests/tmp/linesegmentated");
                     if (words) segmentation(&image);
+                        SDL_SaveBMP(image.surface, "tests/tmp/segmentated");
                 }
 
                 displayImage(&image);
