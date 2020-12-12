@@ -14,14 +14,13 @@ double sigmoidPrime(double x)
     return x * (1-x);
 }
 
-void feedForward(NeuralNetwork neuralnetwork, double inputs[], int len)
+void feedForward(NeuralNetwork neuralnetwork, double *inputs, int len)
 {
     for(int i = 0; i < neuralnetwork.nbr_layers; i++)
     {
         Layer *layer = neuralnetwork.layer +i;
         for(int j = 0; j < layer->nbr_neuronnes; j++)
         {
-            Neuronne *neuronne_precedent = (layer-1)->neuronne;
             Neuronne *neuronne = (layer->neuronne)+j;
             double somme = 0.0;
             int length;
@@ -39,10 +38,11 @@ void feedForward(NeuralNetwork neuralnetwork, double inputs[], int len)
                 
                 if(i == 0)
                 {
-                    somme += inputs[k] * (*(weigth + k));
+                    somme += *(inputs + k) * (*(weigth + k));
                 }
                 else
                 {
+                    Neuronne *neuronne_precedent = (layer-1)->neuronne;
                     somme += (neuronne_precedent + k)->output * (*(weigth + k));
                 }
                       
@@ -57,10 +57,11 @@ double* print_output(NeuralNetwork neuralnetwork)
     double* output = malloc((neuralnetwork.end -1)->nbr_neuronnes * sizeof(double));
     double* j = output;
     Layer *layer = neuralnetwork.end -1;
+    printf("__________\n");
     for(Neuronne *i = layer->neuronne; i < layer->end; i++)
     {
+        printf("%f\n", i->output);
         *j = i->output;
-        printf("%f \n", i->output);
         j++;
     }
     return output;
@@ -106,7 +107,7 @@ void print_error(NeuralNetwork neuralnetwork)
     }
 }
 
-void updateWeigth(NeuralNetwork neuralnetwork, double inputs[], int len, double coeff)
+void updateWeigth(NeuralNetwork neuralnetwork, double *inputs, int len, double coeff)
 {
     for(int i = 0; i < neuralnetwork.nbr_layers; i++)
     {
@@ -119,7 +120,7 @@ void updateWeigth(NeuralNetwork neuralnetwork, double inputs[], int len, double 
             {
                 for(int j = 0; j < len; j++)
                 {
-                    *(weigth + j) += coeff * neuronne->error * inputs[j]; 
+                    *(weigth + j) += coeff * neuronne->error * *(inputs + j); 
                 }
             }
             else
