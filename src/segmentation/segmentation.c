@@ -51,9 +51,6 @@ void segmentation(Image *image) {
         int *words = segmentWords(image, height);
         for (int word = 1; word < words[0]; word += 2) {
             int width[2] = {words[word], words[word + 1]};
-            // highlightText(:w
-            :wq
-            
 
             int *letters = segmentLetters(image, height, width);
 
