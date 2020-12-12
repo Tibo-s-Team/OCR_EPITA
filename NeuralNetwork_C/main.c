@@ -6,6 +6,7 @@
 #include "neuralnetwork.h"
 #include "NN_functions.h"
 #include "XOR.h"
+#include "DataManipulation.h"
 
 int main(int argc, char *argv[]) {
     srand(time (NULL));
@@ -20,6 +21,7 @@ int main(int argc, char *argv[]) {
     XOR(neuralnetwork, 1.0, 0.0);
     printf("0 - 0 : ");
     XOR(neuralnetwork, 0.0, 0.0);
+    save(neuralnetwork, "NeuralData/XOR.txt");
     free_neuralNetwork(neuralnetwork);
     return 0;
 }
