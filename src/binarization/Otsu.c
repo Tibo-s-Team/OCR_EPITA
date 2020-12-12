@@ -20,10 +20,10 @@ void Otsu(char *filename, char *output)
     {
         for (int j = 0; j < img.height; j++)
         {
-            Uint8 pixelValue = getPixelColor(img, i, j);
+            Uint8 pixelValue = getPixelColor(&img, i, j);
             if (pixelValue < threshold)
-                setPixelColor(img, BLACK, i, j);
-            else setPixelColor(img, WHITE, i, j);
+                setPixelColor(&img, BLACK, i, j);
+            else setPixelColor(&img, WHITE, i, j);
         }
     }
 
@@ -35,7 +35,7 @@ void histogramGray(Image img, unsigned long histogram[])
     {
         for (int j = 0; j < img.height; j++)
         {
-            histogram[getPixelColor(img, i, j)] += 1;
+            histogram[getPixelColor(&img, i, j)] += 1;
         }
     }
 }
@@ -59,7 +59,7 @@ unsigned long Threshold(unsigned long histogram[], Image img)
         mu += i * (histogram[i] / totalPixel);
 
         unsigned long temp = (muT*omega) - mu;
-        sigma = (temp*temp) / (omega * (1-omega));
+        unsigned long sigma = (temp*temp) / (omega * (1-omega));
 
         values[i] = sigma;
         if (sigma > thresholdMax)
