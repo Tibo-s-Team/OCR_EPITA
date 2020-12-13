@@ -1,6 +1,6 @@
-OBJS	= main.o Otsu.o Bradley.o  ../image.o 
-SOURCE	= main.c ../image.c Otsu.c Bradley.c 
-HEADER	= binarization.h ../image.h
+OBJS	= main.o Otsu.o Bradley.o  ../image.o ../preprocessing/suppression_couleurs.o
+SOURCE	= main.c ../image.c Otsu.c Bradley.c ../preprocessing/suppression_couleurs.c
+HEADER	= binarization.h ../image.h ../preprocessing/preprocessing.h
 OUT	= TIBO
 CC	 = gcc
 CFLAGS	 = -g -c -Wall -Wextra -Wno-unknown-pragmas -Wno-unused-variable -Wno-unused-parameter -lSDL2 -lSDL2_image -Werror -std=c99 

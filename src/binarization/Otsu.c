@@ -7,10 +7,8 @@
 void histogramGray(Image img, unsigned long histogram[]);
 unsigned long Threshold(unsigned long histogram[], Image img);
 
-void Otsu(char *filename, char *output)
+void Otsu(Image img)
 {
-    Image img = loadImage(filename);
-    
     unsigned long histogram[256] = {0, };
 
     histogramGray(img, histogram);
@@ -27,8 +25,7 @@ void Otsu(char *filename, char *output)
         }
     }
 
-    displayImage(&img);
-
+    img.imageType = BW;
 }
 
 void histogramGray(Image img, unsigned long histogram[])
@@ -46,24 +43,40 @@ unsigned long Threshold(unsigned long histogram[], Image img)
 {
     unsigned long totalPixel = img.width * img.height;
 
-    unsigned long omega = 0;
-    unsigned long mu = 0;
-    unsigned long muT = 0;
+    float sum = 0;
 
     for (int i = 0; i < 256; i++)
-        muT += i * (histogram[i] / totalPixel);
+        sum += i * histogram[i];
 
+    float sumB = 0;
+    int weightB = 0;
+    int weightF = 0;
+
+    float sigmaMax = 0;
     unsigned long thresholdMax = 0;
+
     for (int i = 0; i < 256; i++)
     {
-        omega += histogram[i] / totalPixel;
-        mu += i * (histogram[i] / totalPixel);
+	weightB += histogram[i];
+	if (weightB == 0) continue;
 
-        unsigned long temp = (muT*omega) - mu;
-        unsigned long sigma = (temp*temp) / (omega * (1-omega));
+	weightF = totalPixel - weightB;
+	if (weightF == 0) break;
 
-        if (sigma > thresholdMax)
-            thresholdMax = i;
+	sumB += i*histogram[i];
+
+	float meanB = sumB/weightB;
+	float meanF = (sum-sumB) / weightF;
+
+	float sigmaBetween = weightB * weightF *(meanB-meanF) * 
+		(meanB-meanF);
+
+	if (sigmaBetween > sigmaMax)
+	{
+		sigmaMax = sigmaBetween;
+		thresholdMax = i;
+	}
+	
     }
 
     return thresholdMax;

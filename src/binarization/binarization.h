@@ -5,12 +5,12 @@
 
 // Bradley.c
 
-void Bradley(char *filename, char *output);
+void Bradley(Image img);
 
 
 
 //Otsu.c
 
-void Otsu(char *filename, char *output);
+void Otsu(Image img);
 
 #endif

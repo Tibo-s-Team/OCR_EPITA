@@ -3,32 +3,33 @@
 
 #include "binarization.h"
 
-void adaptativeThreshold(Image img, int w, int h, unsigned int *out);
+void adaptativeThreshold(Image img, int w, int h, unsigned int **out);
 
 
-void Bradley(char *filename, char *output)
+void Bradley(Image img)
 {
-    Image img = loadImage(filename);
+    unsigned int** out = malloc(img.height * sizeof *out);
+    for (int i = 0; i < img.height; ++i) out[i] = calloc(img.width , sizeof *out[i]);
 
-    unsigned int *out =  malloc(img.width * img.height * sizeof(unsigned int));
-
+    
     adaptativeThreshold(img, img.width, img.height, out);
 
     for(int i = 0; i < img.width; i++)
     {
         for(int j = 0; j < img.height; j++)
-            setPixelColor(&img, out[i * img.height + j], i, j);
+            setPixelColor(&img, out[j][i], i, j);
     }
 
-    displayImage(&img);
+    img.imageType = BW;
 }
 
 
-void adaptativeThreshold(Image img, int w, int h, unsigned int *out)
+void adaptativeThreshold(Image img, int w, int h, unsigned int **out)
 {
-    unsigned int *intImage =  malloc(w * h * sizeof(unsigned int));
+    int** intImage = malloc(h * sizeof *intImage);
+    for (int i = 0; i < h; ++i) intImage[i] = calloc(w , sizeof *intImage[i]);
 
-    int s = 12;
+    int s = 30;
     int t = 15;
 
     for(int i = 0; i < w; i++)
@@ -37,11 +38,11 @@ void adaptativeThreshold(Image img, int w, int h, unsigned int *out)
 
         for(int j = 0; j < h; j++)
         {
-            int pixelValue = getPixelColor(&img, i, j);
+            int pixelValue = getPixelColor(&img, i,j);
             sum += pixelValue;
 
-            if (i == 0) intImage[i*h + j] = sum;
-            else intImage[i*h + j] = intImage[(i-1) * h + j] + sum;
+            if (i == 0) intImage[j][i] = sum;
+            else intImage[j][i] = intImage[j][i-1] + sum;
         }
     }
 
@@ -50,19 +51,20 @@ void adaptativeThreshold(Image img, int w, int h, unsigned int *out)
         for (int j = 0; j < h; j++)
         {
             int surrounding = s/2;
-            int x1 = (i < surrounding) ? i-surrounding : 0;
+            int x1 = (i >= surrounding) ? i-surrounding : 0;
             int x2 = (i+surrounding < w) ? i+surrounding : w-1;
-            int y1 = (j < surrounding) ? j - surrounding : 0;
+            int y1 = (j >= surrounding) ? j - surrounding : 0;
             int y2 = (j + surrounding < h) ? j+surrounding : h-1;
 
             int count = (x2-x1) * (y2-y1);
-            int sum = intImage[x2*h + y2] - intImage[x2*h + y1-1] - intImage[(x1-1)*h+y2]
-                + intImage[(x1-1)*h + y1-1];
+
+            int sum = intImage[y2][x2] - intImage[y2][x1] - intImage[y1][x2]
+                + intImage[y1][x1];
 
             int pixel = getPixelColor(&img, i, j);
             if (pixel * count <= sum * (100-t)/100)
-                out[i*h+j] = BLACK;
-            else out[i*h+j] = WHITE;
+                out[j][i] = BLACK;
+            else out[j][i] = WHITE;
         }
     }
 }

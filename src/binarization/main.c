@@ -2,11 +2,17 @@
 #include <stdio.h>
 
 #include "binarization.h"
+#include "../preprocessing/preprocessing.h"
 
 
 int main()
 {
-    Bradley("input/grayBradley.png", "output/Bradley.png");
-    Otsu("input/grayOtsu.png", "output/Otsu.png");
+    Image img = loadImage("images/otsuGray.jpg");
+    //Image img = loadImage("images/hh.png");
+    grayscale(&img);
+    displayImage(&img);
+    //Bradley(img);
+    Otsu(img);
+    displayImage(&img);
     return 0;
 }
