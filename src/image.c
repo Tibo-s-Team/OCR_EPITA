@@ -122,12 +122,12 @@ Uint8 getPixelColor(Image *image, const int x, const int y) {
 void setPixelColor(Image *image, Uint8 color, const int x, const int y) {
     Uint8 *pixel = getPixelRef(image->surface, x, y);
 
-    if (image->imageType == BW)
+    if (image->surface->format->BytesPerPixel == 1)
         *pixel = color == 0;
     else {
-        pixel[0] = color;
         pixel[1] = color;
         pixel[2] = color;
+        pixel[3] = color;
     }
 }
 

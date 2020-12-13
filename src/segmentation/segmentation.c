@@ -51,10 +51,6 @@ void segmentation(Image *image) {
         int *words = segmentWords(image, height);
         for (int word = 1; word < words[0]; word += 2) {
             int width[2] = {words[word], words[word + 1]};
-            // highlightText(:w
-            :wq
-            
-
             int *letters = segmentLetters(image, height, width);
 
             for (int letter = 1; letter < letters[0]; letters += 2) {
@@ -219,14 +215,13 @@ void bin_segmentation(Image *image) {
 
             size_t letter_count;
             Pixel *letters = getColumns(image, word, &letter_count);
-            printf("letters : %ld | ", letter_count);
-            printBox(word);
+            bin_highlightText(image, word);
 
             // Save all words as new images
             // temporary, we should delete files afterwards
             char *file = (char *)calloc(40, sizeof(char));
             sprintf(file, "images/%ld_%ld.png", i, j);
-            extractImage(image, file, word);
+            // extractImage(image, file, word);
             free(file);
 
             for (size_t z = 0; z < letter_count; z++) {
