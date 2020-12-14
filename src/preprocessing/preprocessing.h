@@ -29,6 +29,6 @@ typedef struct Kernel {
 } Kernel;
 
 void convolution(Image *image);
-void printKernel(Kernel *kernel);
+void medianFiltering(Image *image);
 
 #endif
