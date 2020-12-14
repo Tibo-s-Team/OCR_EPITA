@@ -35,7 +35,6 @@ char output_to_char(struct NeuralNetwork neuralnetwork)
         }
         output += 1;
     }
-
     switch (neuronne_max)
     {
     case 0:
@@ -60,6 +59,88 @@ char output_to_char(struct NeuralNetwork neuralnetwork)
         return 'J';
     case 10:
         return 'K';
+    case 11:
+        return 'L';
+    case 12:
+        return 'M';
+    case 13:
+        return 'N';
+    case 14:
+        return 'O';
+    case 15:
+        return 'P';
+    case 16:
+        return 'Q';
+    case 17:
+        return 'R';
+    case 18:
+        return 'S';
+    case 19:
+        return 'T';
+    case 20:
+        return 'U';
+    case 21:
+        return 'V';
+    case 22:
+        return 'W';
+    case 23:
+        return 'X';
+    case 24:
+        return 'Y';
+    case 25:
+        return 'Z';
+    case 26:
+        return 'a';
+    case 27:
+        return 'b';
+    case 28:
+        return 'c';
+    case 29:
+        return 'd';
+    case 30:
+        return 'e';
+    case 31:
+        return 'f';
+    case 32:
+        return 'g';
+    case 33:
+        return 'h';
+    case 34:
+        return 'i';
+    case 35:
+        return 'j';
+    case 36:
+        return 'k';
+    case 37:
+        return 'l';
+    case 38:
+        return 'm';
+    case 39:
+        return 'n';
+    case 40:
+        return 'o';
+    case 41:
+        return 'p';
+    case 42:
+        return 'q';
+    case 43:
+        return 'r';
+    case 44:
+        return 's';
+    case 45:
+        return 't';
+    case 46:
+        return 'u';
+    case 47:
+        return 'v';
+    case 48:
+        return 'w';
+    case 49:
+        return 'x';
+    case 50:
+        return 'y';
+    case 51:
+        return 'z';
     default:
         return '$';
     }

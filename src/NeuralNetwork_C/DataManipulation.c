@@ -15,7 +15,7 @@ void save(struct NeuralNetwork network, char *filename)
 	FILE *fp;
 
 	fp = fopen(filename, "w");
-	//stores the number of inputs
+	//stores the number of inputs"
 	fprintf(fp, "%d\n", network.nbr_inputs);
 
 	//stores the number of layers
@@ -32,6 +32,7 @@ void save(struct NeuralNetwork network, char *filename)
 	for(int i = 0; i < network.nbr_layers; i++)
 	{
 		Layer *layer = network.layer + i;
+
 
 		for(int j = 0; j < layer->nbr_neuronnes; j++)
 		{
@@ -62,8 +63,6 @@ struct NeuralNetwork load(char *filename)
 
 	if (fp == NULL)
 		exit(EXIT_FAILURE);
-	
-	int i = 0;
 	int nbr_inputs;
 	int nbr_layer = 1;
 	double biais_du_neurone;
@@ -79,12 +78,12 @@ struct NeuralNetwork load(char *filename)
 	nbr_layer = strtol(line, NULL, 10);
 
 	int layers[nbr_layer];
-	for (; i-2 < nbr_layer; i++)
+	for (int i = 0; i < nbr_layer; i++)
 	{
 		read = getline(&line, &len, fp);
 		line = strtok(line, "\n");
 		read -= 1;
-		layers[i-2] = strtol(line, NULL, 10);
+		layers[i] = strtol(line, NULL, 10);
 	}
 	Layer *layer = malloc(nbr_layer * sizeof(Layer));
 	Layer *l = layer; 
