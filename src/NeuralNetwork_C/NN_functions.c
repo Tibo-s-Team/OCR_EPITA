@@ -59,7 +59,8 @@ double* print_output(NeuralNetwork neuralnetwork)
     Layer *layer = neuralnetwork.end -1;
     for(Neuronne *i = layer->neuronne; i < layer->end; i++)
     {
-        //printf("%f\n", i->output);
+        printf("%f\n", i->output);
+        printf("_____________\n");
         *j = i->output;
         j++;
     }

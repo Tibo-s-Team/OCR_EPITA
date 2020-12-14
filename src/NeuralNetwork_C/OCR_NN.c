@@ -16,6 +16,7 @@
 #include <string.h>
 #include "OCR_NN.h"
 
+
 /*!
  * Convert the most activated neuronne to the characters which is associated
  * @param neuralnetwork the neuralnetwork 
@@ -230,6 +231,7 @@ void creat_list_img(Letter *letter)
             strcpy(s3,letter->path);
             strcat(s3,lecture->d_name);
             *l = loadImage(s3);
+            *l = resize_images(*l);
             free(s3);
             l++;
         }
@@ -247,16 +249,27 @@ Letter creat_letter(char* path)
     return letter;
 }
 
+void print_waited(double waited[NBR_LETTER][NBR_LETTER], int letter)
+{
+    printf("{");
+    for(int i = 0; i <NBR_LETTER; i++)
+    {
+        printf("%f,", waited[letter][i]);
+    }
+    printf("}\n");
+}
+
 void training_NN(NeuralNetwork neuralnetwork, Letter tab_letter[DONE], int len, double waited[NBR_LETTER][NBR_LETTER], int times, double coeff)
 {
-    double*** img_pixels = malloc(len * sizeof(double) * 625 * 20);
+    double*** img_pixels = malloc(len * sizeof(double) * 625 * 331);
     double*** img_pixels_creation = img_pixels;
     for(int i = 0; i < len; i++)
     {
         int which_image = 0;
-        double **images = malloc(sizeof(double) * 625 * 20);
+        double **images = malloc(sizeof(double) * 625 * 331);
         for (double** j = images; j < images + tab_letter[i].nbr_images; j++)
         {
+            //printf("%d\n",tab_letter[i].nbr_images);
             Image *img = tab_letter[i].img + which_image;
             double* inputs_neuronnes = inputs(img);
             *j = inputs_neuronnes;
@@ -271,7 +284,6 @@ void training_NN(NeuralNetwork neuralnetwork, Letter tab_letter[DONE], int len, 
         int which_letter = 0;
         for (double*** i = img_pixels; i < img_pixels+len; i++)
         {
-
             for (double** j = *i; j < *i + tab_letter[which_letter].nbr_images; j++)
             {   
                 one_training(neuralnetwork, *j, 625, waited[which_letter], coeff);
@@ -283,9 +295,11 @@ void training_NN(NeuralNetwork neuralnetwork, Letter tab_letter[DONE], int len, 
 
 }
 
+
+
 Image resize_images(Image img)
 {
-    if(img.height >25 && img.width > 25)
+    if(img.height < 25 || img.width < 25)
     {
         int decallage_x = (25-img.width)/2;
         int decallage_y = (25-img.height)/2;
@@ -304,6 +318,24 @@ Image resize_images(Image img)
         }
         return blanc;
     }
+    else if (img.height >= 26 || img.width >= 26)
+    {
+        Image blanc = loadImage("/home/drevet/Documents/OCR_EPITA/src/NeuralNetwork_C/blanc.PNG");
+        for(int i = 0; i < blanc.width; i++)
+        {
+            for(int j = 0; j < blanc.height; j++)
+            {
+                Uint8 r = 0;
+                Uint8 g = 0;
+                Uint8 b = 0;
+                getPixelRGB(&img, i, j, &r, &g, &b);
+                Uint8 color[3] = {r, g, b}; 
+                setPixelColor(&blanc, *color, i, j);
+            }
+        }
+        return blanc;
+    }
+
     return img;
 }
 
