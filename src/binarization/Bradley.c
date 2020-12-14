@@ -3,34 +3,34 @@
 
 #include "binarization.h"
 
-void adaptativeThreshold(Image img, int w, int h, unsigned int **out);
+void adaptativeThreshold(Image *img, int w, int h, unsigned int **out);
 
 
-void Bradley(Image img)
+void Bradley(Image *img)
 {
-    unsigned int** out = malloc(img.height * sizeof *out);
-    for (int i = 0; i < img.height; ++i) out[i] = calloc(img.width , sizeof *out[i]);
+    unsigned int** out = malloc(img->height * sizeof *out);
+    for (int i = 0; i < img->height; ++i) out[i] = calloc(img->width , sizeof *out[i]);
 
     
-    adaptativeThreshold(img, img.width, img.height, out);
+    adaptativeThreshold(img, img->width, img->height, out);
 
-    for(int i = 0; i < img.width; i++)
+    for(int i = 0; i < img->width; i++)
     {
-        for(int j = 0; j < img.height; j++)
-            setPixelColor(&img, out[j][i], i, j);
+        for(int j = 0; j < img->height; j++)
+            setPixelColor(img, out[j][i], i, j);
     }
 
-    img.imageType = BW;
+    img->imageType = BW;
 }
 
 
-void adaptativeThreshold(Image img, int w, int h, unsigned int **out)
+void adaptativeThreshold(Image *img, int w, int h, unsigned int **out)
 {
     int** intImage = malloc(h * sizeof *intImage);
     for (int i = 0; i < h; ++i) intImage[i] = calloc(w , sizeof *intImage[i]);
 
-    int s = 30;
-    int t = 15;
+    int s = w/32;
+    int t = 20;
 
     for(int i = 0; i < w; i++)
     {
@@ -38,7 +38,7 @@ void adaptativeThreshold(Image img, int w, int h, unsigned int **out)
 
         for(int j = 0; j < h; j++)
         {
-            int pixelValue = getPixelColor(&img, i,j);
+            int pixelValue = getPixelColor(img, i,j);
             sum += pixelValue;
 
             if (i == 0) intImage[j][i] = sum;
@@ -61,7 +61,7 @@ void adaptativeThreshold(Image img, int w, int h, unsigned int **out)
             int sum = intImage[y2][x2] - intImage[y2][x1] - intImage[y1][x2]
                 + intImage[y1][x1];
 
-            int pixel = getPixelColor(&img, i, j);
+            int pixel = getPixelColor(img, i, j);
             if (pixel * count <= sum * (100-t)/100)
                 out[j][i] = BLACK;
             else out[j][i] = WHITE;
