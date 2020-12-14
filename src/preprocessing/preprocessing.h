@@ -24,11 +24,11 @@ void blackAndWhite(Image *image);
 typedef unsigned char Uint8;
 
 typedef struct Kernel {
-    Uint8 *matrix;
-    int width, height;
+    int *matrix;
+    int size;  // kernel : size * size
 } Kernel;
 
-void convolution(Kernel *kernel);
+void convolution(Image *image);
 void printKernel(Kernel *kernel);
 
 #endif
