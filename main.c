@@ -24,6 +24,14 @@ int main(int argc, char *argv[]) {
     } else {
         for (int i = 1; i < argc; i++)  // for all given paths
         {
+            image = loadImage(argv[i]);
+
+            grayscale(&image);
+            convolution(&image);
+            displayImage(&image);
+
+            return 0;
+
             if (argv[i][0] == '-') {
                 for (int j = 1; j < (int)strlen(argv[i]); j++) {
                     switch (argv[i][j]) {

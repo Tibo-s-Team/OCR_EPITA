@@ -6,6 +6,8 @@
  *  This process is used to have the best image quality possible so that
  *  the image segmentation and more particularily the neural network analysis
  *  work even better.
+ * 
+ *  12/14/2020 : added filter_type enum to simplify external function call
  */
 
 #ifndef PREPROCESSING_H_
@@ -24,11 +26,17 @@ void blackAndWhite(Image *image);
 typedef unsigned char Uint8;
 
 typedef struct Kernel {
-    Uint8 *matrix;
-    int width, height;
+    int *matrix;
+    int size;  // kernel : size * size
 } Kernel;
 
-void convolution(Kernel *kernel);
-void printKernel(Kernel *kernel);
+typedef enum filter_type {
+    CONTOURS,
+    SHARPNESS,
+    MEDIAN,
+    GAUSSIAN  // Doesn't work
+} Filter;
+
+void filterImage(Image *image, Filter filter);
 
 #endif

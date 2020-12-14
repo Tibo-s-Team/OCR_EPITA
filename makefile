@@ -4,7 +4,7 @@ SOURCE	= main.c src/image.c src/preprocessing/suppression_couleurs.c src/segment
 OUT	= TIBO
 CC	 = gcc
 CFLAGS	 = -g -c -Wall -Wextra -Wno-unknown-pragmas -Wno-unused-variable -Wno-unused-parameter -lSDL2 -lSDL2_image 
-LFLAGS	 = -lSDL2 -lSDL2_image
+LFLAGS	 = -lSDL2 -lSDL2_image -lm
 $(VERBOSE).SILENT: $(OBJS)
 
 
