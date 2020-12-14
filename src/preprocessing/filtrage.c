@@ -32,7 +32,7 @@ Uint8 medianFilter(Image *image, int size, int x, int y);
 
 void filterImage(Image *image, Filter filter) {
     switch (filter) {
-        case COUNTOURS:
+        case CONTOURS:
             convolution(image, detectContours);
             break;
         case GAUSSIAN:
@@ -171,7 +171,7 @@ Kernel gaussianFilter() {
 
 /*!
  * Used as a test for the convolution algorithm
- * @return a kernel for countour filtering.
+ * @return a kernel for contour filtering.
  */
 Kernel detectContours() {
     int *k = (int *)calloc(3 * 3, sizeof(int));

@@ -29,7 +29,7 @@ typedef struct Kernel {
 } Kernel;
 
 typedef enum filter_type {
-    COUNTOURS,
+    CONTOURS,
     MEDIAN,
     GAUSSIAN  // Doesn't work
 } Filter;
