@@ -3,6 +3,9 @@
  *  Contributors : leo.duboin
  *
  *  File containing the necessary functions to apply filters onto an image.
+ *
+ *  12/13/2020 : added gaussian filter (bugged) + fixed convolution
+ *  12/14/2020 : added median filtering + external funtion call handler
  */
 
 #include <stdio.h>
@@ -18,22 +21,32 @@ void medianFiltering(Image *image);
 // convolution
 void convolution(Image *image, Kernel (*f)());
 void convolutePixel(Image *image, Kernel kernel, int x, int y);
-void reverseKernel(Kernel *kernel);
+void reverseKernel(Kernel kernel);
 // utils
 void swap(int *a, int *b);
-void printKernel(Kernel *kernel);
+void printKernel(Kernel kernel);
 void sortList(int *list, int size);
 void printList(int *list, int size);
 // filters
 Kernel gaussianFilter();
-Kernel detectContours();
+Kernel contoursFilter();
+Kernel sharpnessFilter();
 Uint8 medianFilter(Image *image, int size, int x, int y);
 //--------------------------------
 
+/*!
+ * Main funtion to call outside the file.
+ * Apply a filter onto an image.
+ * @param image the image to apply the filter onto
+ * @param filter the type of filter to apply
+ */
 void filterImage(Image *image, Filter filter) {
     switch (filter) {
         case CONTOURS:
-            convolution(image, detectContours);
+            convolution(image, contoursFilter);
+            break;
+        case SHARPNESS:
+            convolution(image, sharpnessFilter);
             break;
         case GAUSSIAN:
             convolution(image, gaussianFilter);
@@ -51,8 +64,7 @@ void filterImage(Image *image, Filter filter) {
 
 void convolution(Image *image, Kernel (*f)()) {
     Kernel kernel = (*f)();
-    printKernel(&kernel);
-    reverseKernel(&kernel);
+    reverseKernel(kernel);
     int center = kernel.size / 2;
 
     for (int y = center; y < image->height - center; ++y) {
@@ -84,13 +96,17 @@ void convolutePixel(Image *image, Kernel kernel, int x, int y) {
 
     int pixel = 0;
 
-    for (int i = -center; i < kernel.size - center; ++i) {
-        for (int j = -center; j < kernel.size - center; ++j) {
+    for (int i = 0; i < kernel.size; ++i) {
+        for (int j = 0; j < kernel.size; ++j) {
             // multiplier les elements correpondants (k[i,j] *
             // pixels[x-1+i,y-1+j]) additioner tous les resultats des
             // multiplications
-            pixel += kernel.matrix[kernel.size * i + j] *
-                     getPixelColor(image, x + i, y + j);
+            int I = i - center, J = j - center;
+            int value = kernel.matrix[(kernel.size * i) + j];
+            Uint8 color = getPixelColor(image, x + J, y + I);
+            // printf("%d * %d\n", value, color);
+
+            pixel += value * color;
         }
     }
 
@@ -103,10 +119,13 @@ void convolutePixel(Image *image, Kernel kernel, int x, int y) {
  * [ [0,1],[2,3] ] => [ [3,2],[1,0] ]
  * @param kernel the kernel whose columns/lines we want to inverse
  */
-void reverseKernel(Kernel *kernel) {
-    int total_size = kernel->size * kernel->size;
-    for (int i = 0; i < total_size / 2; ++i) {
-        swap(&kernel->matrix[i], &kernel->matrix[total_size - i]);
+void reverseKernel(Kernel kernel) {
+    int total_size = kernel.size * kernel.size;
+    for (int i = 0; i < total_size / 2;
+         ++i) {  // swap doesn't work here idk why
+        int a = kernel.matrix[i], b = kernel.matrix[total_size - i - 1];
+        kernel.matrix[i] = b;
+        kernel.matrix[total_size - i - 1] = a;
     }
 }
 
@@ -118,11 +137,6 @@ void medianFiltering(Image *image) {
         errx(1,
              "Error: filtrage.c: medianFiltering: "
              "given image is of RGB type.");
-    if (image->imageType == GRAYSCALE)
-        warnx(
-            "WARNING: filtrage.c: medianFiltering: "
-            "given image is of GRAYSCALE type, you may want to use a binarized "
-            "image.");
 
     int size = 3;
     int center = size / 2;
@@ -165,7 +179,7 @@ Kernel gaussianFilter() {
         for (int j = 0; j < 5; ++j) kernel[(i * 5) + j] /= sum;
 
     Kernel res = {kernel, 5};
-    printKernel(&res);
+    printKernel(res);
     return res;
 }
 
@@ -173,11 +187,34 @@ Kernel gaussianFilter() {
  * Used as a test for the convolution algorithm
  * @return a kernel for contour filtering.
  */
-Kernel detectContours() {
+Kernel contoursFilter() {
     int *k = (int *)calloc(3 * 3, sizeof(int));
     for (int i = 0; i < 9; i++) k[i] = -1;
     k[4] = 8;
-    return (Kernel){k, 3};
+    Kernel res = (Kernel){k, 3};
+    printKernel(res);
+    return res;
+}
+
+Kernel sharpnessFilter() {
+    int *k = (int *)calloc(3 * 3, sizeof(int));
+
+    // corners = 0
+    k[0] = 0;
+    k[2] = 0;
+    k[6] = 0;
+    k[8] = 0;
+    // cross = -1
+    k[1] = -1;
+    k[3] = -1;
+    k[5] = -1;
+    k[7] = -1;
+    // center = 5
+    k[4] = 5;
+
+    Kernel res = (Kernel){k, 3};
+    printKernel(res);
+    return res;
 }
 
 /*!
@@ -233,13 +270,13 @@ void swap(int *a, int *b) {
  * Displays the content of the kernel's matrix in a table like format.
  * @param kernel the kernel to print
  */
-void printKernel(Kernel *kernel) {
-    int *matrix = kernel->matrix;
+void printKernel(Kernel kernel) {
+    int *matrix = kernel.matrix;
     int length = 0;
 
-    while (length < kernel->size * kernel->size) {
+    while (length < kernel.size * kernel.size) {
         printf("|%d", *matrix++);
-        if (++length % kernel->size == 0) printf("|\n-------\n");
+        if (++length % kernel.size == 0) printf("|\n-------\n");
     }
 
     printf("\n======\n\n");
@@ -276,70 +313,3 @@ void printList(int *list, int size) {
 }
 
 #pragma endregion utils
-
-#pragma region double
-
-typedef struct double_kernel {
-    double **kernel;
-    int size;
-} d_kernel;
-
-void double_convolutePixel(Image *image, d_kernel kernel, int x, int y) {
-    // place chosen pixel in the center of the kernel
-    int center = kernel.size / 2;
-    if (x < center || y < center)
-        errx(1,
-             "Error: filtrage.c : convolutePixel - "
-             "Pixel coordinate doesn't fit, (%d,%d) with a kernel of size %d",
-             x, y, kernel.size);
-    if (x > image->width - center || y > image->height - center)
-        errx(1,
-             "Error: filtrage.c : convolutePixel - "
-             "Pixel coordinate doesn't fit, (%d,%d) with a kernel of size %d "
-             "and image of size %dx%d",
-             x, y, kernel.size, image->width, image->height);
-
-    double pixel = 0;
-
-    for (int i = -center; i < kernel.size - center; ++i) {
-        for (int j = -center; j < kernel.size - center; ++j) {
-            // multiplier les elements correpondants (k[i,j] *
-            // pixels[x-1+i,y-1+j]) additioner tous les resultats des
-            // multiplications
-            pixel += kernel.kernel[i][j] * getPixelColor(image, x + i, y + j);
-        }
-    }
-
-    pixel /= kernel.size * kernel.size;
-    setPixelColor(image, (Uint8)pixel, x, y);
-}
-
-Kernel double_gaussianFilter() {
-    // intialising standard deviation to 1.0
-    double sigma = 1.0;
-    double r, s = 2.0 * sigma * sigma;
-
-    int *kernel = (int *)calloc(5 * 5, sizeof(int));
-
-    // sum is for normalization
-    double sum = 0.0;
-
-    // generating 5x5 kernel
-    for (int x = -2; x <= 2; x++) {
-        for (int y = -2; y <= 2; y++) {
-            r = sqrt(x * x + y * y);
-            kernel[(x + 2) * 5 + y * 2] = (exp(-(r * r) / s)) / (PI * s);
-            sum += kernel[(x + 2) * 5 + y * 2];
-        }
-    }
-
-    // normalising the Kernel
-    for (int i = 0; i < 5; ++i)
-        for (int j = 0; j < 5; ++j) kernel[(i * 5) + j] /= sum;
-
-    Kernel res = {kernel, 5};
-    printKernel(&res);
-    return res;
-}
-
-#pragma endregion double

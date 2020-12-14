@@ -6,6 +6,8 @@
  *  This process is used to have the best image quality possible so that
  *  the image segmentation and more particularily the neural network analysis
  *  work even better.
+ * 
+ *  12/14/2020 : added filter_type enum to simplify external function call
  */
 
 #ifndef PREPROCESSING_H_
@@ -30,6 +32,7 @@ typedef struct Kernel {
 
 typedef enum filter_type {
     CONTOURS,
+    SHARPNESS,
     MEDIAN,
     GAUSSIAN  // Doesn't work
 } Filter;
