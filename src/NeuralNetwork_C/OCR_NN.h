@@ -30,6 +30,6 @@ void one_training(NeuralNetwork neuralnetwork,
 double *inputs (Image* img);
 Letter creat_letter(char* path);
 void training_NN(NeuralNetwork neuralnetwork, Letter tab_letter[NBR_LETTER], int len, double waited[NBR_LETTER][NBR_LETTER], int times, double coeff);
-
+Image resize_images(Image img);
 
 #endif

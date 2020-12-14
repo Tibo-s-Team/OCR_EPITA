@@ -283,5 +283,28 @@ void training_NN(NeuralNetwork neuralnetwork, Letter tab_letter[DONE], int len, 
 
 }
 
+Image resize_images(Image img)
+{
+    if(img.height >25 && img.width > 25)
+    {
+        int decallage_x = (25-img.width)/2;
+        int decallage_y = (25-img.height)/2;
+        Image blanc = loadImage("/home/drevet/Documents/OCR_EPITA/src/NeuralNetwork_C/blanc.PNG");
+        for(int i = 0; i < img.width; i++)
+        {
+            for(int j = 0; j < img.height; j++)
+            {
+                Uint8 r =0;
+                Uint8 g = 0;
+                Uint8 b = 0;
+                getPixelRGB(&img, i, j, &r, &g, &b);
+                Uint8 color[3] = {r, g, b}; 
+                setPixelColor(&blanc, *color, decallage_x+i, decallage_y+j);
+            }
+        }
+        return blanc;
+    }
+    return img;
+}
 
 

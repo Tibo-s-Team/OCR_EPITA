@@ -68,6 +68,7 @@ double waited[NBR_LETTER][NBR_LETTER] =
 char print_res(NeuralNetwork neuralnetwork ,char* path)
 {
     Image img = loadImage(path);
+    img = resize_images(img);
     double *inputs_list = inputs(&img);
     feedForward(neuralnetwork, inputs_list, 625);
     char res = output_to_char(neuralnetwork);
