@@ -11,7 +11,9 @@
 #include "NN_functions.h"
 #include "../image.h"
 #include <math.h>
-#define NBR_LETTER 3
+#define NBR_LETTER 52
+#define DONE 52
+
 typedef struct Letter
 {
     const char* path;

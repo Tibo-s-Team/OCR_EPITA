@@ -28,8 +28,8 @@
 
 # mrproper: clean
 # 	rm -rf $(EXEC)
-OBJS	= main.o ../image.o ../preprocessing/suppression_couleurs.o ../segmentation/segmentation.o ../segmentation/binaryTree.o ../preprocessing/filtrage.o neuralnetwork.o NN_functions.o OCR_NN.o
-SOURCE	= main.c ../image.c ../preprocessing/suppression_couleurs.c ../segmentation/segmentation.c ../segmentation/binaryTree.c ../preprocessing/filtrage.c neuralnetwork.c NN_functions.c OCR_NN.c
+OBJS	= main.o ../image.o ../preprocessing/suppression_couleurs.o ../segmentation/segmentation.o ../segmentation/binaryTree.o ../preprocessing/filtrage.o neuralnetwork.o NN_functions.o OCR_NN.o DataManipulation.o
+SOURCE	= main.c ../image.c ../preprocessing/suppression_couleurs.c ../segmentation/segmentation.c ../segmentation/binaryTree.c ../preprocessing/filtrage.c neuralnetwork.c NN_functions.c OCR_NN.c DataManipulation.c
 HEADER	= src/*.h 
 OUT	= IA
 CC	 = gcc

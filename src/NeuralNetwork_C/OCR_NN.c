@@ -14,15 +14,7 @@
 #include <math.h>
 #include <dirent.h>
 #include <string.h>
-
-#define NBR_LETTER 3
-
-typedef struct Letter
-{
-    char* path;
-    int nbr_images;
-    Image *img;
-}Letter;
+#include "OCR_NN.h"
 
 /*!
  * Convert the most activated neuronne to the characters which is associated
@@ -43,17 +35,31 @@ char output_to_char(struct NeuralNetwork neuralnetwork)
         }
         output += 1;
     }
+
     switch (neuronne_max)
     {
     case 0:
-        return 'A';
-    
+        return 'A';   
     case 1:
         return 'B';
-
     case 2:
         return 'C';
-
+    case 3:
+        return 'D';
+    case 4:
+        return 'E';
+    case 5:
+        return 'F';
+    case 6:
+        return 'G';
+    case 7:
+        return 'H';
+    case 8:
+        return 'I';
+    case 9:
+        return 'J';
+    case 10:
+        return 'K';
     default:
         return '$';
     }
@@ -73,15 +79,6 @@ void one_training(NeuralNetwork neuralnetwork,
                     double waited_outputs[],
                     double coeff)
 {
-    // int j = 0;
-    // for (double* i = inputs; i < inputs + 624; i++)
-    // {
-    //     printf("%f ", *i);
-    //     j++;
-    // }
-
-    
-    
     feedForward(neuralnetwork, inputs, 625);
     backPropagation(neuralnetwork, waited_outputs);
     updateWeigth(neuralnetwork, inputs, len_inputs, coeff);
@@ -117,9 +114,7 @@ void character_training(double* inputs_neuronnes, NeuralNetwork neuralnetwork, L
 {
     for (Image *l = letter->img; l < letter->img+letter->nbr_images; l++)
     {
-        //double* inputs_neuronnes = inputs(l);
         one_training(neuralnetwork, inputs_neuronnes, 625, waited, coeff);
-        //free(inputs_neuronnes);
     } 
 }
 
@@ -171,15 +166,14 @@ Letter creat_letter(char* path)
     return letter;
 }
 
-void training_NN(NeuralNetwork neuralnetwork, Letter tab_letter[NBR_LETTER], int len, double waited[NBR_LETTER][NBR_LETTER], int times, double coeff)
+void training_NN(NeuralNetwork neuralnetwork, Letter tab_letter[DONE], int len, double waited[NBR_LETTER][NBR_LETTER], int times, double coeff)
 {
-    double*** img_pixels = malloc(len * sizeof(double) * 625 * 361);
+    double*** img_pixels = malloc(len * sizeof(double) * 625 * 20);
     double*** img_pixels_creation = img_pixels;
     for(int i = 0; i < len; i++)
     {
         int which_image = 0;
-        double **images = malloc(sizeof(double) * 625 * 361);
-        printf("tab %d\n", tab_letter[i].nbr_images);
+        double **images = malloc(sizeof(double) * 625 * 20);
         for (double** j = images; j < images + tab_letter[i].nbr_images; j++)
         {
             Image *img = tab_letter[i].img + which_image;
@@ -187,21 +181,25 @@ void training_NN(NeuralNetwork neuralnetwork, Letter tab_letter[NBR_LETTER], int
             *j = inputs_neuronnes;
             which_image += 1;
         }
-
         *img_pixels_creation = images;           
         img_pixels_creation += 1;
     }
 
-    int which_letter = 0;
-    for (double*** i = img_pixels; i < img_pixels+len; i++)
+    for(int t = 0; t < times; t++)
     {
+        int which_letter = 0;
+        for (double*** i = img_pixels; i < img_pixels+len; i++)
+        {
 
-        for (double** j = *i; j < *i + tab_letter[which_letter].nbr_images; j++)
-        {   
-            one_training(neuralnetwork, *j, 625, waited[which_letter], coeff);
+            for (double** j = *i; j < *i + tab_letter[which_letter].nbr_images; j++)
+            {   
+                one_training(neuralnetwork, *j, 625, waited[which_letter], coeff);
+            }
+            which_letter+=1;
         }
-        which_letter+=1;
+        printf("%d\n", t);
     }
+
 }
 
 

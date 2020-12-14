@@ -57,10 +57,9 @@ double* print_output(NeuralNetwork neuralnetwork)
     double* output = malloc((neuralnetwork.end -1)->nbr_neuronnes * sizeof(double));
     double* j = output;
     Layer *layer = neuralnetwork.end -1;
-    printf("__________\n");
     for(Neuronne *i = layer->neuronne; i < layer->end; i++)
     {
-        printf("%f\n", i->output);
+        //printf("%f\n", i->output);
         *j = i->output;
         j++;
     }
