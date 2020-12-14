@@ -6,6 +6,7 @@
 #include "src/preprocessing/preprocessing.h"
 #include "src/segmentation/segmentation.h"
 
+
 int main(int argc, char *argv[]) {
     Image image;
 
@@ -21,14 +22,8 @@ int main(int argc, char *argv[]) {
             image = loadImage(argv[i]);
 
             grayscale(&image);
-            blackAndWhite(&image);
-
-            // segmentation(&image);
-            // bin_segmentation(&image);
-            // displayImage(&image);
-
-            BBox area = {(Pixel){100, 100}, (Pixel){image.width / 4, image.height / 4}};
-            extractImage(&image, "test.png", area);
+            convolution(&image);
+            displayImage(&image);
 
             IMG_Quit();
         }

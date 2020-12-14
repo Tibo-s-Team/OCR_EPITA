@@ -51,8 +51,8 @@ Image loadImage(const char *path) {
  */
 static inline Uint8 *getPixelRef(SDL_Surface *surf, int x, int y) {
     if (x > surf->w || y > surf->h)
-        errx(1, "Error: image.c - getPixelRef : IndexOutOfBounds (%d,%d)", x,
-             y);
+        errx(1, "Error: image.c - getPixelRef : IndexOutOfBounds (%d,%d) and image is %dx%d",
+            x, y, surf->w, surf->h);
 
     Uint8 bpp = surf->format->BytesPerPixel;
     return (Uint8 *)surf->pixels + y * surf->pitch + x * bpp;
@@ -199,4 +199,47 @@ void extractImage(Image *image, const char *file, BBox area) {
              "Error : image.c - extractImage : Image couldn't be extracted.");
 
     IMG_SavePNG(cropped, file);
+}
+
+/*
+ * angle: the angle we want to rotate the image with
+ * matrix: the matrix of the image
+ * w: the width of the matrix
+ * h: the height of the matrix
+ */
+
+// rotates the image according to the angle 'angle'
+void rotation(Image *image, double angle) {
+    return;
+
+    // FIXME
+
+    int w = image->width, h = image->height;
+    Uint8 bpp = image->surface->format->BytesPerPixel;
+    double ray = sqrt(w * w + h * h);
+
+    // save old pixels information
+    Uint8 *rotated = calloc(h * image->surface->pitch, sizeof(Uint8));
+
+    for (double i = 0; i < w; i++) {
+        for (double j = 0; j < h; j++) {
+            // new coordinates of the current pixel
+            int y = (int)(i * cos(angle) + j * sin(angle));
+            int x = (int)((-1) * i * sin(angle) + j * cos(angle));
+
+            // get old pixel values
+            Uint8 r, g, b;
+            if (image->imageType == RGB)
+                getPixelRGB(image, i, j, &r, &g, &b);
+            else {
+                r = getPixelColor(image, i, j);
+                g = r;
+                b = r;
+            }
+            if (x > w || x < 0 || y < 0 || y > h) printf("test\n");
+        }
+    }
+
+    memcpy(image->surface->pixels, rotated, image->surface->pitch * h);
+    free(rotated);
 }
