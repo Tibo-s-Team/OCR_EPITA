@@ -28,7 +28,12 @@ typedef struct Kernel {
     int size;  // kernel : size * size
 } Kernel;
 
-void convolution(Image *image);
-void medianFiltering(Image *image);
+typedef enum filter_type {
+    COUNTOURS,
+    MEDIAN,
+    GAUSSIAN  // Doesn't work
+} Filter;
+
+void filterImage(Image *image, Filter filter);
 
 #endif

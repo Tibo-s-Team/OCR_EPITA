@@ -13,7 +13,10 @@
 #define PI 3.14159265358
 
 //--------------------------------
+// median
+void medianFiltering(Image *image);
 // convolution
+void convolution(Image *image, Kernel (*f)());
 void convolutePixel(Image *image, Kernel kernel, int x, int y);
 void reverseKernel(Kernel *kernel);
 // utils
@@ -27,10 +30,27 @@ Kernel detectContours();
 Uint8 medianFilter(Image *image, int size, int x, int y);
 //--------------------------------
 
+void filterImage(Image *image, Filter filter) {
+    switch (filter) {
+        case COUNTOURS:
+            convolution(image, detectContours);
+            break;
+        case GAUSSIAN:
+            convolution(image, gaussianFilter);
+            break;
+        case MEDIAN:
+            medianFiltering(image);
+            break;
+        default:
+            errx(1, "Error: filtrage.c: filterImage: invalid filter type.");
+            break;
+    }
+}
+
 #pragma region filtering
 
-void convolution(Image *image) {
-    Kernel kernel = gaussianFilter();
+void convolution(Image *image, Kernel (*f)()) {
+    Kernel kernel = (*f)();
     printKernel(&kernel);
     reverseKernel(&kernel);
     int center = kernel.size / 2;
