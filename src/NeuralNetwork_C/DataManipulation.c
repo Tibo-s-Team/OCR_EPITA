@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "DataManipulation.h"
+#include "neuralnetwork.h"
 
 /*
  *A File is created at the path: filename where we want to save the network
@@ -20,6 +21,14 @@ void save(struct NeuralNetwork network, char *filename)
 	//stores the number of layers
 	fprintf(fp, "%d\n", network.nbr_layers);
 
+
+	for (Layer *i = network.layer; i < network.layer + network.nbr_layers; i++)
+	{
+		//stores the number of neuronnes for each layers
+		fprintf(fp, "%d\n", i->nbr_neuronnes);
+	}
+	
+
 	for(int i = 0; i < network.nbr_layers; i++)
 	{
 		Layer *layer = network.layer + i;
@@ -34,16 +43,14 @@ void save(struct NeuralNetwork network, char *filename)
 			{
 				//ecris le poids
 				double *weight = (neurone->weigth) + k;
-				fprintf(fp, "%f,", *weight);
+				fprintf(fp, "%f\n", *weight);
 			}
-			fprintf(fp, "\n");
 		}
 	}
 
 	fclose(fp);
 }
 
-/*
 struct NeuralNetwork load(char *filename)
 {
 	FILE *fp;
@@ -58,33 +65,70 @@ struct NeuralNetwork load(char *filename)
 	
 	int i = 0;
 	int nbr_inputs;
-	int nbr_layer;
+	int nbr_layer = 1;
+	double biais_du_neurone;
 
-	while((read = getline(&line, &len, fp)) != -1)
+	read = getline(&line, &len, fp);
+	line = strtok(line, "\n");
+	read -= 1;
+	nbr_inputs = strtol(line, NULL, 10);
+
+	read = getline(&line, &len, fp);
+	line = strtok(line, "\n");
+	read -= 1;
+	nbr_layer = strtol(line, NULL, 10);
+
+	int layers[nbr_layer];
+	for (; i-2 < nbr_layer; i++)
 	{
-		line = strtok_r(line, "\n");
+		read = getline(&line, &len, fp);
+		line = strtok(line, "\n");
 		read -= 1;
-		if (i == 0)
-			nbr_inputs = strtol(line, NULL, 10);
-		else if (i == 1) 
-			nbr_layer = strtol(line, NULL, 10);
+		layers[i-2] = strtol(line, NULL, 10);
+	}
+	Layer *layer = malloc(nbr_layer * sizeof(Layer));
+	Layer *l = layer; 
+	for(int i = 0; i < nbr_layer; i++)
+	{
+		int length;
+		if(i == 0)
+		{
+			length = nbr_inputs;
+		}
 		else
 		{
-			if(i % 2 == 1)
-				//biais du neurone = strtod(line, NULL, 10);
-			else
-			{
-				char *weight = strtok(line, ",");
-				while(weight != NULL)
-				{
-					//on donne a neurone.weight[indice] = weight
-					weight = strtok(NULL, ",");
-				}
-			}
+			length = layers[i-1];
 		}
-		i++;
-	}
+		Neuronne *neuronne = malloc(layers[i] * sizeof(Neuronne));
+		Neuronne *n = neuronne;
 
+		for (int j = 0; j < layers[i]; j++)
+		{
+			read = getline(&line, &len, fp);
+			line = strtok(line, "\n");
+			read -= 1;
+			char *biais = strtok(line, "\n");
+			double biais_d = atof(biais);
+			double *weigth = malloc(length * sizeof(double));
+			double *w = weigth;
+			for (int k = 0; k < length; k++)
+			{
+				read = getline(&line, &len, fp);
+				line = strtok(line, "\n");
+				read -= 1;
+				char *weight_i = strtok(line, "\n");
+				*w = atof(weight_i);
+				w += 1;
+			}
+			Neuronne neuronne = {length, weigth, w, biais_d, 0, 0}; 
+			*n = neuronne;
+			n ++;
+		}
+		Layer l_i = {layers[i], neuronne, n};
+		*l = l_i;
+		l++;
+	}
+	NeuralNetwork neuralnetwork = {nbr_layer, nbr_inputs, layer, l};
 	fclose(fp);
-	//return neuralnetwork
-}*/
+	return neuralnetwork;
+}

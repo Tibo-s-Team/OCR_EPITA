@@ -75,9 +75,10 @@ char print_res(NeuralNetwork neuralnetwork ,char* path)
 
 int main(int argc, char *argv[]) {
     srand(time (NULL));
-    int layer[3] = {16, 16, DONE};
-    NeuralNetwork neuralnetwork = creat_neuralNetwork(625, layer, 3);
-
+    //int layer[3] = {16, 16, DONE};
+    //NeuralNetwork neuralnetwork = creat_neuralNetwork(625, layer, 3);
+    NeuralNetwork neuralnetwork = load("/home/drevet/Documents/OCR_EPITA/tests/OCR_sauvegarde2");
+    
     Letter letter_A = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters - Copy/A/");
     Letter letter_B = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters - Copy/B/");
     Letter letter_C = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters - Copy/C/");
@@ -184,8 +185,8 @@ int main(int argc, char *argv[]) {
                             letter_y,
                             letter_z};
     
-    training_NN(neuralnetwork, letters, DONE, waited, 400000, 0.1);
-    save(neuralnetwork, "/home/drevet/Documents/OCR_EPITA/tests/OCR_sauvegarde2");
+    training_NN(neuralnetwork, letters, DONE, waited, 2, 0.1);
+    save(neuralnetwork, "/home/drevet/Documents/OCR_EPITA/tests/OCR_sauvegarde4");
     char res = print_res(neuralnetwork, "/home/drevet/Documents/OCR_EPITA/tests/images/test_letters/a.png");
     printf("RES = %d\n", res);
     printf("RES WAITED %d\n", 'A');
