@@ -90,7 +90,6 @@ void convolution(Image *image, Kernel (*f)()) {
 
     for (int y = center; y < image->height - center; ++y) {
         for (int x = center; x < image->width - center; ++x) {
-            convolutePixel(image, kernel, x, y);
         }
     }
 }

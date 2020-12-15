@@ -137,38 +137,69 @@ void setPixelColor(Image *image, Uint8 color, const int x, const int y) {
  * @param image the image to display on screen
  */
 void displayImage(Image *image) {
-    const int WIDTH = image->width, HEIGHT = image->height;
+    SDL_Surface *screen;
+    SDL_Surface *img = image->surface;
+    SDL_Event e;
 
-    SDL_Window *win = NULL;
-    SDL_Renderer *renderer = NULL;
-    SDL_Texture *img = NULL;
-    SDL_Rect texr;
-
-    // create rendering context
-    win = SDL_CreateWindow("Image Preview", 100, 100, WIDTH, HEIGHT, 0);
-    renderer = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
-
-    // load image in the window
-    img = SDL_CreateTextureFromSurface(renderer, image->surface);
-    texr.x = 0;
-    texr.y = 0;
-    texr.w = WIDTH;
-    texr.h = HEIGHT;
-
-    while (1) {
-        SDL_Event e;
-        if (SDL_PollEvent(&e))
-            if (e.type == SDL_QUIT || e.type == SDL_KEYUP) break;
-
-        // refresh renderer
-        SDL_RenderClear(renderer);
-        SDL_RenderCopy(renderer, img, NULL, &texr);
-        SDL_RenderPresent(renderer);
+    // Set the window to the same size as the image
+    SDL_UnlockSurface(img);
+    screen = SDL_SetVideoMode(img->w, img->h, 0, SDL_SWSURFACE | SDL_ANYFORMAT);
+    if (screen == NULL) {
+        // error management
+        errx(1, "Couldn't set %dx%d video mode: %s\n", img->w, img->h,
+             SDL_GetError());
     }
 
-    SDL_DestroyTexture(img);
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(win);
+    // Blit onto the screen surface
+    if (SDL_BlitSurface(img, NULL, screen, NULL) < 0)
+        warnx("BlitSurface error: %s\n", SDL_GetError());
+
+    // Update the screen
+    SDL_UpdateRect(screen, 0, 0, img->w, img->h);
+
+    // Wait for key to be pressed
+    do {
+        SDL_PollEvent(&e);
+    } while (e.type != SDL_KEYDOWN);
+    // Wait for key to be released
+    do {
+        SDL_PollEvent(&e);
+    } while (e.type != SDL_KEYUP);
+
+    SDL_FreeSurface(screen);
+}
+
+/*!
+ * Extract part of an image and save it as a new image.
+ * @param image the image to extract from
+ * @param file the file where to save the new image
+ * @param height tuple contating the starting and ending height
+ *  of the part of the image to extract
+ * @param width tuple contating the starting and ending width
+ *  of the part of the image to extract
+ */
+void extractImage(Image *image, const char *file, int height[2], int width[2]) {
+    // FIXME
+    return;
+    /*
+        SDL_Surface *new_image = NULL;
+        SDL_Rect rect = {.x = width[0],
+                         .y = height[0],
+                         .w = width[1] - width[0],
+                         .h = height[1] - height[0]};
+
+        // verify path doesn't already exist
+
+        // extract image part => returns 0 if succesful
+        int extraction = SDL_BlitSurface(image->surface, NULL, new_image, NULL);
+        if (extraction)
+            errx(1,
+                 "Error : image.c - extractImage : Image couldn't be
+       extracted.");
+
+        IMG_SavePNG(new_image, file);
+        SDL_FreeSurface(new_image);
+    */
 }
 
 /*!

@@ -1,5 +1,4 @@
 /*!
- *  /!\ DEPRECATED /!\
  *  File created on 10/23/2020 (MM/DD/YYYY) by leo.duboin
  *  Contributors : leo.duboin
  *
