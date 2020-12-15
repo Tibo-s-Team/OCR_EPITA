@@ -52,6 +52,11 @@ Neuronne creat_neuronne(size_t nbr_poids)
     return neuronne;
 }
 
+void free_neurone(Neuronne neuronne)
+{
+    free(neuronne.weigth);
+}
+
 /*!
  * Creat a layer. 
  * @param nbr_poid the number of neuronnes in the layer before
@@ -79,7 +84,7 @@ void free_layer(Layer layer)
 {
     for(Neuronne *i = layer.neuronne; i < layer.end; i++)
     {
-        free(i->weigth);
+        free_neurone(*i);
     }
     free(layer.neuronne);
 }

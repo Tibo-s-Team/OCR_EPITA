@@ -2,50 +2,30 @@
 This is our OCR school project at EPITA
 
 ## Getting Started
-After cloning you can launch the Makfile for the main.c code 
-or use the Python scripts for the Neural Network
+- git@github.com:Tibo-s-Team/OCR_EPITA.git
+- cd src
+- make
+- run the program with the command `./TIBO`
 
 ### Prerequisites
 - gcc (C99)
 - Python 3
 
-
-## Running the tests
-Shell:
-	`tests/scripts/launch.sh/ [--compiler] [-args] [image-path]`
-
-### compiler
-
-- --gcc : execute C script
-- --python : execute Python script (not a compiler but ...)
-
-### args	
-Please refer to the corresponding script below
-
-### Python: 
-	Xor: Use XOR script
-	Grayscale: Use the Otsu: PaintGray function
-
-### C:
-	run `make` and execute the program with the desired arguments using `./TIBO [-args] files`.
-
-### arguments
-
-	- g : grayscaling process only
-	- b : binarization process only
-	- l : linewise text segmentation only
-	- w : wordwise text segmentation only (by default)
-
 ## File Architecture
 
 ```
 .
-├── images
+├── Images
+│   └── Images used by the program
 ├── Python
 │   └── Python source files
 ├── src
+│   ├── main.c
+│   ├── Makefile
 │   └── C source files (.c and headers)
 └── tests
+    ├── outputs
+    │   ├── Tests' results from our different neural networks
     ├── images
     │   ├── All the images used to test our algorithms on
     └── scripts
@@ -54,25 +34,18 @@ Please refer to the corresponding script below
 
 
 ## Project Avancement Recap
-*how much have we done? what is left to be done?*
 
 ### What have we done 
-	-Grayscale
-	-Neural Network (Xor and a bit of images)
-	-Segmentation
-	-Image loading
+- Image loading : Done
+- Image preprocessing : Done
+- Image filtering : Done
 
 ### What we have to rework
-	-Neural Network for Images
-	-Segmentation (letters are not yet recognized)
-	-Otsu
-	-Better CLS
-
+- Interface : Add filter selection and better previsualization
+- Image segmentation : Better thresholding system 
+	
 ### What we have to do
-	-Image Processing 
-	-Interface
-	-Neural Network
-	-Full conversion in C
+- Image rotation
 
 ## Authors
 
