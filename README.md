@@ -2,10 +2,13 @@
 This is our OCR school project at EPITA
 
 ## Getting Started
-- git@github.com:Tibo-s-Team/OCR_EPITA.git
-- cd src
-- make
-- run the program with the command `./TIBO`
+```
+git clone git@github.com:Tibo-s-Team/OCR_EPITA.git
+cd src
+make
+```
+
+Run the program with the command `./TIBO`
 
 ### Prerequisites
 - gcc (C99)
