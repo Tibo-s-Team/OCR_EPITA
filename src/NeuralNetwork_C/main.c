@@ -234,7 +234,7 @@ int main(int argc, char *argv[]) {
     Letter letter_z = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/letter/z/");
     //Creat a new neuralnetwork
 
-    int layer[3] = {16, 16, DONE};
+    int layer[4] = {25, 16, 16, DONE};
     NeuralNetwork neuralnetwork2 = creat_neuralNetwork(625, layer, 3);
     // print_output(neuralnetwork2);
    
@@ -296,10 +296,10 @@ int main(int argc, char *argv[]) {
                             letter_z};
     
     //train the NeuralNetwork 
-    training_NN(neuralnetwork2, letters, DONE, waited, 5000, 0.1);
+    training_NN(neuralnetwork2, letters, DONE, waited, 2000, 0.15);
 
     //Save the neural network trained
-    save(neuralnetwork2, "/home/drevet/Documents/OCR_EPITA/tests/OCR_Finale_bradley5");
+    save(neuralnetwork2, "/home/drevet/Documents/OCR_EPITA/tests/OCR_Finale_bradley6");
 
     //TEST
 
