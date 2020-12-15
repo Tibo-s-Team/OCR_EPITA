@@ -21,6 +21,7 @@ void adaptativeThreshold(Image *img, int w, int h, unsigned int **out);
  * calculates the threshold with the integral image and fill "out"
  * recolorize the image with the values from "out"
  * also changes the imageType value to black and white
+ *
  * @param *img: the image loaded
  */
 
