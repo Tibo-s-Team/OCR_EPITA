@@ -104,7 +104,8 @@ void SaveImage(char *path) {
             printf("Error opening file!\n");
             exit(1);
         }
-	filterImage(&image, SHARPNESS);	
+	filterImage(&image, SHARPNESS);
+	blackAndWhite(&image);
         bin_segmentation(&image, f);
         fclose(f);
     }
