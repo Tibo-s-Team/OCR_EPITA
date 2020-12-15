@@ -7,12 +7,13 @@
 
 int main()
 {
-    Image img = loadImage("images/otsuGray.jpg");
-    //Image img = loadImage("images/hh.png");
+    //Image img = loadImage("images/Bradley_Gray.jpg");
+    Image img = loadImage("images/hh.png");
+    //Image img = loadImage("images/memeGray.png");
     grayscale(&img);
     displayImage(&img);
-    //Bradley(img);
-    Otsu(img);
+    Bradley(&img);
+    //Otsu(&img);
     displayImage(&img);
     return 0;
 }
