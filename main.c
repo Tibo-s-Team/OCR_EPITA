@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "src/binarization/binarization.h"
 #include "src/image.h"
 #include "src/preprocessing/preprocessing.h"
 #include "src/segmentation/segmentation.h"
@@ -24,14 +25,6 @@ int main(int argc, char *argv[]) {
     } else {
         for (int i = 1; i < argc; i++)  // for all given paths
         {
-            image = loadImage(argv[i]);
-
-            grayscale(&image);
-            convolution(&image);
-            displayImage(&image);
-
-            return 0;
-
             if (argv[i][0] == '-') {
                 for (int j = 1; j < (int)strlen(argv[i]); j++) {
                     switch (argv[i][j]) {
@@ -60,9 +53,16 @@ int main(int argc, char *argv[]) {
 
                 if (!display) {
                     if (gray || words) grayscale(&image);
-                    if (black_and_white || words) blackAndWhite(&image);
-                    if (lines) bin_segmentation(&image);
-                    if (words) segmentation(&image);
+                    if (black_and_white || words) Bradley(image);
+                    image.imageType = BW;
+                    if (lines || words) {
+                        filterImage(&image, SHARPNESS);
+                        filterImage(&image, SHARPNESS);
+                        Bradley(image);
+                        image.imageType = BW;
+                        displayImage(&image);
+                        bin_segmentation(&image);
+                    }
                 }
 
                 displayImage(&image);

@@ -1,5 +1,7 @@
-OBJS	= main.o src/image.o src/preprocessing/suppression_couleurs.o src/segmentation/segmentation.o src/segmentation/boundaryBox.o src/preprocessing/filtrage.o src/binarization/Bradley.o src/binarization/Otsu.o 
-SOURCE	= main.c src/image.c src/preprocessing/suppression_couleurs.c src/segmentation/segmentation.c src/segmentation/boundaryBox.c src/preprocessing/filtrage.c src/binarization/Bradley.c src/binarization/Otsu.c
+#OBJS	= main.o src/image.o src/preprocessing/utils.o src/preprocessing/suppression_couleurs.o src/segmentation/segmentation.o src/segmentation/boundaryBox.o src/preprocessing/filtrage.o src/binarization/Bradley.o src/binarization/Otsu.o 
+SOURCE	= main.c src/image.c src/preprocessing/utils.c src/preprocessing/suppression_couleurs.c src/segmentation/segmentation.c src/segmentation/boundaryBox.c src/preprocessing/filtrage.c src/binarization/Bradley.c src/binarization/Otsu.c
+OBJS = $(SOURCE:.c=.o)
+
 
 OUT	= TIBO
 CC	 = gcc
@@ -13,7 +15,6 @@ all: $(OBJS)
 
 main.o: main.c
 	$(CC) $(CFLAGS) main.c -std=c99
-
 
 clean:
 	rm -f $(OBJS) $(OUT)

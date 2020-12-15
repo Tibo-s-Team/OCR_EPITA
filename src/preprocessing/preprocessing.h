@@ -6,13 +6,14 @@
  *  This process is used to have the best image quality possible so that
  *  the image segmentation and more particularily the neural network analysis
  *  work even better.
- * 
+ *
  *  12/14/2020 : added filter_type enum to simplify external function call
  */
 
 #ifndef PREPROCESSING_H_
 #define PREPROCESSING_H_
 
+#include "../binarization/binarization.h"
 #include "../image.h"
 
 // suppression_couleurs.c ----
@@ -31,10 +32,13 @@ typedef struct Kernel {
 } Kernel;
 
 typedef enum filter_type {
-    CONTOURS,
-    SHARPNESS,
-    MEDIAN,
-    GAUSSIAN  // Doesn't work
+    SHARPNESS,  // Really Useful
+    AVERAGE,    // Useful
+    MEDIAN,     // Meh
+    CONTOURS,   // Test
+    EDGE,       // Test
+    SOBEL,      // Test
+    GAUSSIAN    // Doesn't work
 } Filter;
 
 void filterImage(Image *image, Filter filter);
