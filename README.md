@@ -2,8 +2,10 @@
 This is our OCR school project at EPITA
 
 ## Getting Started
-After cloning you can launch the Makfile for the main.c code 
-or use the Python scripts for the Neural Network
+- git@github.com:Tibo-s-Team/OCR_EPITA.git
+- cd src
+- make
+- run the program with the command `./TIBO`
 
 ### Prerequisites
 - gcc (C99)
@@ -18,6 +20,8 @@ or use the Python scripts for the Neural Network
 ├── Python
 │   └── Python source files
 ├── src
+│   ├── main.c
+│   ├── Makefile
 │   └── C source files (.c and headers)
 └── tests
     ├── outputs
