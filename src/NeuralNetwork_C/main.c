@@ -5,7 +5,7 @@
 #include <math.h>
 #include "neuralnetwork.h"
 #include "NN_functions.h"
-#include "../image.h"
+#include "/home/drevet/Documents/OCR_EPITA/src/Image/image.h"
 #include "DataManipulation.h"
 #include "OCR_NN.h"
 
@@ -71,12 +71,12 @@ int main(int argc, char *argv[]) {
 
     //Creat a new neuralnetwork
 
-    // int layer[4] = {16, 16, 16, DONE};
-    // NeuralNetwork neuralnetwork2 = creat_neuralNetwork(625, layer, 4);
+    int layer[4] = {16, 16, 16, DONE};
+    NeuralNetwork neuralnetwork2 = creat_neuralNetwork(625, layer, 4);
     // print_output(neuralnetwork2);
    
     //load a neural network
-    NeuralNetwork neuralnetwork2 = load("/home/drevet/Documents/OCR_EPITA/tests/OCR_Finale_1_letter1");
+    //NeuralNetwork neuralnetwork2 = load("/home/drevet/Documents/OCR_EPITA/tests/OCR_Finale_25_25_25");
 
     //Creat all the letters from folder letters - Copy
     Letter letter_A = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters - Copy/A/");
@@ -241,21 +241,21 @@ int main(int argc, char *argv[]) {
                             letter_z};
     
     //train the NeuralNetwork 
-    training_NN(neuralnetwork2, letters, DONE, waited, 20000, 0.1);
+    trainig_NN(neuralnetwork2, letters, DONE, waited, 20000, 0.1);
 
     //Save the neural network trained
-    save(neuralnetwork2, "/home/drevet/Documents/OCR_EPITA/tests/OCR_Finale_1_letter1");
+    save(neuralnetwork2, "/home/drevet/Documents/OCR_EPITA/tests/OCR_Finale_binarized");
 
     //TEST
 
-    //Image img2 = loadImage("/h&ome/drevet/Documents/OCR_EPITA/tests/images/letters/letter/r/r.PNG");
+    Image img2 = loadImage("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/r/r.PNG");
     //Image img2 = loadImage("/home/drevet/Documents/OCR_EPITA/tests/images/test_letters/e.PNG");
-    //char res = print_res(neuralnetwork2, img2);
+    char res = print_res(neuralnetwork2, img2);
     //char res = print_res(neuralnetwork2, "/home/drevet/Documents/OCR_EPITA/tests/images/letters/A/A.PNG");
     //char res = print_res(neuralnetwork2, "/home/drevet/Documents/OCR_EPITA/tests/images/test_letters/A.png");
     // printf("RES = %d\n", res);
     // printf("RES WAITED %d\n", 't');
-    // printf("%c\n", res);
+    printf("%c\n", res);
 
     //free the neural network
     free_neuralNetwork(neuralnetwork2);

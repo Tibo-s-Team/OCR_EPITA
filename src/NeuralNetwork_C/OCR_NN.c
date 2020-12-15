@@ -13,7 +13,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include "/home/drevet/Documents/OCR_EPITA/src/binarization/binarization.h"
+#include "/home/drevet/Documents/OCR_EPITA/src/preprocessing/preprocessing.h"
 #include "NN_functions.h"
 #include "neuralnetwork.h"
 
@@ -167,14 +168,18 @@ void one_training(NeuralNetwork neuralnetwork, double *inputs, int len_inputs,
  */
 double *inputs(Image *img) {
     double *inputs = malloc(25 * 25 * sizeof(double));
+    Image img_bw = *img;
+    grayscale(&img_bw);
+    Bradley(&img_bw);
     double *in = inputs;
     for (int i = 0; i < img->height; i++) {
         for (int j = 0; j < img->width; j++) {
             Uint8 r = 0;
             Uint8 g = 0;
             Uint8 b = 0;
-            getPixelRGB(img, i, j, &r, &g, &b);
-            double pixel_bi = (r + g + b) / (3 * 255);
+            Uint8 pixel_bi = getPixelColor(&img_bw, i, j);
+            //getPixelRGB(img, i, j, &r, &g, &b);
+            //double pixel_bi = (r + g + b) / (3 * 255);
             *in = pixel_bi;
             in += 1;
         }

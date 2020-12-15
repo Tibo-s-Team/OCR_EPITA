@@ -28,9 +28,9 @@
 
 # mrproper: clean
 # 	rm -rf $(EXEC)
-OBJS	= main.o ../image.o ../preprocessing/suppression_couleurs.o ../segmentation/segmentation.o ../segmentation/binaryTree.o ../preprocessing/filtrage.o neuralnetwork.o NN_functions.o OCR_NN.o DataManipulation.o
-SOURCE	= main.c ../image.c ../preprocessing/suppression_couleurs.c ../segmentation/segmentation.c ../segmentation/binaryTree.c ../preprocessing/filtrage.c neuralnetwork.c NN_functions.c OCR_NN.c DataManipulation.c
-HEADER	= src/*.h 
+OBJS	= main.o /home/drevet/Documents/OCR_EPITA/src/binarization/Bradley.o /home/drevet/Documents/OCR_EPITA/src/segmentation/boundaryBox.o /home/drevet/Documents/OCR_EPITA/src/preprocessing/utils.o /home/drevet/Documents/OCR_EPITA/src/Image/image.o ../preprocessing/suppression_couleurs.o ../segmentation/segmentation.o ../segmentation/binaryTree.o ../preprocessing/filtrage.o neuralnetwork.o NN_functions.o OCR_NN.o DataManipulation.o
+SOURCE	= main.c /home/drevet/Documents/OCR_EPITA/src/binarization/Bradley.c /home/drevet/Documents/OCR_EPITA/src/segmentation/boundaryBox.c /home/drevet/Documents/OCR_EPITA/src/preprocessing/utils.c src/preprocessing/utils.c /home/drevet/Documents/OCR_EPITA/src/Image/image.c ../preprocessing/suppression_couleurs.c ../segmentation/segmentation.c ../segmentation/binaryTree.c ../preprocessing/filtrage.c neuralnetwork.c NN_functions.c OCR_NN.c DataManipulation.c
+HEADER	= src/*.h src/Image/*.h src/binarization/*.h /home/drevet/Documents/OCR_EPITA/src/preprocessing/suppression_couleurs.c
 OUT	= IA
 CC	 = gcc
 CFLAGS	 = -g -c -Wall -Wextra -Wno-unknown-pragmas -Wno-unused-variable -Wno-unused-parameter -lSDL2 -lSDL2_image -Werror -std=c99 $(shell pkg-config --cflags sdl SDL_image)  

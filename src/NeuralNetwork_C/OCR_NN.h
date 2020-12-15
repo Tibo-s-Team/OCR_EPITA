@@ -18,6 +18,8 @@
 #include "neuralnetwork.h"
 #include "NN_functions.h"
 #include "../Image/image.h"
+#include "/home/drevet/Documents/OCR_EPITA/src/binarization/binarization.h"
+#include "/home/drevet/Documents/OCR_EPITA/src/preprocessing/preprocessing.h"
 #include <math.h>
 #define NBR_LETTER 52
 #define DONE 52
