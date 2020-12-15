@@ -248,7 +248,7 @@ int main(int argc, char *argv[]) {
 
     //TEST
 
-    //Image img2 = loadImage("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/r/r.PNG");
+    //Image img2 = loadImage("/h&ome/drevet/Documents/OCR_EPITA/tests/images/letters/letter/r/r.PNG");
     //Image img2 = loadImage("/home/drevet/Documents/OCR_EPITA/tests/images/test_letters/e.PNG");
     //char res = print_res(neuralnetwork2, img2);
     //char res = print_res(neuralnetwork2, "/home/drevet/Documents/OCR_EPITA/tests/images/letters/A/A.PNG");
