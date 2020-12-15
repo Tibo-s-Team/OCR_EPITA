@@ -218,12 +218,12 @@ void bin_segmentation(Image *image, FILE *f) {
              "binarized beforehand.\n");
 
     Histogram histo = lineHistogram(image);
-    NeuralNetwork network = load("tests/OCR_Finale_1_letter1");
-    printf("test\n");
+    NeuralNetwork network = load("tests/OCR_Finale_25_25_25");
     size_t len;
 
     // x = start of box | y = end of box
     Pixel *lines = bin_findBoxes(&histo, &len);
+
 
     for (size_t i = 0; i < len; i++) {
         BBox line = {(Pixel){0, lines[i].x}, (Pixel){image->width, lines[i].y}};

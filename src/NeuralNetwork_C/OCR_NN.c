@@ -14,6 +14,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "../binarization/binarization.h"
+#include "../preprocessing/preprocessing.h"
 #include "NN_functions.h"
 #include "neuralnetwork.h"
 
@@ -167,14 +169,17 @@ void one_training(NeuralNetwork neuralnetwork, double *inputs, int len_inputs,
  */
 double *inputs(Image *img) {
     double *inputs = malloc(25 * 25 * sizeof(double));
+    Image img_bw = *img;
+    grayscale(&img_bw);
+    //img_bw = resize_images(img_bw);
+    //Bradley(&img_bw);
+    //displayImage(&img_bw);
     double *in = inputs;
     for (int i = 0; i < img->height; i++) {
-        for (int j = 0; j < img->width; j++) {
-            Uint8 r = 0;
-            Uint8 g = 0;
-            Uint8 b = 0;
-            getPixelRGB(img, i, j, &r, &g, &b);
-            double pixel_bi = (r + g + b) / (3 * 255);
+        for (int j = 0; j < img->width; j++) {  
+            Uint8 pixel_bi = getPixelColor(&img_bw, i, j);
+            // getPixelRGB(img, i, j, &r, &g, &b);
+            // double pixel_bi = (r + g + b) / (3 * 255);
             *in = pixel_bi;
             in += 1;
         }
@@ -384,7 +389,7 @@ Image resize_images(Image img) {
     Uint32 color = SDL_MapRGB(cropped->format, 255, 255, 255);
     SDL_FillRect(cropped, &tmp, color);
 
-    int extraction = SDL_BlitSurface(img.surface, &src, cropped, &dst);
+    int extraction = SDL_BlitScaled(img.surface, NULL, cropped, NULL);
     if (extraction)
         errx(1,
              "Error : OCR_NN.c - resize_images : Image couldn't be extracted.\n"
