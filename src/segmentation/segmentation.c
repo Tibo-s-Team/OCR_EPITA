@@ -215,13 +215,12 @@ void bin_segmentation(Image *image) {
 
             size_t letter_count;
             Pixel *letters = getColumns(image, word, &letter_count);
-            bin_highlightText(image, word);
 
-            // Save all words as new images
+           
             // temporary, we should delete files afterwards
             char *file = (char *)calloc(40, sizeof(char));
             sprintf(file, "images/%ld_%ld.png", i, j);
-            // extractImage(image, file, word);
+            extractImage(image, file, word);
             free(file);
 
             for (size_t z = 0; z < letter_count; z++) {
