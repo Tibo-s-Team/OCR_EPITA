@@ -211,7 +211,7 @@ void printBox(BBox box);
  *  implementation.
  * @param image black and white image
  */
-void bin_segmentation(Image *image) {
+void bin_segmentation(Image *image, FILE *f) {
     if (image->imageType != BW)
         errx(1,
              "ERROR : segmentation.c - segmentLine : Image must have been "
@@ -219,6 +219,7 @@ void bin_segmentation(Image *image) {
 
     Histogram histo = lineHistogram(image);
     NeuralNetwork network = load("tests/OCR_Finale_1_letter1");
+    printf("test\n");
     size_t len;
 
     // x = start of box | y = end of box
@@ -244,7 +245,8 @@ void bin_segmentation(Image *image) {
 
             // print letter
             Image img = loadImage(file);
-            printf("%c", print_res(network, img));
+            char rer = print_res(network, img);
+            fprintf(f,"%c", rer);
             SDL_FreeSurface(img.surface);
             free(file);
 

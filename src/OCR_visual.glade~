@@ -151,7 +151,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkTextView" id="ocr1">
+                      <object class="GtkTextView">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                       </object>
@@ -284,7 +284,6 @@
                 </child>
                 <child>
                   <object class="GtkStackSwitcher">
-                    <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="stack">stack1</property>
                   </object>

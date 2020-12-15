@@ -6,9 +6,8 @@
  * on the screnn our OCR's work
  */
 
-#include "visual.h"
+//#include "visual.h"
 
-void on_savebutton_clicked(GtkButton *sv, app_widgets *app_wdgts);
 
 /*!
  * This structure is used to create pointer
@@ -16,32 +15,54 @@ void on_savebutton_clicked(GtkButton *sv, app_widgets *app_wdgts);
  * glade possibilities.
  */
 
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <err.h>
+#include <gtk/gtk.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "Image/image.h"
+#include "preprocessing/preprocessing.h"
+#include "segmentation/segmentation.h"
+typedef struct {
+    GtkWidget *w_dlg_file_choose;  // FileChooser
+    GtkWidget   *button1;  // button that activate the radio button to print the result
+    GtkWidget *w_img_main;   // print on the left the file selected
+    GtkWidget *w_img_main1;  // print on the right the result
+    GtkWidget *OCR;          // radiobutton for OCR
+    GtkWidget *greyscale;    // radio button for grayscale
+    GtkWidget *bw;           // radiobutton for black and white
+    GtkWidget *lseg;         // radiobutton for line segmentation
+    GtkWidget *segment;      // radiobutton for segmentation
+    GtkWidget *window;       // The window showed
+    GtkWidget *savebutton;   // the save button
+} app_widgets;
+
+
 int main(int argc, char *argv[]) {
-    app_widgets *widgets = g_slice_new(app_widgets);
-    GtkBuilder *builder;
+    app_widgets     *widgets = g_slice_new(app_widgets);
+    GtkBuilder      *builder;
     gtk_init(&argc, &argv);
     builder = gtk_builder_new_from_file("OCR_visual.glade");
+    chdir("..");
 
-    // Link glade and code together
+    //Link glade and code together
     widgets->window = GTK_WIDGET(gtk_builder_get_object(builder, "window"));
-    widgets->w_dlg_file_choose =
-        GTK_WIDGET(gtk_builder_get_object(builder, "dlg_file_choose"));
-    widgets->w_img_main =
-        GTK_WIDGET(gtk_builder_get_object(builder, "img_main"));
-    widgets->w_img_main1 =
-        GTK_WIDGET(gtk_builder_get_object(builder, "img_main1"));
+    widgets->w_dlg_file_choose = GTK_WIDGET(gtk_builder_get_object(builder, "dlg_file_choose"));
+    widgets->w_img_main = GTK_WIDGET(gtk_builder_get_object(builder, "img_main"));
+    widgets->w_img_main1 = GTK_WIDGET(gtk_builder_get_object(builder, "img_main1"));
     widgets->button1 = GTK_WIDGET(gtk_builder_get_object(builder, "button1"));
     widgets->OCR = GTK_WIDGET(gtk_builder_get_object(builder, "OCR"));
-    widgets->greyscale =
-        GTK_WIDGET(gtk_builder_get_object(builder, "greyscale"));
+    widgets->greyscale = GTK_WIDGET(gtk_builder_get_object(builder, "greyscale"));
     widgets->bw = GTK_WIDGET(gtk_builder_get_object(builder, "bw"));
     widgets->lseg = GTK_WIDGET(gtk_builder_get_object(builder, "lseg"));
     widgets->segment = GTK_WIDGET(gtk_builder_get_object(builder, "segment"));
-    widgets->savebutton =
-        GTK_WIDGET(gtk_builder_get_object(builder, "savebutton"));
+    widgets->savebutton = GTK_WIDGET(gtk_builder_get_object(builder, "savebutton"));
 
     // put a background color --- Not really useful but nice
-    GdkColor color;
+   GdkColor color;
     color.red = 0xa500;
     color.green = 0xa500;
     color.blue = 0xb500;
@@ -64,18 +85,24 @@ int main(int argc, char *argv[]) {
 
 void SaveImage(char *path) {
     Image image;
+    Image tmp;
     if (SDL_Init(SDL_INIT_VIDEO | SDL_GETEVENT) < 0) {
         printf("Error: failed to initialize SDL: %s", SDL_GetError());
     } else {
-        Image image = loadImage(path);
+        image = loadImage(path);
         grayscale(&image);
-        SDL_SaveBMP(image.surface, "../Images/gtk/grayscaled");
-        blackAndWhite(&image);
-        SDL_SaveBMP(image.surface, "../Images/gtk/blackandwhited");
-        lineSegmentation(&image);
-        SDL_SaveBMP(image.surface, "../Images/gtk/linesegmentated");
-        segmentation(&image);
-        SDL_SaveBMP(image.surface, "../Images/gtk/segmentated");
+        SDL_SaveBMP(image.surface, "tests/images/gtk/grayscaled");
+        Bradley(&image);
+        SDL_SaveBMP(image.surface, "tests/images/gtk/blackandwhited");
+        FILE *f = fopen("tests/images/gtk/output.txt","w");
+        if (f == NULL)
+        {
+            printf("Error opening file!\n");
+            exit(1);
+        }
+        //fprintf(f, "test\n");
+        bin_segmentation(&image, f);
+        fclose(f);
     }
 }
 
@@ -86,25 +113,22 @@ void SaveImage(char *path) {
  * possibilities (can be absolute or relative to the workspace folder)
  * @return nothing, but open the picture in the interface.
  */
-
-void on_menuitm_open_activate(GtkMenuItem *menuitem, app_widgets *app_wdgts) {
-    gchar *file_name = NULL;
+void on_menuitm_open_activate(GtkMenuItem *m, app_widgets *app_wdgts)
+{
+    char *file_name = NULL;
     gtk_widget_show(app_wdgts->w_dlg_file_choose);
-    if (gtk_dialog_run(GTK_DIALOG(app_wdgts->w_dlg_file_choose)) ==
-        GTK_RESPONSE_OK) {
-        file_name = gtk_file_chooser_get_filename(
-            GTK_FILE_CHOOSER(app_wdgts->w_dlg_file_choose));
+    if (gtk_dialog_run(GTK_DIALOG (app_wdgts->w_dlg_file_choose)) == GTK_RESPONSE_OK) {
+        file_name = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(app_wdgts->w_dlg_file_choose));
         if (file_name != NULL) {
-            gtk_image_set_from_file(GTK_IMAGE(app_wdgts->w_img_main),
-                                    file_name);
-            gtk_image_set_from_file(GTK_IMAGE(app_wdgts->w_img_main1),
-                                    file_name);
+            gtk_image_set_from_file(GTK_IMAGE(app_wdgts->w_img_main), file_name);
+            gtk_image_set_from_file(GTK_IMAGE(app_wdgts->w_img_main1), file_name);
             SaveImage(file_name);
         }
         g_free(file_name);
     }
     gtk_widget_hide(app_wdgts->w_dlg_file_choose);
 }
+
 
 /*!
  * close the menu
@@ -131,27 +155,27 @@ void on_button1_clicked(GtkButton *b, app_widgets *app_wdgts) {
     gboolean T =
         gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(app_wdgts->greyscale));
     if (T) {
-        gchar *filename = "../Images/gtk/grayscaled";
+        gchar *filename = "tests/images/gtk/grayscaled";
         gtk_image_set_from_file(GTK_IMAGE(app_wdgts->w_img_main1), filename);
     }
     T = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(app_wdgts->bw));
     if (T) {
-        gchar *filename = "../Images/gtk/blackandwhited";
+        gchar *filename = "tests/images/gtk/blackandwhited";
         gtk_image_set_from_file(GTK_IMAGE(app_wdgts->w_img_main1), filename);
     }
     T = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(app_wdgts->lseg));
     if (T) {
-        gchar *filename = "../Images/gtk/linesegmentated";
+        gchar *filename = "tests/images/gtk/linesegmentated";
         gtk_image_set_from_file(GTK_IMAGE(app_wdgts->w_img_main1), filename);
     }
     T = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(app_wdgts->segment));
     if (T) {
-        gchar *filename = "../Images/gtk/segmentated";
+        gchar *filename = "tests/images//gtk/segmentated";
         gtk_image_set_from_file(GTK_IMAGE(app_wdgts->w_img_main1), filename);
     }
     T = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(app_wdgts->OCR));
     if (T) {
-        gchar *filename = "../Images/gtk/grayscaled";
+        gchar *filename = "tests/images/gtk/grayscaled";
         gtk_image_set_from_file(GTK_IMAGE(app_wdgts->w_img_main1), filename);
     }
 }
@@ -184,31 +208,31 @@ void on_savebutton_clicked(GtkButton *sv, app_widgets *app_wdgts) {
         gboolean T = gtk_toggle_button_get_active(
             GTK_TOGGLE_BUTTON(app_wdgts->greyscale));
         if (T) {
-            path = "../Images/gtk/grayscaled";
+            path = "Images/gtk/grayscaled";
             Image image = loadImage(path);
             SDL_SaveBMP(image.surface, filename);
         }
         T = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(app_wdgts->bw));
         if (T) {
-            path = "../Images/gtk/blackandwhited";
+            path = "tests/images/gtk/blackandwhited";
             Image image = loadImage(path);
             SDL_SaveBMP(image.surface, filename);
         }
         T = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(app_wdgts->lseg));
         if (T) {
-            path = "../Images/gtk/linesegmentated";
+            path = "tests/images/gtk/linesegmentated";
             Image image = loadImage(path);
             SDL_SaveBMP(image.surface, filename);
         }
         T = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(app_wdgts->segment));
         if (T) {
-            path = "../Images/gtk/segmentated";
+            path = "tests/images/gtk/segmentated";
             Image image = loadImage(path);
             SDL_SaveBMP(image.surface, filename);
         }
         T = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(app_wdgts->OCR));
         if (T) {
-            path = "../Images/gtk/grayscaled";
+            path = "tests/images/gtk/grayscaled";
             Image image = loadImage(path);
             SDL_SaveBMP(image.surface, filename);
         }

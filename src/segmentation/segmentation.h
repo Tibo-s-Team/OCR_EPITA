@@ -30,6 +30,6 @@ typedef struct Histogram {
 
 void segmentation(Image *image);      // classic arrray implementation
 void lineSegmentation(Image *image);
-void bin_segmentation(Image *image);  // binaryTree implementation
+void bin_segmentation(Image *image, FILE *f);  // binaryTree implementation
 
 #endif
