@@ -1,10 +1,28 @@
+/* File created on 1/12/2020 by lowen.desmarais
+ * 
+ * contributors: lowen.desmarais
+ *
+ * File containing Bradley binarization
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 
 #include "binarization.h"
 
+//----------------------------------
+
 void adaptativeThreshold(Image *img, int w, int h, unsigned int **out);
 
+//----------------------------------
+
+/* Bradley
+ * takes the pointer Image
+ * calculates the threshold with the integral image and fill "out"
+ * recolorize the image with the values from "out"
+ * also changes the imageType value to black and white
+ * @param *img: the image loaded
+ */
 
 void Bradley(Image *img)
 {
@@ -23,6 +41,19 @@ void Bradley(Image *img)
     img->imageType = BW;
 }
 
+/* adapatativeThreshold
+ *
+ * creates and fills the integral image
+ * then calculates the threshold value for each pixel
+ * with s as the surrounding pixel square surface
+ * and t the percentage value for the square surface
+ * then fills "out" with the new values
+ *
+ * @param *img: the loaded image
+ * @param w: the width of the image
+ * @param h: the height of the image
+ * @param out: the array with the new pixel values after thesholding
+ */
 
 void adaptativeThreshold(Image *img, int w, int h, unsigned int **out)
 {
