@@ -12,14 +12,6 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-<<<<<<< HEAD
-#include "neuralnetwork.h"
-#include "NN_functions.h"
-#include "../image.h"
-#include <math.h>
-#include <dirent.h>
-=======
->>>>>>> a90bbd7a9de7e89a381c36699e1bdb171a9e3a30
 #include <string.h>
 
 #include "NN_functions.h"
