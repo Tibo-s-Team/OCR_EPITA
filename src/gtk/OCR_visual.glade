@@ -97,8 +97,8 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <child>
-                  <object class="GtkScrolledWindow">
-                    <property name="width-request">960</property>
+                  <object class="GtkScrolledWindow" id="frame1">
+                    <property name="width-request">955</property>
                     <property name="height-request">950</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
@@ -119,8 +119,8 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkScrolledWindow">
-                    <property name="width-request">960</property>
+                  <object class="GtkScrolledWindow" id="frame2">
+                    <property name="width-request">955</property>
                     <property name="height-request">950</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
@@ -140,7 +140,7 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="x">960</property>
+                    <property name="x">965</property>
                   </packing>
                 </child>
               </object>
@@ -242,6 +242,21 @@
                   <packing>
                     <property name="x">258</property>
                     <property name="y">40</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="savebutton">
+                    <property name="label">gtk-save</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="use-stock">True</property>
+                    <property name="always-show-image">True</property>
+                    <signal name="clicked" handler="on_savebutton_clicked" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="x">1711</property>
+                    <property name="y">16</property>
                   </packing>
                 </child>
               </object>

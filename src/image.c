@@ -1,6 +1,6 @@
 /*!
  *  File created on 10/8/2020 (MM/DD/YYYY) by leo.duboin
- *  Contributors : leo.duboin jean.barbaroux
+ *  Contributors : leo.duboin 
  *
  *  File containing all the functions necessary to interact with an image.
  *
