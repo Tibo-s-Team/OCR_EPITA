@@ -1,8 +1,20 @@
+/*!
+ *  File created on 12/9/2020 (MM/DD/YYYY) by florian.drevet
+ *  Contributors : florian.drevet
+ *
+ *  The structure of a neural network
+ * 
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include "neuralnetwork.h"
 
-
+/*!
+ * creat a random double between min and max exclued
+ * @param min the min value of the random
+ * @param max the max value of the random
+ * @return a random number
+ */
 double randfrom(double min, double max) 
 {
     double range = (max - min); 
@@ -14,6 +26,14 @@ double randfrom(double min, double max)
         return res;
 }
 
+
+/*!
+ * Creat a new neuronne
+ * .weigth has values between -1 and 1 exclued
+ * .biais has a value between -1 and 1 exclued
+ * @param nbr_poids
+ * @return a new neuronne
+ */
 Neuronne creat_neuronne(size_t nbr_poids)
 {
     double *begin_weigth = malloc(nbr_poids * sizeof(double));
@@ -32,6 +52,12 @@ Neuronne creat_neuronne(size_t nbr_poids)
     return neuronne;
 }
 
+/*!
+ * Creat a layer. 
+ * @param nbr_poid the number of neuronnes in the layer before
+ * @param nbr_neuronnes number of neuronne of this layer
+ * @return a new layer
+ */
 Layer creat_layer(int nbr_poids, int nbr_neuronnes)
 {
     Neuronne *begin_layer = malloc(nbr_neuronnes * sizeof(Neuronne));
@@ -45,6 +71,10 @@ Layer creat_layer(int nbr_poids, int nbr_neuronnes)
     return layer;
 }
 
+/*!
+ * free the memory allocated to a layer
+ * @param layer the layer to free
+ */
 void free_layer(Layer layer)
 {
     for(Neuronne *i = layer.neuronne; i < layer.end; i++)
@@ -54,6 +84,15 @@ void free_layer(Layer layer)
     free(layer.neuronne);
 }
 
+/*!
+ * creat a neuralnetwork
+ * @param nbr_inputs number of inputs of our neuralnetwork
+ * @param layers an array that represent the layer
+ * the number of element is the number of layers
+ * each element is the number of neuronne of the layer
+ * @param len the length of the layer array
+ * @return a new neuralnetwork
+ */
 NeuralNetwork creat_neuralNetwork(int nbr_inputs, int layers[], int len)
 {
 
@@ -78,6 +117,10 @@ NeuralNetwork creat_neuralNetwork(int nbr_inputs, int layers[], int len)
     return neuralnetwork;
 }
 
+/*!
+ * free the memory allocated to a neuralnetwork
+ * @param neurlnetwork the neuralnetwork to free
+ */
 void free_neuralNetwork(NeuralNetwork neuralnetwork)
 {
     for(Layer *i = neuralnetwork.layer; i < neuralnetwork.end; i++)

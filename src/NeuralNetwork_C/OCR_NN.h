@@ -1,3 +1,11 @@
+/*!
+ *  File created on 12/12/2020 (MM/DD/YYYY) by florian.drevet
+ *  Contributors : florian.drevet
+ *
+ *  Train NeuralNetwork to recognize images of characters
+ * 
+ */
+
 #ifndef OCR_NN_H
 #define OCR_NN_H
 

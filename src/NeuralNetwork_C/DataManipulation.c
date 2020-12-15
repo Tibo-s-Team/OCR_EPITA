@@ -1,3 +1,11 @@
+/*!
+ *  File created on 12/14/2020 (MM/DD/YYYY) by florian.drevet
+ *  Contributors : florian.drevet lowen.desmarais
+ *
+ *  Train NeuralNetwork to recognize images of characters
+ * 
+ */
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -5,11 +13,12 @@
 #include "DataManipulation.h"
 #include "neuralnetwork.h"
 
-/*
- *A File is created at the path: filename where we want to save the network
+/*!
+  *A File is created at the path: filename where we want to save the network
  * with all the weights, biases and info about the orinal network
+ * @param neuralnetwork the neuralnetwork 
+ * @param filename the path of the file where the neural network will be saved
  */
-
 void save(struct NeuralNetwork network, char *filename)
 {
 	FILE *fp;
@@ -52,6 +61,10 @@ void save(struct NeuralNetwork network, char *filename)
 	fclose(fp);
 }
 
+/*!
+ * Load a neural network from a file 
+ * @param filename the path of the file where the neural network is save 
+ */
 struct NeuralNetwork load(char *filename)
 {
 	FILE *fp;

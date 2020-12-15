@@ -73,7 +73,7 @@ int main(int argc, char *argv[]) {
     // print_output(neuralnetwork2);
    
     //save(neuralnetwork, "/home/drevet/Documents/OCR_EPITA/tests/OCR_test5");
-    NeuralNetwork neuralnetwork2 = load("/home/drevet/Documents/OCR_EPITA/tests/OCR_Finale_16_16_16_20");
+    NeuralNetwork neuralnetwork2 = load("/home/drevet/Documents/OCR_EPITA/tests/OCR_Finale_1_letter1");
     Image img = loadImage("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/t/t.PNG");
     char res2 = print_res(neuralnetwork2, img);
     //char res = print_res(neuralnetwork2, "/home/drevet/Documents/OCR_EPITA/tests/images/test_letters/A.png");
@@ -241,9 +241,10 @@ int main(int argc, char *argv[]) {
                             letter_y,
                             letter_z};
     
-    training_NN(neuralnetwork2, letters, DONE, waited, 15000, 0.1);
-    save(neuralnetwork2, "/home/drevet/Documents/OCR_EPITA/tests/OCR_Finale_16_16_16_20");
-    Image img2 = loadImage("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/t/t.PNG");
+    //training_NN(neuralnetwork2, letters, DONE, waited, 20000, 0.1);
+    //save(neuralnetwork2, "/home/drevet/Documents/OCR_EPITA/tests/OCR_Finale_1_letter1");
+    //Image img2 = loadImage("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/r/r.PNG");
+    Image img2 = loadImage("/home/drevet/Documents/OCR_EPITA/tests/images/test_letters/e.PNG");
     char res = print_res(neuralnetwork2, img2);
     //char res = print_res(neuralnetwork2, "/home/drevet/Documents/OCR_EPITA/tests/images/letters/A/A.PNG");
     //char res = print_res(neuralnetwork2, "/home/drevet/Documents/OCR_EPITA/tests/images/test_letters/A.png");

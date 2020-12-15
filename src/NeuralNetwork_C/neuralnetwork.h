@@ -1,3 +1,11 @@
+/*!
+ *  File created on 12/9/2020 (MM/DD/YYYY) by florian.drevet
+ *  Contributors : florian.drevet
+ *
+ *  The structure of a neural network
+ * 
+ */
+
 #ifndef NEURALNETWORK_H_
 #define NEURALNETWORK_H_
 
