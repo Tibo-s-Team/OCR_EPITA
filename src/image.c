@@ -5,6 +5,8 @@
  *  File containing all the functions necessary to interact with an image.
  *
  *  10/20 : Cleaned code by mixing it with some functions seen in class
+ *  12/10 : Added saveImage => memory leak issue
+ *  12/12 : Added imageRotation
  */
 
 #include "image.h"
@@ -51,8 +53,10 @@ Image loadImage(const char *path) {
  */
 static inline Uint8 *getPixelRef(SDL_Surface *surf, int x, int y) {
     if (x > surf->w || y > surf->h)
-        errx(1, "Error: image.c - getPixelRef : IndexOutOfBounds (%d,%d) and image is %dx%d",
-            x, y, surf->w, surf->h);
+        errx(1,
+             "Error: image.c - getPixelRef : IndexOutOfBounds (%d,%d) and "
+             "image is %dx%d",
+             x, y, surf->w, surf->h);
 
     Uint8 bpp = surf->format->BytesPerPixel;
     return (Uint8 *)surf->pixels + y * surf->pitch + x * bpp;
@@ -198,18 +202,19 @@ void extractImage(Image *image, const char *file, BBox area) {
         errx(1,
              "Error : image.c - extractImage : Image couldn't be extracted.");
 
-    IMG_SavePNG(cropped, file);
+    SDL_SaveBMP(cropped, file);
+    SDL_FreeSurface(cropped);
+    IMG_Quit();
 }
 
-/*
- * angle: the angle we want to rotate the image with
- * matrix: the matrix of the image
- * w: the width of the matrix
- * h: the height of the matrix
+/*!
+ * rotates the image according to an angle
+ * @param angle the angle we want to rotate the image with
+ * @param matrix the matrix of the image
+ * @param w the width of the matrix
+ * @param h the height of the matrix
  */
-
-// rotates the image according to the angle 'angle'
-void rotation(Image *image, double angle) {
+void imageRotation(Image *image, double angle) {
     return;
 
     // FIXME

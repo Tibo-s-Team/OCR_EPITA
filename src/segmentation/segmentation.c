@@ -216,10 +216,9 @@ void bin_segmentation(Image *image) {
             size_t letter_count;
             Pixel *letters = getColumns(image, word, &letter_count);
 
-           
             // temporary, we should delete files afterwards
-            char *file = (char *)calloc(40, sizeof(char));
-            sprintf(file, "images/%ld_%ld.png", i, j);
+            char *file = (char *)calloc(20, sizeof(char));
+            sprintf(file, "images/%ld_%ld.bmp", i, j);
             extractImage(image, file, word);
             free(file);
 
@@ -233,6 +232,7 @@ void bin_segmentation(Image *image) {
         free(words);
     }
     free(lines);
+    free(histo.histo);
 }
 
 /*!
@@ -260,6 +260,8 @@ Pixel *getColumns(Image *image, BBox line, size_t *len) {
 
     // x = start of box | y = end of box
     Pixel *boxes = bin_findBoxes(&histo, len);
+
+    free(histo.histo);
     return boxes;
 }
 
