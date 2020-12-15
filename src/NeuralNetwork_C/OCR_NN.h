@@ -19,6 +19,7 @@ typedef struct Letter
     const char* path;
     int nbr_images;
     Image *img;
+    char chara;
 }Letter;
 
 char output_to_char(struct NeuralNetwork neuralnetwork);
@@ -30,6 +31,7 @@ void one_training(NeuralNetwork neuralnetwork,
 double *inputs (Image* img);
 Letter creat_letter(char* path);
 void training_NN(NeuralNetwork neuralnetwork, Letter tab_letter[NBR_LETTER], int len, double waited[NBR_LETTER][NBR_LETTER], int times, double coeff);
+char print_res(NeuralNetwork neuralnetwork ,char* path);
 Image resize_images(Image img);
 
 #endif
