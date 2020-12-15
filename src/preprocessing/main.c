@@ -19,14 +19,15 @@ int main(int argc, char const *argv[]) {
             image = loadImage(argv[i]);
 
             grayscale(&image);
-            Bradley(image);
-            image.imageType = BW;
+            Bradley(&image);
 
             filterImage(&image, SHARPNESS);
             filterImage(&image, SHARPNESS);
 
             blackAndWhite(&image);
             displayImage(&image);
+
+            Bradley(&image);
 
             IMG_Quit();
         }

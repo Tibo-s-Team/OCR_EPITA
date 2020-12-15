@@ -3,6 +3,11 @@
  *  Contributors : leo.duboin
  *
  *  File containing the necessary functions to apply filters onto an image.
+ *  You should normally use the SHARPNESS filter as it is the most efficient.
+ *
+ * Remark : You should always rebinarize your image afterwards as the resulting
+ * values may differ from 0 or 255. The basic B&W function works generraly
+ * better.
  *
  *  12/13/2020 : added gaussian filter (bugged) + fixed convolution
  *  12/14/2020 : added median filtering + external funtion call handler

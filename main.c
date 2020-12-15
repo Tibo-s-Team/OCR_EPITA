@@ -53,13 +53,12 @@ int main(int argc, char *argv[]) {
 
                 if (!display) {
                     if (gray || words) grayscale(&image);
-                    if (black_and_white || words) Bradley(image);
+                    if (black_and_white || words) Bradley(&image);
                     image.imageType = BW;
                     if (lines || words) {
+                        displayImage(&image);
                         filterImage(&image, SHARPNESS);
-                        filterImage(&image, SHARPNESS);
-                        Bradley(image);
-                        image.imageType = BW;
+                        blackAndWhite(&image);
                         displayImage(&image);
                         bin_segmentation(&image);
                     }
