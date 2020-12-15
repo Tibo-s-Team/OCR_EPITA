@@ -11,7 +11,7 @@
 int main(int argc, char *argv[]) {
 
     Image image;
-    FILE *f = fopen("25.txt", "w");
+    FILE *f = fopen("tests/outputs/25.txt", "w");
 
     static int gray = 0;
     static int black_and_white = 0;

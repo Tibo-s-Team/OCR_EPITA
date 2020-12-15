@@ -100,7 +100,7 @@ void SaveImage(char *path) {
             printf("Error opening file!\n");
             exit(1);
         }
-        //fprintf(f, "test\n");
+	filterImage(&image, SHARPNESS);	
         bin_segmentation(&image, f);
         fclose(f);
     }
