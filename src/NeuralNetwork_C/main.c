@@ -126,68 +126,121 @@ int main(int argc, char *argv[]) {
     // Letter letter_z = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters - Copy/letter/z/");
 
     //Creat all the letters from folder letters //think to change the number of image in OCR_NN to 331
-    Letter letter_A = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/A/");
-    Letter letter_B = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/B/");
-    Letter letter_C = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/C/");
-    Letter letter_D = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/D/");
-    Letter letter_E = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/E/");
-    Letter letter_F = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/F/");
-    Letter letter_G = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/G/");
-    Letter letter_H = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/H/");
-    Letter letter_I = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/I/");
-    Letter letter_J = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/J/");
-    Letter letter_K = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/K/");
-    Letter letter_L = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/L/");
-    Letter letter_M = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/M/");
-    Letter letter_N = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/N/");
-    Letter letter_O = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/O/");
-    Letter letter_P = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/P/");
-    Letter letter_Q = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/Q/");
-    Letter letter_R = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/R/");
-    Letter letter_S = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/S/");
-    Letter letter_T = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/T/");
-    Letter letter_U = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/U/");
-    Letter letter_V = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/V/");
-    Letter letter_W = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/W/");
-    Letter letter_X = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/X/");
-    Letter letter_Y = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/Y/");
-    Letter letter_Z = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/Z/");
-    Letter letter_a = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/a/");
-    Letter letter_b = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/b/");
-    Letter letter_c = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/c/");
-    Letter letter_d = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/d/");
-    Letter letter_e = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/e/");
-    Letter letter_f = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/f/");
-    Letter letter_g = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/g/");
-    Letter letter_h = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/h/");
-    Letter letter_i = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/i/");
-    Letter letter_j = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/j/");
-    Letter letter_k = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/k/");
-    Letter letter_l = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/l/");
-    Letter letter_m = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/m/");
-    Letter letter_n = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/n/");
-    Letter letter_o = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/o/");
-    Letter letter_p = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/p/");
-    Letter letter_q = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/v/");
-    Letter letter_w = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/w/");
-    Letter letter_x = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/q/");
-    Letter letter_r = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/r/");
-    Letter letter_s = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/s/");
-    Letter letter_t = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/t/");
-    Letter letter_u = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/u/");
-    Letter letter_v = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/x/");
-    Letter letter_y = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/y/");
-    Letter letter_z = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/z/");
+    // Letter letter_A = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/A/");
+    // Letter letter_B = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/B/");
+    // Letter letter_C = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/C/");
+    // Letter letter_D = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/D/");
+    // Letter letter_E = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/E/");
+    // Letter letter_F = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/F/");
+    // Letter letter_G = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/G/");
+    // Letter letter_H = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/H/");
+    // Letter letter_I = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/I/");
+    // Letter letter_J = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/J/");
+    // Letter letter_K = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/K/");
+    // Letter letter_L = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/L/");
+    // Letter letter_M = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/M/");
+    // Letter letter_N = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/N/");
+    // Letter letter_O = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/O/");
+    // Letter letter_P = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/P/");
+    // Letter letter_Q = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/Q/");
+    // Letter letter_R = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/R/");
+    // Letter letter_S = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/S/");
+    // Letter letter_T = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/T/");
+    // Letter letter_U = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/U/");
+    // Letter letter_V = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/V/");
+    // Letter letter_W = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/W/");
+    // Letter letter_X = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/X/");
+    // Letter letter_Y = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/Y/");
+    // Letter letter_Z = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/Z/");
+    // Letter letter_a = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/a/");
+    // Letter letter_b = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/b/");
+    // Letter letter_c = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/c/");
+    // Letter letter_d = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/d/");
+    // Letter letter_e = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/e/");
+    // Letter letter_f = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/f/");
+    // Letter letter_g = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/g/");
+    // Letter letter_h = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/h/");
+    // Letter letter_i = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/i/");
+    // Letter letter_j = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/j/");
+    // Letter letter_k = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/k/");
+    // Letter letter_l = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/l/");
+    // Letter letter_m = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/m/");
+    // Letter letter_n = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/n/");
+    // Letter letter_o = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/o/");
+    // Letter letter_p = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/p/");
+    // Letter letter_q = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/v/");
+    // Letter letter_w = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/w/");
+    // Letter letter_x = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/q/");
+    // Letter letter_r = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/r/");
+    // Letter letter_s = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/s/");
+    // Letter letter_t = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/t/");
+    // Letter letter_u = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/u/");
+    // Letter letter_v = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/x/");
+    // Letter letter_y = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/y/");
+    // Letter letter_z = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/z/");
     
+
+    Letter letter_A = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/A/");
+    Letter letter_B = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/B/");
+    Letter letter_C = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/C/");
+    Letter letter_D = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/D/");
+    Letter letter_E = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/E/");
+    Letter letter_F = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/F/");
+    Letter letter_G = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/G/");
+    Letter letter_H = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/H/");
+    Letter letter_I = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/I/");
+    Letter letter_J = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/J/");
+    Letter letter_K = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/K/");
+    Letter letter_L = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/L/");
+    Letter letter_M = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/M/");
+    Letter letter_N = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/N/");
+    Letter letter_O = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/O/");
+    Letter letter_P = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/P/");
+    Letter letter_Q = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/Q/");
+    Letter letter_R = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/R/");
+    Letter letter_S = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/S/");
+    Letter letter_T = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/T/");
+    Letter letter_U = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/U/");
+    Letter letter_V = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/V/");
+    Letter letter_W = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/W/");
+    Letter letter_X = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/X/");
+    Letter letter_Y = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/Y/");
+    Letter letter_Z = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/Z/");
+    Letter letter_a = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/letter/a/");
+    Letter letter_b = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/letter/b/");
+    Letter letter_c = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/letter/c/");
+    Letter letter_d = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/letter/d/");
+    Letter letter_e = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/letter/e/");
+    Letter letter_f = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/letter/f/");
+    Letter letter_g = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/letter/g/");
+    Letter letter_h = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/letter/h/");
+    Letter letter_i = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/letter/i/");
+    Letter letter_j = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/letter/j/");
+    Letter letter_k = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/letter/k/");
+    Letter letter_l = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/letter/l/");
+    Letter letter_m = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/letter/m/");
+    Letter letter_n = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/letter/n/");
+    Letter letter_o = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/letter/o/");
+    Letter letter_p = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/letter/p/");
+    Letter letter_q = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/letter/v/");
+    Letter letter_w = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/letter/w/");
+    Letter letter_x = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/letter/q/");
+    Letter letter_r = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/letter/r/");
+    Letter letter_s = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/letter/s/");
+    Letter letter_t = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/letter/t/");
+    Letter letter_u = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/letter/u/");
+    Letter letter_v = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/letter/x/");
+    Letter letter_y = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/letter/y/");
+    Letter letter_z = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/letters_bradley/letter/z/");
     //Creat a new neuralnetwork
 
-    // int layer[4] = {16, 16, 16, DONE};
-    // NeuralNetwork neuralnetwork2 = creat_neuralNetwork(625, layer, 4);
+    int layer[4] = {16, 16, 16, DONE};
+    NeuralNetwork neuralnetwork2 = creat_neuralNetwork(625, layer, 4);
     // print_output(neuralnetwork2);
    
     //load a neural network
-    NeuralNetwork neuralnetwork2 = load("/home/drevet/Documents/OCR_EPITA/tests/OCR_Finale_25_25_25");
-    
+    //NeuralNetwork neuralnetwork2 = load("/home/drevet/Documents/OCR_EPITA/tests/OCR_Finale_25_25_25");
+
     //creat array of all letters
     Letter letters[DONE] = {letter_A,
                             letter_B,
@@ -243,10 +296,10 @@ int main(int argc, char *argv[]) {
                             letter_z};
     
     //train the NeuralNetwork 
-    //training_NN(neuralnetwork2, letters, DONE, waited, 1, 0.1);
+    training_NN(neuralnetwork2, letters, DONE, waited, 2000, 0.1);
 
     //Save the neural network trained
-    //save(neuralnetwork2, "/home/drevet/Documents/OCR_EPITA/tests/OCR_Finale_binarized_330");
+    save(neuralnetwork2, "/home/drevet/Documents/OCR_EPITA/tests/OCR_Finale_bradley");
 
     //TEST
 
