@@ -299,7 +299,7 @@ int main(int argc, char *argv[]) {
     training_NN(neuralnetwork2, letters, DONE, waited, 10000, 0.1);
 
     //Save the neural network trained
-    save(neuralnetwork2, "/home/drevet/Documents/OCR_EPITA/tests/OCR_Finale_bradley2");
+    save(neuralnetwork2, "/home/drevet/Documents/OCR_EPITA/tests/OCR_Finale_bradley3");
 
     //TEST
 
