@@ -51,8 +51,8 @@ Image loadImage(const char *path) {
  */
 static inline Uint8 *getPixelRef(SDL_Surface *surf, int x, int y) {
     if (x > surf->w || y > surf->h)
-        errx(1, "Error: image.c - getPixelRef : IndexOutOfBounds (%d,%d)", x,
-             y);
+        errx(1, "Error: image.c - getPixelRef : IndexOutOfBounds (%d,%d) and image is %dx%d",
+            x, y, surf->w, surf->h);
 
     Uint8 bpp = surf->format->BytesPerPixel;
     return (Uint8 *)surf->pixels + y * surf->pitch + x * bpp;
@@ -122,7 +122,7 @@ Uint8 getPixelColor(Image *image, const int x, const int y) {
 void setPixelColor(Image *image, Uint8 color, const int x, const int y) {
     Uint8 *pixel = getPixelRef(image->surface, x, y);
 
-    if (image->imageType == BW)
+    if (image->surface->format->BytesPerPixel == 1)
         *pixel = color == 0;
     else {
         pixel[0] = color;
@@ -180,24 +180,66 @@ void displayImage(Image *image) {
  * @param width tuple contating the starting and ending width
  *  of the part of the image to extract
  */
-void extractImage(Image *image, const char *file, int height[2], int width[2]) {
-    // FIXME
-    return;
+void extractImage(Image *image, const char *file, BBox area) {
+    SDL_Rect rect = {.x = area.start.x,
+                     .y = area.start.y,
+                     .w = area.end.x - area.start.x,
+                     .h = area.end.y - area.start.y};
+    SDL_Surface *cropped =
+        SDL_CreateRGBSurface(0, rect.w, rect.h, 32, 0, 0, 0, 0);
 
-    SDL_Surface *new_image = NULL;
-    SDL_Rect rect = {.x = width[0],
-                     .y = height[0],
-                     .w = width[1] - width[0],
-                     .h = height[1] - height[0]};
-
+    // create new blank surface
     // verify path doesn't already exist
+    SDL_UnlockSurface(image->surface);
 
     // extract image part => returns 0 if succesful
-    int extraction = SDL_BlitSurface(image->surface, NULL, new_image, NULL);
+    int extraction = SDL_BlitSurface(image->surface, &rect, cropped, NULL);
     if (extraction)
         errx(1,
              "Error : image.c - extractImage : Image couldn't be extracted.");
 
-    IMG_SavePNG(new_image, file);
-    SDL_FreeSurface(new_image);
+    IMG_SavePNG(cropped, file);
+}
+
+/*
+ * angle: the angle we want to rotate the image with
+ * matrix: the matrix of the image
+ * w: the width of the matrix
+ * h: the height of the matrix
+ */
+
+// rotates the image according to the angle 'angle'
+void rotation(Image *image, double angle) {
+    return;
+
+    // FIXME
+
+    int w = image->width, h = image->height;
+    Uint8 bpp = image->surface->format->BytesPerPixel;
+    double ray = sqrt(w * w + h * h);
+
+    // save old pixels information
+    Uint8 *rotated = calloc(h * image->surface->pitch, sizeof(Uint8));
+
+    for (double i = 0; i < w; i++) {
+        for (double j = 0; j < h; j++) {
+            // new coordinates of the current pixel
+            int y = (int)(i * cos(angle) + j * sin(angle));
+            int x = (int)((-1) * i * sin(angle) + j * cos(angle));
+
+            // get old pixel values
+            Uint8 r, g, b;
+            if (image->imageType == RGB)
+                getPixelRGB(image, i, j, &r, &g, &b);
+            else {
+                r = getPixelColor(image, i, j);
+                g = r;
+                b = r;
+            }
+            if (x > w || x < 0 || y < 0 || y > h) printf("test\n");
+        }
+    }
+
+    memcpy(image->surface->pixels, rotated, image->surface->pitch * h);
+    free(rotated);
 }

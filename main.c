@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "src/binarization/binarization.h"
 #include "src/image.h"
 #include "src/preprocessing/preprocessing.h"
 #include "src/segmentation/segmentation.h"
@@ -13,11 +14,12 @@ int main(int argc, char *argv[]) {
     static int gray = 0;
     static int black_and_white = 0;
     static int lines = 0;
+    static int display = 0;
 
     if (argc < 2)  // if no path given do nothing
         return 0;
 
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) < 0) {
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_GETEVENT) < 0) {
         printf("Error: failed to initialize SDL: %s", SDL_GetError());
         return 1;
     } else {
@@ -26,6 +28,9 @@ int main(int argc, char *argv[]) {
             if (argv[i][0] == '-') {
                 for (int j = 1; j < (int)strlen(argv[i]); j++) {
                     switch (argv[i][j]) {
+                        case 'd':
+                            display = 1;
+                            break;
                         case 'g':
                             gray = 1;
                             break;
@@ -46,10 +51,18 @@ int main(int argc, char *argv[]) {
                 Image image = loadImage(argv[i]);
                 int words = !gray && !black_and_white && !lines;
 
-                if (gray || words) grayscale(&image);
-                if (black_and_white || words) blackAndWhite(&image);
-                if (lines) lineSegmentation(&image);
-                if (words) segmentation(&image);
+                if (!display) {
+                    if (gray || words) grayscale(&image);
+                    if (black_and_white || words) Bradley(&image);
+                    image.imageType = BW;
+                    if (lines || words) {
+                        displayImage(&image);
+                        filterImage(&image, SHARPNESS);
+                        blackAndWhite(&image);
+                        displayImage(&image);
+                        bin_segmentation(&image);
+                    }
+                }
 
                 displayImage(&image);
             }
