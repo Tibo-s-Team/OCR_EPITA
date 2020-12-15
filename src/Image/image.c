@@ -185,7 +185,7 @@ void displayImage(Image *image)
  * @param width tuple contating the starting and ending width
  *  of the part of the image to extract
  */
-void extractImage(Image *image, const char *file, BBox area) {
+void saveImage(Image *image, const char *file, BBox area) {
     SDL_Rect rect = {.x = area.start.x,
                      .y = area.start.y,
                      .w = area.end.x - area.start.x,
@@ -201,7 +201,7 @@ void extractImage(Image *image, const char *file, BBox area) {
     int extraction = SDL_BlitSurface(image->surface, &rect, cropped, NULL);
     if (extraction)
         errx(1,
-             "Error : image.c - extractImage : Image couldn't be extracted.");
+             "Error : image.c - saveImage : Image couldn't be extracted.");
 
     SDL_SaveBMP(cropped, file);
     SDL_FreeSurface(cropped);

@@ -97,8 +97,10 @@ double* print_output(NeuralNetwork neuralnetwork)
     Layer *layer = neuralnetwork.end -1;
     for(Neuronne *i = layer->neuronne; i < layer->end; i++)//for each neurone in the last layer
     {
+        /*
         printf("%f\n", i->output); //line to uncomment to print the ouput of each neuronne
         printf("_____________\n");
+        */
         *j = i->output;
         j++;
     }

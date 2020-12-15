@@ -35,6 +35,6 @@ void getPixelRGB(Image *image, const int x, const int y, Uint8 *r, Uint8 *g,
                  Uint8 *b);
 void setPixelColor(Image *image, Uint8 color, const int x, const int y);
 void displayImage(Image *image);
-void extractImage(Image *image, const char *file, BBox area);
+void saveImage(Image *image, const char *file, BBox area);
 void imageRotation(Image *image, double angle);
 #endif

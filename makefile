@@ -18,6 +18,7 @@ main.o: main.c
 
 clean:
 	rm -f $(OBJS) $(OUT)
+	rm -f Images/* Images/NN/*
 
 run: $(OUT)
 	./$(OUT)
