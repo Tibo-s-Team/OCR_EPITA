@@ -69,14 +69,7 @@ double waited[NBR_LETTER][NBR_LETTER] =
 int main(int argc, char *argv[]) {
     srand(time (NULL));
 
-    //Creat a new neuralnetwork
 
-    // int layer[4] = {16, 16, 16, DONE};
-    // NeuralNetwork neuralnetwork2 = creat_neuralNetwork(625, layer, 4);
-    // print_output(neuralnetwork2);
-   
-    //load a neural network
-    NeuralNetwork neuralnetwork2 = load("/home/drevet/Documents/OCR_EPITA/tests/OCR_Finale_25_25_25");
 
     //Creat all the letters from folder letters - Copy
     // Letter letter_A = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters - Copy/A/");
@@ -185,7 +178,16 @@ int main(int argc, char *argv[]) {
     Letter letter_v = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/x/");
     Letter letter_y = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/y/");
     Letter letter_z = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/z/");
+    
+    //Creat a new neuralnetwork
 
+    // int layer[4] = {16, 16, 16, DONE};
+    // NeuralNetwork neuralnetwork2 = creat_neuralNetwork(625, layer, 4);
+    // print_output(neuralnetwork2);
+   
+    //load a neural network
+    NeuralNetwork neuralnetwork2 = load("/home/drevet/Documents/OCR_EPITA/tests/OCR_Finale_25_25_25");
+    
     //creat array of all letters
     Letter letters[DONE] = {letter_A,
                             letter_B,
