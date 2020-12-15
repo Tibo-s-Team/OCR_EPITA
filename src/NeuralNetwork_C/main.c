@@ -68,19 +68,17 @@ double waited[NBR_LETTER][NBR_LETTER] =
 
 int main(int argc, char *argv[]) {
     srand(time (NULL));
+
+    //Creat a new neuralnetwork
+
     // int layer[4] = {16, 16, 16, DONE};
     // NeuralNetwork neuralnetwork2 = creat_neuralNetwork(625, layer, 4);
     // print_output(neuralnetwork2);
    
-    //save(neuralnetwork, "/home/drevet/Documents/OCR_EPITA/tests/OCR_test5");
+    //load a neural network
     NeuralNetwork neuralnetwork2 = load("/home/drevet/Documents/OCR_EPITA/tests/OCR_Finale_1_letter1");
-    Image img = loadImage("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/t/t.PNG");
-    char res2 = print_res(neuralnetwork2, img);
-    //char res = print_res(neuralnetwork2, "/home/drevet/Documents/OCR_EPITA/tests/images/test_letters/A.png");
-    printf("RES = %d\n", res2);
-    printf("RES WAITED %d\n", 't');
-    printf("%c\n", res2);
 
+    //Creat all the letters from folder letters - Copy
     Letter letter_A = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters - Copy/A/");
     Letter letter_B = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters - Copy/B/");
     Letter letter_C = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters - Copy/C/");
@@ -134,7 +132,7 @@ int main(int argc, char *argv[]) {
     Letter letter_y = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters - Copy/letter/y/");
     Letter letter_z = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters - Copy/letter/z/");
 
-
+    //Creat all the letters from folder letters //think to change the number of image in OCR_NN to 331
     // Letter letter_A = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/A/");
     // Letter letter_B = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/B/");
     // Letter letter_C = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/C/");
@@ -188,6 +186,7 @@ int main(int argc, char *argv[]) {
     // Letter letter_y = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/y/");
     // Letter letter_z = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/z/");
 
+    //creat array of all letters
     Letter letters[DONE] = {letter_A,
                             letter_B,
                             letter_C, 
@@ -241,16 +240,24 @@ int main(int argc, char *argv[]) {
                             letter_y,
                             letter_z};
     
-    //training_NN(neuralnetwork2, letters, DONE, waited, 20000, 0.1);
-    //save(neuralnetwork2, "/home/drevet/Documents/OCR_EPITA/tests/OCR_Finale_1_letter1");
+    //train the NeuralNetwork 
+    training_NN(neuralnetwork2, letters, DONE, waited, 20000, 0.1);
+
+    //Save the neural network trained
+    save(neuralnetwork2, "/home/drevet/Documents/OCR_EPITA/tests/OCR_Finale_1_letter1");
+
+    //TEST
+
     //Image img2 = loadImage("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/r/r.PNG");
-    Image img2 = loadImage("/home/drevet/Documents/OCR_EPITA/tests/images/test_letters/e.PNG");
-    char res = print_res(neuralnetwork2, img2);
+    //Image img2 = loadImage("/home/drevet/Documents/OCR_EPITA/tests/images/test_letters/e.PNG");
+    //char res = print_res(neuralnetwork2, img2);
     //char res = print_res(neuralnetwork2, "/home/drevet/Documents/OCR_EPITA/tests/images/letters/A/A.PNG");
     //char res = print_res(neuralnetwork2, "/home/drevet/Documents/OCR_EPITA/tests/images/test_letters/A.png");
-    printf("RES = %d\n", res);
-    printf("RES WAITED %d\n", 't');
-    printf("%c\n", res);
+    // printf("RES = %d\n", res);
+    // printf("RES WAITED %d\n", 't');
+    // printf("%c\n", res);
+
+    //free the neural network
     free_neuralNetwork(neuralnetwork2);
     return 0;
 }
