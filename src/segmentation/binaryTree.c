@@ -17,8 +17,8 @@
  * @param end ending position of a block
  * @return a standalone tree whose key contains the position of a block
  */
-BinTree createBinTree(int start, int end) {
-    BinTree node = {{start, end}, NULL, NULL, NULL};
+BinTree createBinTree(BBox key) {
+    BinTree node = {key, NULL, NULL, NULL};
     return node;
 }
 
@@ -64,13 +64,17 @@ void mapFunction(BinTree *tree, Image *image, void (*f)(Image *, BinTree *)) {
     }
 }
 
+#pragma region print
+
 /*!
  * Print the content of a forest of trees. Each node is printed as [key1, key2].
  * @param node the first tree of the forest to be printed
  */
 void printForest(BinTree *node) {
     if (node != NULL) {
-        printf("[%d, %d]\n", node->key[0], node->key[1]);
+        printBox(node->key);
         printForest(node->sibling);
     }
 }
+
+#pragma endregion print

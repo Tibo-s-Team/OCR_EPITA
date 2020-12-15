@@ -1,5 +1,5 @@
 # project files
-images/*
+logs
 
 # Text editor files
 *.vscode
