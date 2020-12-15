@@ -56,10 +56,8 @@ int main(int argc, char *argv[]) {
                     if (black_and_white || words) Bradley(&image);
                     image.imageType = BW;
                     if (lines || words) {
-                        displayImage(&image);
                         filterImage(&image, SHARPNESS);
                         blackAndWhite(&image);
-                        displayImage(&image);
                         bin_segmentation(&image);
                     }
                 }

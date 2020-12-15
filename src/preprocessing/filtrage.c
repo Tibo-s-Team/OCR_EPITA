@@ -30,8 +30,8 @@ void reverseKernel(Kernel kernel);
 //--------------------------------
 
 /*!
- * Apply a filter onto an image. 
- * Main function to call outside the file. 
+ * Apply a filter onto an image.
+ * Main function to call outside the file.
  * @warning You may want to rebinarize your image afterwards
  * @param image the image to apply the filter onto
  * @param filter the filter we want to apply
@@ -82,7 +82,7 @@ void filterImage(Image *image, Filter filter) {
  * Apply convolution onto an image using a given kernel
  * @param image the image to apply convolution onto
  * @param f the function returning the kernel to use
-*/
+ */
 void convolution(Image *image, Kernel (*f)()) {
     Kernel kernel = (*f)();
     reverseKernel(kernel);
@@ -90,6 +90,7 @@ void convolution(Image *image, Kernel (*f)()) {
 
     for (int y = center; y < image->height - center; ++y) {
         for (int x = center; x < image->width - center; ++x) {
+            convolutePixel(image, kernel, x, y);
         }
     }
 }
@@ -141,7 +142,8 @@ void convolutePixel(Image *image, Kernel kernel, int x, int y) {
  */
 void reverseKernel(Kernel kernel) {
     int total_size = kernel.size * kernel.size;
-    for (int i = 0; i < total_size / 2; ++i) {  // swap doesn't work here idk why
+    for (int i = 0; i < total_size / 2;
+         ++i) {  // swap doesn't work here idk why
         int a = kernel.matrix[i], b = kernel.matrix[total_size - i - 1];
         kernel.matrix[i] = b;
         kernel.matrix[total_size - i - 1] = a;
