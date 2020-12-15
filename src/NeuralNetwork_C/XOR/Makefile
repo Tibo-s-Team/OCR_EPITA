@@ -1,5 +1,5 @@
-OBJS	= main.o  ../neuralnetwork.o ../NN_functions.o 
-SOURCE	= main.c  ../neuralnetwork.c ../NN_functions.c 
+OBJS	= main.o  ../neuralnetwork.o ../NN_functions.o XOR.o
+SOURCE	= main.c  ../neuralnetwork.c ../NN_functions.c XOR.c
 HEADER	= src/*.h 
 OUT	= XOR
 CC	 = gcc
