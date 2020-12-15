@@ -66,13 +66,13 @@ void SaveImage(char *path) {
     } else {
         Image image = loadImage(path);
         grayscale(&image);
-        SDL_SaveBMP(image.surface, "../../tests/tmp/grayscaled");
+        SDL_SaveBMP(image.surface, "../Images/gtk/grayscaled");
         blackAndWhite(&image);
-        SDL_SaveBMP(image.surface, "../../tests/tmp/blackandwhited");
+        SDL_SaveBMP(image.surface, "../Images/gtk/blackandwhited");
         lineSegmentation(&image);
-        SDL_SaveBMP(image.surface, "../../tests/tmp/linesegmentated");
+        SDL_SaveBMP(image.surface, "../Images/gtk/linesegmentated");
         segmentation(&image);
-        SDL_SaveBMP(image.surface, "../../tests/tmp/segmentated");
+        SDL_SaveBMP(image.surface, "../Images/gtk/segmentated");
     }
 }
 
@@ -128,27 +128,27 @@ void on_button1_clicked(GtkButton *b, app_widgets *app_wdgts) {
     gboolean T =
         gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(app_wdgts->greyscale));
     if (T) {
-        gchar *filename = "../../tests/tmp/grayscaled";
+        gchar *filename = "../Images/gtk/grayscaled";
         gtk_image_set_from_file(GTK_IMAGE(app_wdgts->w_img_main1), filename);
     }
     T = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(app_wdgts->bw));
     if (T) {
-        gchar *filename = "../../tests/tmp/blackandwhited";
+        gchar *filename = "../Images/gtk/blackandwhited";
         gtk_image_set_from_file(GTK_IMAGE(app_wdgts->w_img_main1), filename);
     }
     T = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(app_wdgts->lseg));
     if (T) {
-        gchar *filename = "../../tests/tmp/linesegmentated";
+        gchar *filename = "../Images/gtk/linesegmentated";
         gtk_image_set_from_file(GTK_IMAGE(app_wdgts->w_img_main1), filename);
     }
     T = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(app_wdgts->segment));
     if (T) {
-        gchar *filename = "../../tests/tmp/segmentated";
+        gchar *filename = "../Images/gtk/segmentated";
         gtk_image_set_from_file(GTK_IMAGE(app_wdgts->w_img_main1), filename);
     }
     T = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(app_wdgts->OCR));
     if (T) {
-        gchar *filename = "../../tests/tmp/grayscaled";
+        gchar *filename = "../Images/gtk/grayscaled";
         gtk_image_set_from_file(GTK_IMAGE(app_wdgts->w_img_main1), filename);
     }
 }
@@ -170,7 +170,7 @@ void on_savebutton_clicked(GtkButton *sv, app_widgets *app_wdgts) {
                                                    TRUE);
 
     gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog),
-                                        "../../tests");
+                                        "../Images");
     gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog),
                                       "Untitled document");
 
@@ -182,31 +182,31 @@ void on_savebutton_clicked(GtkButton *sv, app_widgets *app_wdgts) {
         gboolean T = gtk_toggle_button_get_active(
             GTK_TOGGLE_BUTTON(app_wdgts->greyscale));
         if (T) {
-            path = "../../tests/tmp/grayscaled";
+            path = "../Images/gtk/grayscaled";
             Image image = loadImage(path);
             SDL_SaveBMP(image.surface, filename);
         }
         T = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(app_wdgts->bw));
         if (T) {
-            path = "../../tests/tmp/blackandwhited";
+            path = "../Images/gtk/blackandwhited";
             Image image = loadImage(path);
             SDL_SaveBMP(image.surface, filename);
         }
         T = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(app_wdgts->lseg));
         if (T) {
-            path = "../../tests/tmp/linesegmentated";
+            path = "../Images/gtk/linesegmentated";
             Image image = loadImage(path);
             SDL_SaveBMP(image.surface, filename);
         }
         T = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(app_wdgts->segment));
         if (T) {
-            path = "../../tests/tmp/segmentated";
+            path = "../Images/gtk/segmentated";
             Image image = loadImage(path);
             SDL_SaveBMP(image.surface, filename);
         }
         T = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(app_wdgts->OCR));
         if (T) {
-            path = "../../tests/tmp/grayscaled";
+            path = "../Images/gtk/grayscaled";
             Image image = loadImage(path);
             SDL_SaveBMP(image.surface, filename);
         }

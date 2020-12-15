@@ -237,8 +237,8 @@ void bin_segmentation(Image *image) {
             Pixel *letters = getColumns(image, word, &letter_count);
 
             // temporary, we should delete files afterwards
-            char *file = (char *)calloc(20, sizeof(char));
-            sprintf(file, "images/%ld_%ld.bmp", i, j);
+            char *file = (char *)calloc(30, sizeof(char));
+            sprintf(file, "../Images/NN/%ld_%ld.bmp", i, j);
             extractImage(image, file, word);
             free(file);
 
