@@ -170,13 +170,12 @@ double *inputs(Image *img) {
     double *inputs = malloc(25 * 25 * sizeof(double));
     Image img_bw = *img;
     grayscale(&img_bw);
-    Bradley(&img_bw);
+    //img_bw = resize_images(img_bw);
+    //Bradley(&img_bw);
+    displayImage(&img_bw);
     double *in = inputs;
     for (int i = 0; i < img->height; i++) {
-        for (int j = 0; j < img->width; j++) {
-            Uint8 r = 0;
-            Uint8 g = 0;
-            Uint8 b = 0;
+        for (int j = 0; j < img->width; j++) {  
             Uint8 pixel_bi = getPixelColor(&img_bw, i, j);
             //getPixelRGB(img, i, j, &r, &g, &b);
             //double pixel_bi = (r + g + b) / (3 * 255);
