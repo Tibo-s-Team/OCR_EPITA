@@ -173,7 +173,7 @@ double *inputs(Image *img) {
     grayscale(&img_bw);
     //img_bw = resize_images(img_bw);
     //Bradley(&img_bw);
-    displayImage(&img_bw);
+    //displayImage(&img_bw);
     double *in = inputs;
     for (int i = 0; i < img->height; i++) {
         for (int j = 0; j < img->width; j++) {  
