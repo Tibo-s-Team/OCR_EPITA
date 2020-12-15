@@ -343,12 +343,11 @@ void training_NN(NeuralNetwork neuralnetwork, Letter tab_letter[DONE], int len, 
  * we give a image to our neuralnetwork and see what is its answer 
  * by returning the char associated 
  * @param neuralnetwork the neuralnetwork 
- * @param path path of the image to know the letter
+ * @param img the image to know the letter
  * @return the char that the neuralnetwork thinks it is
  */
-char print_res(NeuralNetwork neuralnetwork ,char* path)
+char print_res(NeuralNetwork neuralnetwork ,Image img)
 {
-    Image img = loadImage(path);
     img = resize_images(img);//resize the image to be 25x25 pixels
     double *inputs_list = inputs(&img);
     feedForward(neuralnetwork, inputs_list, 625);

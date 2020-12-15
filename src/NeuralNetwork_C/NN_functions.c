@@ -1,3 +1,11 @@
+/*!
+ *  File created on 10/12/2020 (MM/DD/YYYY) by florian.drevet
+ *  Contributors : florian.drevet
+ *
+ *  Usefull functions to train a neuralnetwork
+ * 
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "neuralnetwork.h"
