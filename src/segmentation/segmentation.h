@@ -9,7 +9,7 @@
 #ifndef SEGMENTATION_H_
 #define SEGMENTATION_H_
 
-#include "../image.h"
+#include "../Image/image.h"
 #include "boundaryBox.h"
 
 // segmentation.c ------------------

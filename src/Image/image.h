@@ -16,7 +16,7 @@
 #include <err.h>
 #include <stdlib.h>
 
-#include "segmentation/boundaryBox.h"
+#include "../segmentation/boundaryBox.h"
 
 #define WHITE 255  // 8bit value for white
 #define BLACK 0    // 8bit value for black

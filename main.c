@@ -4,11 +4,12 @@
 #include <string.h>
 
 #include "src/binarization/binarization.h"
-#include "src/image.h"
+#include "src/Image/image.h"
 #include "src/preprocessing/preprocessing.h"
 #include "src/segmentation/segmentation.h"
 
 int main(int argc, char *argv[]) {
+
     Image image;
 
     static int gray = 0;

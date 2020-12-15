@@ -12,7 +12,7 @@
 #ifndef BINARY_TREE_H_
 #define BINARY_TREE_H_
 
-#include "../image.h"
+#include "../Image/image.h"
 
 // binaryTree.c --------------------
 

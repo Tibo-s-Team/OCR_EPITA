@@ -77,9 +77,4 @@ void printForest(BinTree *node) {
     }
 }
 
-void printBox(BBox box) {
-    printf("[%d, %d] -> [%d,%d]\n", box.start.x, box.start.y, box.end.x,
-           box.end.y);
-}
-
 #pragma endregion print

@@ -14,7 +14,7 @@
 #define PREPROCESSING_H_
 
 #include "../binarization/binarization.h"
-#include "../image.h"
+#include "../Image/image.h"
 
 // suppression_couleurs.c ----
 

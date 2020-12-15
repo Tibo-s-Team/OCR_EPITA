@@ -10,14 +10,14 @@
 #define OCR_NN_H
 
 #include <stdlib.h>
-#include <SDL/SDL.h>
-#include <SDL/SDL_image.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include <err.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "neuralnetwork.h"
 #include "NN_functions.h"
-#include "../image.h"
+#include "../Image/image.h"
 #include <math.h>
 #define NBR_LETTER 52
 #define DONE 52

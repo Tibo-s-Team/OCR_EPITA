@@ -1,7 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "neuralnetwork.h"
-#include "NN_functions.h"
 #include "XOR.h"
 #include <math.h>
 

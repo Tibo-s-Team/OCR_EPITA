@@ -1,3 +1,0 @@
-#!/bin/bash
-
-gcc -Wno-format -o OCR visual.c ../image.c ../preprocessing/filtrage.c ../preprocessing/suppression_couleurs.c ../segmentation/binaryTree.c ../segmentation/segmentation.c -Wno-deprecated-declarations -Wno-format-security -lm `pkg-config --cflags --libs gtk+-3.0 sdl SDL_image` -export-dynamic

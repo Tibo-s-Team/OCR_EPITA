@@ -10,7 +10,6 @@
 #include <stdlib.h>
 #include "neuralnetwork.h"
 #include "NN_functions.h"
-#include "../image.h"
 #include <math.h>
 #include <dirent.h>
 #include <string.h>

@@ -7,7 +7,7 @@
 #ifndef BINARIZATION_H_
 #define BINARIZATION_H_
 
-#include "../image.h"
+#include "../Image/image.h"
 
 // Bradley.c
 

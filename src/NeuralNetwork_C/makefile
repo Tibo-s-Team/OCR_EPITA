@@ -34,7 +34,7 @@ HEADER	= src/*.h
 OUT	= IA
 CC	 = gcc
 CFLAGS	 = -g -c -Wall -Wextra -Wno-unknown-pragmas -Wno-unused-variable -Wno-unused-parameter -lSDL2 -lSDL2_image -Werror -std=c99 $(shell pkg-config --cflags sdl SDL_image)  
-LFLAGS	 = -lSDL -lSDL_image
+LFLAGS	 = -lSDL2 -lSDL2_image
 $(VERBOSE).SILENT: $(OBJS)
 
 
