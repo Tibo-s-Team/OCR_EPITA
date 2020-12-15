@@ -13,8 +13,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "/home/drevet/Documents/OCR_EPITA/src/binarization/binarization.h"
-#include "/home/drevet/Documents/OCR_EPITA/src/preprocessing/preprocessing.h"
+
+#include "../binarization/binarization.h"
+#include "../preprocessing/preprocessing.h"
 #include "NN_functions.h"
 #include "neuralnetwork.h"
 
@@ -178,8 +179,8 @@ double *inputs(Image *img) {
             Uint8 g = 0;
             Uint8 b = 0;
             Uint8 pixel_bi = getPixelColor(&img_bw, i, j);
-            //getPixelRGB(img, i, j, &r, &g, &b);
-            //double pixel_bi = (r + g + b) / (3 * 255);
+            // getPixelRGB(img, i, j, &r, &g, &b);
+            // double pixel_bi = (r + g + b) / (3 * 255);
             *in = pixel_bi;
             in += 1;
         }
@@ -389,7 +390,7 @@ Image resize_images(Image img) {
     Uint32 color = SDL_MapRGB(cropped->format, 255, 255, 255);
     SDL_FillRect(cropped, &tmp, color);
 
-    int extraction = SDL_BlitSurface(img.surface, &src, cropped, &dst);
+    int extraction = SDL_BlitScaled(img.surface, NULL, cropped, NULL);
     if (extraction)
         errx(1,
              "Error : OCR_NN.c - resize_images : Image couldn't be extracted.\n"
