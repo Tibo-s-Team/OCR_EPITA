@@ -71,12 +71,12 @@ int main(int argc, char *argv[]) {
 
     //Creat a new neuralnetwork
 
-    int layer[4] = {16, 16, 16, DONE};
-    NeuralNetwork neuralnetwork2 = creat_neuralNetwork(625, layer, 4);
+    // int layer[4] = {16, 16, 16, DONE};
+    // NeuralNetwork neuralnetwork2 = creat_neuralNetwork(625, layer, 4);
     // print_output(neuralnetwork2);
    
     //load a neural network
-    //NeuralNetwork neuralnetwork2 = load("/home/drevet/Documents/OCR_EPITA/tests/OCR_Finale_25_25_25");
+    NeuralNetwork neuralnetwork2 = load("/home/drevet/Documents/OCR_EPITA/tests/OCR_Finale_25_25_25");
 
     //Creat all the letters from folder letters - Copy
     // Letter letter_A = creat_letter("/home/drevet/Documents/OCR_EPITA/tests/images/letters - Copy/A/");
@@ -241,14 +241,14 @@ int main(int argc, char *argv[]) {
                             letter_z};
     
     //train the NeuralNetwork 
-    training_NN(neuralnetwork2, letters, DONE, waited, 500, 0.1);
+    //training_NN(neuralnetwork2, letters, DONE, waited, 1, 0.1);
 
     //Save the neural network trained
-    save(neuralnetwork2, "/home/drevet/Documents/OCR_EPITA/tests/OCR_Finale_binarized_330");
+    //save(neuralnetwork2, "/home/drevet/Documents/OCR_EPITA/tests/OCR_Finale_binarized_330");
 
     //TEST
 
-    Image img2 = loadImage("/home/drevet/Documents/OCR_EPITA/tests/images/letters/letter/r/r.PNG");
+    Image img2 = loadImage("/home/drevet/Documents/Maison/1_0.bmp");
     //Image img2 = loadImage("/home/drevet/Documents/OCR_EPITA/tests/images/test_letters/e.PNG");
     char res = print_res(neuralnetwork2, img2);
     //char res = print_res(neuralnetwork2, "/home/drevet/Documents/OCR_EPITA/tests/images/letters/A/A.PNG");
