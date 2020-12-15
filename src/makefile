@@ -5,8 +5,8 @@ OBJS = $(SOURCE:.c=.o)
 
 OUT	= TIBO
 CC	 = gcc
-CFLAGS	 = -g -c -Wall -Wextra -Wno-unknown-pragmas -Wno-unused-variable -Wno-unused-parameter -lSDL2 -lSDL2_image `pkg-config --cflags gtk+-3.0` -rdynamic
-LFLAGS	 = -lSDL2 -lSDL2_image -lm `pkg-config --libs gtk+-3.0`
+CFLAGS	 = -g -c -Wall -Wextra -Wno-unknown-pragmas -Wno-unused-variable -Wno-unused-parameter -lSDL2 -lSDL2_image `pkg-config --cflags gtk+-3.0 gmodule-2.0` -export-dynamic
+LFLAGS	 = -lSDL2 -lSDL2_image -lm `pkg-config --libs gtk+-3.0 gmodule-2.0`
 $(VERBOSE).SILENT: $(OBJS)
 
 

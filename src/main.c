@@ -8,6 +8,8 @@
 
 #include "visual.h"
 
+void on_savebutton_clicked(GtkButton *sv, app_widgets *app_wdgts);
+
 /*!
  * This structure is used to create pointer
  * that will be used in the code to refer to
@@ -170,8 +172,7 @@ void on_savebutton_clicked(GtkButton *sv, app_widgets *app_wdgts) {
     gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(dialog),
                                                    TRUE);
 
-    gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog),
-                                        "../Images");
+    gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), "../Images");
     gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog),
                                       "Untitled document");
 

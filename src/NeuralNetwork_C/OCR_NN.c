@@ -369,21 +369,31 @@ char print_res(NeuralNetwork neuralnetwork, Image img) {
  * @return the new image resized
  */
 Image resize_images(Image img) {
-    int w = img.width > 25 ? 25 : img.width;
-    int h = img.height > 25 ? 25 : img.height;
-    SDL_Rect rect = {0, 0, w, h};
+    int x = img.width > 25 ? img.width - 25 : 0;
+    int y = img.height > 25 ? img.height - 25 : 0;
+    SDL_Rect src = {0, 0, 25, 25};
+    int w = img.width < 25 ? 25 - img.width : 0;
+    int h = img.height < 25 ? 25 - img.height : 0;
+    SDL_Rect dst = {x, y, 0, 0};
 
     SDL_UnlockSurface(img.surface);
 
+    // Create a white surface
     SDL_Surface *cropped = SDL_CreateRGBSurface(0, 25, 25, 32, 0, 0, 0, 0);
-    int extraction = SDL_BlitScaled(img.surface, &rect, cropped, NULL);
+    SDL_Rect tmp = {0, 0, 25, 25};
+    Uint32 color = SDL_MapRGB(cropped->format, 255, 255, 255);
+    SDL_FillRect(cropped, &tmp, color);
+
+    int extraction = SDL_BlitSurface(img.surface, &src, cropped, &dst);
     if (extraction)
         errx(1,
              "Error : OCR_NN.c - resize_images : Image couldn't be extracted.\n"
-             "%s", SDL_GetError());
+             "%s",
+             SDL_GetError());
 
     img.surface = cropped;
     img.height = 25;
     img.width = 25;
+
     return img;
 }
