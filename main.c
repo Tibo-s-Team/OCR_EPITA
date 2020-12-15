@@ -11,6 +11,7 @@
 int main(int argc, char *argv[]) {
 
     Image image;
+    FILE *f = fopen("25.txt", "w");
 
     static int gray = 0;
     static int black_and_white = 0;
@@ -57,9 +58,9 @@ int main(int argc, char *argv[]) {
                     if (black_and_white || words) Bradley(&image);
                     image.imageType = BW;
                     if (lines || words) {
-                        //filterImage(&image, SHARPNESS);
+                        filterImage(&image, SHARPNESS);
                         blackAndWhite(&image);
-                        bin_segmentation(&image);
+                        bin_segmentation(&image, f);
                     }
                 }
 
@@ -68,5 +69,6 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    fclose(f);
     return 0;
 }
