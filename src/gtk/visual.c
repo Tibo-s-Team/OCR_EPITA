@@ -1,3 +1,11 @@
+/*!
+ *  File created on 12/8/2020 (MM/DD/YYYY) by jean.barbaroux
+ *  Contributors : jean.barbaroux
+ *
+ *  File containing the interface code. It means the work done in order to print on the screnn our OCR's work
+ */
+
+
 #include <gtk/gtk.h>
 #include <stdio.h> 
 #include <string.h>
@@ -6,27 +14,24 @@
 #include "../segmentation/segmentation.h"
 #include "visual.h"
 #include <stdlib.h>
-/*#include <SDL/SDL.h>
-#include <SDL/SDL_image.h>*/
 #include <err.h>
-
+/*!
+ * This structure is used to create pointer
+ * that will be used in the code to refer to
+ * glade possibilities.
+ */
 typedef struct {
-    GtkWidget   *w_dlg_file_choose;       // Pointer to file chooser dialog box
-    GtkWidget   *button1;   
-    GtkWidget   *w_img_main;              // Pointer to image widget
-    GtkWidget   *w_img_main1;
-    GtkWidget   *label1;
-    GtkWidget   *sav;
-    GtkWidget   *OCR;
-    GtkWidget   *greyscale;
-    GtkWidget   *bw;
-    GtkWidget   *lseg;
-    GtkWidget   *segment;
-    GtkWidget   *window;
-    GtkWidget   *save;
-    GtkWidget   *file1;
-    GtkWidget   *entry1;
-    GtkWidget   *savebutton;
+    GtkWidget   *w_dlg_file_choose; //FileChooser
+    GtkWidget   *button1;   //button that activate the radio button to print the result
+    GtkWidget   *w_img_main;  //print on the left the file selected
+    GtkWidget   *w_img_main1; //print on the right the result 
+    GtkWidget   *OCR; //radiobutton for OCR
+    GtkWidget   *greyscale; //radio button for grayscale
+    GtkWidget   *bw; //radiobutton for black and white
+    GtkWidget   *lseg; //radiobutton for line segmentation
+    GtkWidget   *segment; //radiobutton for segmentation
+    GtkWidget   *window; //The window showed
+    GtkWidget   *savebutton; //the save button
 } app_widgets;
 
 
@@ -34,48 +39,42 @@ int main(int argc, char *argv[])
 {
     app_widgets     *widgets = g_slice_new(app_widgets);
     GtkBuilder      *builder;
-
     gtk_init(&argc, &argv);
-
     builder = gtk_builder_new_from_file("OCR_visual.glade");
 
+    //Link glade and code together
     widgets->window = GTK_WIDGET(gtk_builder_get_object(builder, "window"));
     widgets->w_dlg_file_choose = GTK_WIDGET(gtk_builder_get_object(builder, "dlg_file_choose"));
     widgets->w_img_main = GTK_WIDGET(gtk_builder_get_object(builder, "img_main"));
     widgets->w_img_main1 = GTK_WIDGET(gtk_builder_get_object(builder, "img_main1"));
     widgets->button1 = GTK_WIDGET(gtk_builder_get_object(builder, "button1"));
-    widgets->label1 = GTK_WIDGET(gtk_builder_get_object(builder, "label1"));
     widgets->OCR = GTK_WIDGET(gtk_builder_get_object(builder, "OCR"));
     widgets->greyscale = GTK_WIDGET(gtk_builder_get_object(builder, "greyscale"));
     widgets->bw = GTK_WIDGET(gtk_builder_get_object(builder, "bw"));
     widgets->lseg = GTK_WIDGET(gtk_builder_get_object(builder, "lseg"));
     widgets->segment = GTK_WIDGET(gtk_builder_get_object(builder, "segment"));
-    widgets->sav = GTK_WIDGET(gtk_builder_get_object(builder, "sav"));
-    widgets->save = GTK_WIDGET(gtk_builder_get_object(builder, "save"));
-    widgets->file1 = GTK_WIDGET(gtk_builder_get_object(builder, "file1"));
-    widgets->entry1 = GTK_WIDGET(gtk_builder_get_object(builder, "entry1"));
     widgets->savebutton = GTK_WIDGET(gtk_builder_get_object(builder, "savebutton"));
 
-        GdkColor color; // default background color
+    //put a background color --- Not really useful but nice
+        GdkColor color; 
         color.red = 0xa500;
         color.green = 0xa500;
         color.blue = 0xb500;
         gtk_widget_modify_bg(GTK_WIDGET(widgets->window), GTK_STATE_NORMAL, &color);
-
-        color.red = 0x0000;
-        color.green = 0x0000;
-        color.blue = 0x0000;
-    
     gtk_builder_connect_signals(builder, widgets);
     g_object_unref(builder);
-
     gtk_widget_show(widgets->window);                
     gtk_main();
     g_slice_free(app_widgets, widgets);
-    
-
 	return EXIT_SUCCESS;
 }
+
+/*!
+ * Loads an image from a file and save it in a temporary directory.
+ * @param path the path to the image to save
+ *  (can be absolute or relative to the workspace folder)
+ * @return nothing, but Pictures are saved
+ */
 
 
 void SaveImage(char *path){
@@ -97,17 +96,19 @@ void SaveImage(char *path){
             
     }
 
-// File --> Open
+/*!
+ * Loads an image from a file and returns an Image struct.
+ * @param menuitem 
+ * @param app_wdgts refers to the structure in order to use the Glade possibilities
+ *  (can be absolute or relative to the workspace folder)
+ * @return nothing, but open the picture in the interface.
+ */
+
 void on_menuitm_open_activate(GtkMenuItem *menuitem, app_widgets *app_wdgts)
 {
-    gchar *file_name = NULL;        // Name of file to open from dialog box
-    
-    // Show the "Open Image" dialog box
+    gchar *file_name = NULL;
     gtk_widget_show(app_wdgts->w_dlg_file_choose);
-    
-    // Check return value from Open Image dialog box to see if user clicked the Open button
     if (gtk_dialog_run(GTK_DIALOG (app_wdgts->w_dlg_file_choose)) == GTK_RESPONSE_OK) {
-        // Get the file name from the dialog box
         file_name = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(app_wdgts->w_dlg_file_choose));
         if (file_name != NULL) {
             gtk_image_set_from_file(GTK_IMAGE(app_wdgts->w_img_main), file_name);
@@ -116,44 +117,33 @@ void on_menuitm_open_activate(GtkMenuItem *menuitem, app_widgets *app_wdgts)
         }
         g_free(file_name);
     }
-    // Finished with the "Open Image" dialog box, so hide it
     gtk_widget_hide(app_wdgts->w_dlg_file_choose);
 }
 
-void on_save_clicked(GtkMenuItem *m, app_widgets *app_wdgts)
-{
-   gchar *file_name = NULL;        // Name of file to open from dialog box
-    
-    // Show the "Open Image" dialog box
-    gtk_widget_show(app_wdgts->sav);
-    
-    // Check return value from Open Image dialog box to see if user clicked the Open button
-    if (gtk_dialog_run(GTK_DIALOG (app_wdgts->sav)) == GTK_RESPONSE_OK) {
-        // Get the file name from the dialog box
-        file_name = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(app_wdgts->sav));
-        if (file_name != NULL) {
-            gtk_image_set_from_file(GTK_IMAGE(app_wdgts->w_img_main), file_name);
-            gtk_image_set_from_file(GTK_IMAGE(app_wdgts->w_img_main1), file_name);
-            SaveImage(file_name);
-        }
-        g_free(file_name);
-    }
-    // Finished with the "Open Image" dialog box, so hide it
-    gtk_widget_hide(app_wdgts->sav);
-}
-// File --> Quit
+/*!
+ * close the menu 
+ * @param menuitem 
+ * @param app_wdgts refers to the structure in order to use the Glade possibilities
+ *  (can be absolute or relative to the workspace folder)
+ * @return nothing
+ */
+
 void on_menuitm_close_activate(GtkMenuItem *menuitem, app_widgets *app_wdgts)
 {
     gtk_main_quit();
 }
 
-// called when window is closed
 void on_window_destroy()
 {
     gtk_main_quit();
 }
 
-
+/*!
+ * Loads the expected result from the radio button to theright of the screen
+ * @param b  
+ * @param app_wdgts refers to the structure in order to use the Glade possibilities
+ * @return nothing
+ */
 void on_button1_clicked(GtkButton *b, app_widgets *app_wdgts){
     
 	gboolean T = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(app_wdgts->greyscale));
@@ -178,6 +168,14 @@ void on_button1_clicked(GtkButton *b, app_widgets *app_wdgts){
     }
 }
 
+
+/*!
+  * When the button is clicked, it opens a file managerto save the right image
+  * @param sv  
+ * @param app_wdgts refers to the structure in order to use the Glade possibilities
+ * @return nothing
+ */
+
 void on_savebutton_clicked(GtkButton *sv, app_widgets *app_wdgts ){ 
     GtkWidget *dialog;
      dialog = gtk_file_chooser_dialog_new ("Save File",
@@ -197,7 +195,6 @@ void on_savebutton_clicked(GtkButton *sv, app_widgets *app_wdgts ){
             Image image;
             char *path;
          filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-          g_print("%s\n",filename);
 	        gboolean T = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(app_wdgts->greyscale));
 	        if (T){ path = "../../tests/tmp/grayscaled"; 
                 Image image = loadImage(path);
@@ -227,21 +224,4 @@ void on_savebutton_clicked(GtkButton *sv, app_widgets *app_wdgts ){
        }
      
      gtk_widget_destroy (dialog);
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-           
+}         
