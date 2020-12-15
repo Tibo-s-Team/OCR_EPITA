@@ -1,5 +1,5 @@
 /*
- * File created by Léo DUBOIN on DATE.
+ * File created by Léo DUBOIN on 12/14/2020.
  */
 
 #include "utils.h"
@@ -7,6 +7,7 @@
 #pragma region filters
 
 /*!
+ * @warning Doesn't work
  * @return an istance of a gaussian filter
  */
 Kernel gaussianFilter() {
@@ -49,6 +50,10 @@ Kernel contoursFilter() {
     return res;
 }
 
+/*!
+ * Used as a test for the convolution algorithm
+ * @return a kernel for edge filtering.
+ */
 Kernel edgeFilter() {
     int *k = (int *)calloc(3 * 3, sizeof(int));
     k[3] = -1;
@@ -58,6 +63,9 @@ Kernel edgeFilter() {
     return res;
 }
 
+/*!
+ * @return a kernel for accentuating contours.
+ */
 Kernel sharpnessFilter() {
     int *k = (int *)calloc(3 * 3, sizeof(int));
 
@@ -74,6 +82,10 @@ Kernel sharpnessFilter() {
     return res;
 }
 
+/*!
+ * Used as a test for the convolution algorithm
+ * @return sobel's kernel.
+ */
 Kernel sobelFilter() {
     int *k = (int *)calloc(3 * 3, sizeof(int));
 
@@ -88,6 +100,9 @@ Kernel sobelFilter() {
     return res;
 }
 
+/*!
+ * @return a kernel for filtering through average value.
+ */
 Kernel averageFilter() {
     int *k = (int *)calloc(3 * 3, sizeof(int));
     for (int i = 0; i < 9; ++i) k[i] = 1;
@@ -99,6 +114,10 @@ Kernel averageFilter() {
 
 /*!
  * @return the pixel value according to the median filtering algorithm
+ * @param image the image containing the pixel
+ * @param size the size of the resulting kernel (size * size)
+ * @param x pixel's x coordinate
+ * @param y pixel's y coordinate
  */
 Uint8 medianFilter(Image *image, int size, int x, int y) {
     int center = size / 2;
@@ -184,7 +203,9 @@ void sortList(int *list, int size) {
 }
 
 /*!
- * Prints the content of a list
+ * Print the content of a list
+ * @param list the list to print
+ * @param size the total size of the list
  */
 void printList(int *list, int size) {
     printf("[");
@@ -193,7 +214,7 @@ void printList(int *list, int size) {
 }
 
 /*!
- * Reverse an image's color
+ * Reverse an image's colors
 */
 void reverseColor(Image *image) {
     for (int y = 0; y < image->height; ++y) {

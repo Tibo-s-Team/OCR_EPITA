@@ -19,18 +19,25 @@
 // suppression_couleurs.c ----
 
 void grayscale(Image *image);
-void grayscaleTest(Image *image);
 void blackAndWhite(Image *image);
 
 // filtrage.c ----------------
 
 typedef unsigned char Uint8;
 
+/*!
+ * Basic structure of a kernel used for convolution.
+ * @param matrix the kernel itself
+ * @param size the size of the kernel (size * size)
+*/
 typedef struct Kernel {
     int *matrix;
     int size;  // kernel : size * size
 } Kernel;
 
+/*!
+ * List of all the different filter types
+*/
 typedef enum filter_type {
     SHARPNESS,  // Really Useful
     AVERAGE,    // Useful

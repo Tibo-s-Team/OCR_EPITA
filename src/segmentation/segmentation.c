@@ -12,7 +12,7 @@
  *  12/11 : Abandonned binaryTree for a simple boundaryBox struct.
  *  Need to fix threshold calculation
  *
- * //TODO : implement threshold system
+ * //TODO : implement better thresholding system
  */
 
 #include "segmentation.h"

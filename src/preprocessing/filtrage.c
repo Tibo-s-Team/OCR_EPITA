@@ -30,8 +30,8 @@ void reverseKernel(Kernel kernel);
 //--------------------------------
 
 /*!
- * Main funtion to call outside the file.
- * Apply a filter onto an image.
+ * Apply a filter onto an image. 
+ * Main function to call outside the file. 
  * @warning You may want to rebinarize your image afterwards
  * @param image the image to apply the filter onto
  * @param filter the filter we want to apply
@@ -72,12 +72,17 @@ void filterImage(Image *image, Filter filter) {
             break;
     }
 
-    // Values may not all be between 0 and 255, so jst to make sure
+    // Values may not all be between 0 and 255, so just to make sure
     image->imageType = GRAYSCALE;
 }
 
 #pragma region filtering
 
+/*!
+ * Apply convolution onto an image using a given kernel
+ * @param image the image to apply convolution onto
+ * @param f the function returning the kernel to use
+*/
 void convolution(Image *image, Kernel (*f)()) {
     Kernel kernel = (*f)();
     reverseKernel(kernel);
@@ -137,8 +142,7 @@ void convolutePixel(Image *image, Kernel kernel, int x, int y) {
  */
 void reverseKernel(Kernel kernel) {
     int total_size = kernel.size * kernel.size;
-    for (int i = 0; i < total_size / 2;
-         ++i) {  // swap doesn't work here idk why
+    for (int i = 0; i < total_size / 2; ++i) {  // swap doesn't work here idk why
         int a = kernel.matrix[i], b = kernel.matrix[total_size - i - 1];
         kernel.matrix[i] = b;
         kernel.matrix[total_size - i - 1] = a;
@@ -147,6 +151,7 @@ void reverseKernel(Kernel kernel) {
 
 /*!
  * Apply median filtering onto an image.
+ * @param image the image to apply filter onto
  */
 void medianFiltering(Image *image) {
     if (image->imageType == RGB)
