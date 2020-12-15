@@ -374,81 +374,31 @@ char print_res(NeuralNetwork neuralnetwork, Image img) {
  * @return the new image resized
  */
 Image resize_images(Image img) {
-    if (img.height < 25 || img.width < 25)  // if the image is too small
-    {
-        int decallage_x = (25 - img.width) / 2;   // to center the image with x
-        int decallage_y = (25 - img.height) / 2;  // to center the image with y
-        Image blanc = loadImage("src/NeuralNetwork_C/blanc.PNG");
-        // load a white image of 25x25
-        // the too small image will be put in the center of this white image
-        for (int i = 0; i < img.width; i++) {
-            for (int j = 0; j < img.height; j++) {
-                Uint8 r = 0;
-                Uint8 g = 0;
-                Uint8 b = 0;
-                getPixelRGB(&img, i, j, &r, &g,
-                            &b);  // get the pixel(i, j) of the too small image
-                Uint8 color[3] = {r, g, b};  // creat the color of this pixel
-                setPixelColor(
-                    &blanc, *color, decallage_x + i,
-                    decallage_y + j);  // put the pixel in the white image
-            }
-        }
-        return blanc;
-    } else if (img.height >= 26 && img.width >= 26) {
-        // if the image is too big
-        Image blanc = loadImage(
-            "src/NeuralNetwork_C/blanc.PNG");
-        // as for too small we load a white image
-        // there will be a lost of data
-        // this part of the function is juste to avoid a crash of our
-        // neurlanetwork
-        for (int i = 0; i < blanc.width; i++) {
-            for (int j = 0; j < blanc.height; j++) {
-                Uint8 r = 0;
-                Uint8 g = 0;
-                Uint8 b = 0;
-                getPixelRGB(&img, i, j, &r, &g, &b);
-                Uint8 color[3] = {r, g, b};
-                setPixelColor(&blanc, *color, i, j);
-            }
-        }
-        return blanc;
-    }
-    else if(img.height >= 26 && img.width < 25)
-    {
-        int decallage_y = (25-img.width)/2;
-        Image blanc = loadImage(
-            "src/NeuralNetwork_C/blanc.PNG");
-        for (int i = 0; i < blanc.width; i++) {
-            for (int j = 0; j < blanc.height; j++) {
-                Uint8 r = 0;
-                Uint8 g = 0;
-                Uint8 b = 0;
-                getPixelRGB(&img, i, j, &r, &g, &b);
-                Uint8 color[3] = {r, g, b};
-                setPixelColor(&blanc, *color, i, j+decallage_y);
-            }
-        }
-        return blanc;
-    }
-    else if(img.height < 25 && img.width >= 26)
-    {
-        int decallage_x = (25-img.height)/2;
-        Image blanc = loadImage(
-            "src/NeuralNetwork_C/blanc.PNG");
-        for (int i = 0; i < blanc.width; i++) {
-            for (int j = 0; j < blanc.height; j++) {
-                Uint8 r = 0;
-                Uint8 g = 0;
-                Uint8 b = 0;
-                getPixelRGB(&img, i, j, &r, &g, &b);
-                Uint8 color[3] = {r, g, b};
-                setPixelColor(&blanc, *color, i+decallage_x, j);
-            }
-        }
-        return blanc;
-    }
+    int x = img.width > 25 ? img.width - 25 : 0;
+    int y = img.height > 25 ? img.height - 25 : 0;
+    SDL_Rect src = {0, 0, 25, 25};
+    int w = img.width < 25 ? 25 - img.width : 0;
+    int h = img.height < 25 ? 25 - img.height : 0;
+    SDL_Rect dst = {x, y, 0, 0};
+
+    SDL_UnlockSurface(img.surface);
+
+    // Create a white surface
+    SDL_Surface *cropped = SDL_CreateRGBSurface(0, 25, 25, 32, 0, 0, 0, 0);
+    SDL_Rect tmp = {0, 0, 25, 25};
+    Uint32 color = SDL_MapRGB(cropped->format, 255, 255, 255);
+    SDL_FillRect(cropped, &tmp, color);
+
+    int extraction = SDL_BlitSurface(img.surface, &src, cropped, &dst);
+    if (extraction)
+        errx(1,
+             "Error : OCR_NN.c - resize_images : Image couldn't be extracted.\n"
+             "%s",
+             SDL_GetError());
+
+    img.surface = cropped;
+    img.height = 25;
+    img.width = 25;
 
     return img;
 }

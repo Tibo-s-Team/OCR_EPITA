@@ -240,7 +240,7 @@ void bin_segmentation(Image *image) {
             // temporary, we should delete files afterwards
             char *file = (char *)calloc(30, sizeof(char));
             sprintf(file, "Images/NN/%ld_%ld.bmp", i, j);
-            extractImage(image, file, word);
+            saveImage(image, file, word);
 
             // print letter
             Image img = loadImage(file);
@@ -261,6 +261,7 @@ void bin_segmentation(Image *image) {
     }
     free(lines);
     free(histo.histo);
+    free_neuralNetwork(network);
 }
 
 /*!
