@@ -38,6 +38,8 @@ typedef struct {
     GtkWidget *segment;      // radiobutton for segmentation
     GtkWidget *window;       // The window showed
     GtkWidget *savebutton;   // the save button
+    GtkWidget *ocr;   // the save button
+    GtkTextBuffer *textbuffer1;  
 } app_widgets;
 
 
@@ -60,6 +62,8 @@ int main(int argc, char *argv[]) {
     widgets->lseg = GTK_WIDGET(gtk_builder_get_object(builder, "lseg"));
     widgets->segment = GTK_WIDGET(gtk_builder_get_object(builder, "segment"));
     widgets->savebutton = GTK_WIDGET(gtk_builder_get_object(builder, "savebutton"));
+    widgets->ocr = GTK_WIDGET(gtk_builder_get_object(builder, "ocr"));
+    widgets->textbuffer1 = GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "textbuffer1"));
 
     // put a background color --- Not really useful but nice
    GdkColor color;
@@ -175,8 +179,13 @@ void on_button1_clicked(GtkButton *b, app_widgets *app_wdgts) {
     }
     T = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(app_wdgts->OCR));
     if (T) {
-        gchar *filename = "tests/images/gtk/grayscaled";
-        gtk_image_set_from_file(GTK_IMAGE(app_wdgts->w_img_main1), filename);
+    gboolean file_success = 0;
+    gchar *filename =  "tests/images/gtk/output.txt";        // Name of file to open from dialog box
+    gchar *file_contents = NULL;    // For reading contents of file
+     if (file_success = g_file_get_contents(filename, &file_contents, NULL, NULL)){
+        gtk_text_buffer_set_text(app_wdgts->textbuffer1, file_contents, -1);
+     }
+     g_free(file_contents);
     }
 }
 
@@ -208,7 +217,7 @@ void on_savebutton_clicked(GtkButton *sv, app_widgets *app_wdgts) {
         gboolean T = gtk_toggle_button_get_active(
             GTK_TOGGLE_BUTTON(app_wdgts->greyscale));
         if (T) {
-            path = "Images/gtk/grayscaled";
+            path = "tests/images/gtk/grayscaled";
             Image image = loadImage(path);
             SDL_SaveBMP(image.surface, filename);
         }
@@ -233,9 +242,22 @@ void on_savebutton_clicked(GtkButton *sv, app_widgets *app_wdgts) {
         T = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(app_wdgts->OCR));
         if (T) {
             path = "tests/images/gtk/grayscaled";
-            Image image = loadImage(path);
-            SDL_SaveBMP(image.surface, filename);
+        image = loadImage(path);
+        image.imageType = GRAYSCALE;
+        FILE *f = fopen(filename,"w");
+        if (f == NULL)
+        {
+            
+            printf("Error opening file!\n");
+            exit(1);
         }
+        //fprintf(f, "test\n")
+        Bradley(&image);
+        filterImage(&image,SHARPNESS);
+        blackAndWhite(&image);
+        bin_segmentation(&image, f);
+        fclose(f);
+    }
         g_free(filename);
     }
 

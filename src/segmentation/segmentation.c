@@ -218,7 +218,7 @@ void bin_segmentation(Image *image, FILE *f) {
              "binarized beforehand.\n");
 
     Histogram histo = lineHistogram(image);
-    NeuralNetwork network = load("tests/OCR_Finale_25_25_25");
+    NeuralNetwork network = load("tests/OCR_Finale_bradley2");
     size_t len;
 
     // x = start of box | y = end of box
@@ -254,11 +254,11 @@ void bin_segmentation(Image *image, FILE *f) {
                 BBox letter = {(Pixel){letters[j].x, line.start.y},
                                (Pixel){letters[j].y, line.end.y}};
                 // FIXME : fix threshold pls important
-                printf(" ");
+                fprintf(f, " ");
             }
             free(letters);
         }
-        printf("\n");
+        fprintf(f, "\n");
         free(words);
     }
     free(lines);
