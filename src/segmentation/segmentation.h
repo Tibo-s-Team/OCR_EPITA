@@ -10,6 +10,10 @@
 #define SEGMENTATION_H_
 
 #include "../Image/image.h"
+#include "../NeuralNetwork_C/neuralnetwork.h"
+#include "../NeuralNetwork_C/OCR_NN.h"
+#include "../NeuralNetwork_C/NN_functions.h"
+#include "../NeuralNetwork_C/DataManipulation.h"
 #include "boundaryBox.h"
 
 // segmentation.c ------------------

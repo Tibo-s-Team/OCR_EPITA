@@ -47,6 +47,7 @@ int main(int argc, char *argv[]) {
     gtk_builder_connect_signals(builder, widgets);
     g_object_unref(builder);
     gtk_widget_show(widgets->window);
+
     gtk_main();
     g_slice_free(app_widgets, widgets);
     return EXIT_SUCCESS;

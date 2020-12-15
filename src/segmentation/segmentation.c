@@ -218,6 +218,7 @@ void bin_segmentation(Image *image) {
              "binarized beforehand.\n");
 
     Histogram histo = lineHistogram(image);
+    NeuralNetwork network = load("tests/OCR_Finale_1_letter1");
     size_t len;
 
     // x = start of box | y = end of box
@@ -238,17 +239,24 @@ void bin_segmentation(Image *image) {
 
             // temporary, we should delete files afterwards
             char *file = (char *)calloc(30, sizeof(char));
-            sprintf(file, "../Images/NN/%ld_%ld.bmp", i, j);
+            sprintf(file, "Images/NN/%ld_%ld.bmp", i, j);
             extractImage(image, file, word);
+
+            // print letter
+            Image img = loadImage(file);
+            printf("%c", print_res(network, img));
+            SDL_FreeSurface(img.surface);
             free(file);
 
             for (size_t z = 0; z < letter_count; z++) {
                 BBox letter = {(Pixel){letters[j].x, line.start.y},
                                (Pixel){letters[j].y, line.end.y}};
                 // FIXME : fix threshold pls important
+                printf(" ");
             }
             free(letters);
         }
+        printf("\n");
         free(words);
     }
     free(lines);
