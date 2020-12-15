@@ -23,7 +23,7 @@ void XOR(NeuralNetwork neuralnetwork, double a, double b)
 {
     double values[2] = {a, b};
     feedForward(neuralnetwork, values, 2);
-    Layer *layer = neuralnetwork.end -1;
+        Layer *layer = neuralnetwork.end -1;
     for(Neuronne *i = layer->neuronne; i < layer->end; i++)//for each neurone in the last layer
     {
         printf("%f\n", i->output);
